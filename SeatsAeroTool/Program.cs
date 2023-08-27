@@ -17,7 +17,8 @@ namespace SeatsAeroTool
             ApplicationConfiguration.Initialize();
 
             seatsAeroInfo = new SeatsAeroAPI();
-            seatsAeroInfo.LoadAvailability(MileageProgram.lifemiles);
+
+            seatsAeroInfo.LoadAvailability( MileageProgram.velocity);
 
             Application.Run(new MainForm());
         }

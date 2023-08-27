@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SeatsAeroLibrary.Helpers;
 
 namespace SeatsAeroLibrary
 {
@@ -23,6 +24,8 @@ namespace SeatsAeroLibrary
 
         public bool TryFindValidSnapshot(MileageProgram mileageProgram, ref string results)
         {
+            MileageProgramHelpers.CheckForSingleMileageProgram(mileageProgram);
+
             bool success = false;
             results = "";
 

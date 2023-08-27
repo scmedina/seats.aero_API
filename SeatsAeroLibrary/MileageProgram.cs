@@ -38,4 +38,35 @@ namespace SeatsAeroLibrary
         all = 4095
     }
 
+
+    public class MileageProgramHelpers
+    {
+        static bool IsPowerOf2(int num)
+        {
+            return num > 0 && (num & (num - 1)) == 0;
+        }
+
+        public static bool IsSingleAirline(MileageProgram program)
+        {
+            int num = Convert.ToInt32(program);
+            return IsPowerOf2(num);
+        }
+
+
+        internal static void CheckForSingleMileageProgram(MileageProgram program)
+        {
+            if (IsSingleAirline(program)== false) 
+            { 
+                throw new SingleMileageProgramRequiredException(program.ToString()); 
+            }
+        }
+    }
+
+    public class SingleMileageProgramRequiredException: InvalidOperationException
+    {
+        public SingleMileageProgramRequiredException(string message) : base(message)
+        {
+            
+        }
+    }
 }

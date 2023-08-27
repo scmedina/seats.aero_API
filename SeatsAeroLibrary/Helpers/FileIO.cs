@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace SeatsAeroLibrary
+namespace SeatsAeroLibrary.Helpers
 {
     internal class FileIO
     {

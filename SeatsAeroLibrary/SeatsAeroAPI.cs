@@ -1,6 +1,10 @@
 ﻿using RestSharp;
+using SeatsAeroLibrary.Models;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace SeatsAeroLibrary
 {
@@ -12,20 +16,37 @@ namespace SeatsAeroLibrary
 
         public async void LoadAvailability(MileageProgram mileageProgram, bool forceMostRecent = false)
         {
+            for (int i = 0; i<12; i++)
+            {
+                MileageProgram thisProgram = (MileageProgram)Math.Pow(2, i);
+                if (mileageProgram.HasFlag(thisProgram))
+                {
+                    LoadAvailabilitySingle(thisProgram, forceMostRecent);
+                }
+            }
+        }
+        public async void LoadAvailabilitySingle(MileageProgram mileageProgram, bool forceMostRecent = false)
+        {
 
-            string jsonResults = "";
+            MileageProgramHelpers.CheckForSingleMileageProgram(mileageProgram);
+
+            string json = "";
             FileSnapshot fileSnapshot = new FileSnapshot();
 
-            if (fileSnapshot.TryFindValidSnapshot(mileageProgram, ref jsonResults) == false)
+            if (forceMostRecent == true ||  fileSnapshot.TryFindValidSnapshot(mileageProgram, ref json) == false)
             {
-                jsonResults = await TryGetAPIAvailabilityResults(mileageProgram);
+                json = await TryGetAPIAvailabilityResults(mileageProgram);
             }
 
-            System.Diagnostics.Debug.WriteLine("{0}", jsonResults);
+            List<Availability> availabilities = JsonSerializer.Deserialize<List<Availability>>(json);
+
+            //System.Diagnostics.Debug.WriteLine("{0}", jsonResults);
         }
 
         private async Task<string> TryGetAPIAvailabilityResults(MileageProgram mileageProgram)
         {
+            MileageProgramHelpers.CheckForSingleMileageProgram(mileageProgram);
+
             var options = new RestClientOptions($"https://seats.aero/api/availability?source={mileageProgram.ToString()}");
             var client = new RestClient(options);
             var request = new RestRequest("");

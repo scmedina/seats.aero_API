@@ -5,7 +5,7 @@ VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeatsAeroTool", "SeatsAeroTool\SeatsAeroTool.csproj", "{9EE86DFE-BE63-40ED-8B4F-7C54AC8B25C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeatsAeroLibrary", "SeatsAeroLibrary\SeatsAeroLibrary.csproj", "{F4A3C51E-6561-438A-BA62-F6CD525B06C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeatsAeroLibrary", "SeatsAeroLibrary\SeatsAeroLibrary.csproj", "{F4A3C51E-6561-438A-BA62-F6CD525B06C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
