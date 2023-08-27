@@ -19,7 +19,7 @@ namespace SeatsAeroTool
             seatsAeroInfo = new SeatsAeroAPI();
             seatsAeroInfo.LoadAvailability(MileageProgram.lifemiles);
 
-            Application.Run(new Form1());
+            Application.Run(new MainForm());
         }
     }
 }

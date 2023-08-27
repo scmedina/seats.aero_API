@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace SeatsAeroLibrary
 {
     //Source	Mileage Program	Supported Cabins	Has Seat Count	Has Trip Data
+    [FlagsAttribute]
     public enum MileageProgram
     {
         None = 0,
@@ -15,25 +16,26 @@ namespace SeatsAeroLibrary
         // virginatlantic  Virgin Atlantic Flying Club Y/W/J   Yes Yes
         virginatlantic = 2,
         // aeromexico  Aeromexico Club Premier Y/W/J   Yes No,
-        aeromexico = 3,
+        aeromexico = 4,
         // american    American Airlines   Y/W/J/F No  Yes
-        american = 4,
+        american = 8,
         // delta   Delta SkyMiles  Y/W/J   Yes Yes
-        delta = 5,
+        delta = 16,
         // etihad  Etihad Guest    Y/J Yes No
-        etihad = 6,
+        etihad = 32,
         // united  United MileagePlus  Y/W/J/F Yes Yes
-        united = 7,
+        united = 64,
         // emirates    Emirates Skywards   Y/W/J/F No  No
-        emirates = 8,
+        emirates = 128,
         // aeroplan    Air Canada Aeroplan Y/W/J/F No  Yes
-        aeroplan = 9,
+        aeroplan =  256,
         // alaska  Alaska Mileage Plan Y/W/J/F Yes Yes
-        alaska = 10,
+        alaska = 512,
         // velocity    Virgin Australia Velocity   Y/W/J/F Yes Yes
-        velocity=11,
+        velocity=1024,
         // qantas  Qantas Frequent Flyer   Y/W/J/F No  Yes
-        qantas = 12
+        qantas = 2048,
+        all = 4095
     }
 
 }
