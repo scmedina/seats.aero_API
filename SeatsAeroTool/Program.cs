@@ -36,7 +36,7 @@ namespace SeatsAeroTool
 
             seatsAeroInfo = new SeatsAeroAPI();
 
-            seatsAeroInfo.LoadAvailability( MileageProgram.velocity);
+            seatsAeroInfo.LoadAvailability( MileageProgram.american);
 
             Application.Run(new MainForm());
         }

@@ -39,21 +39,6 @@ namespace SeatsAeroLibrary.Models
     }
 
 
-    public class MileageProgramHelpers
-    {
-        static bool IsPowerOf2(int num)
-        {
-            return num > 0 && (num & num - 1) == 0;
-        }
-
-        public static bool IsSingleAirline(MileageProgram program)
-        {
-            int num = Convert.ToInt32(program);
-            return IsPowerOf2(num);
-        }
-
-    }
-
     public class SingleMileageProgramRequiredException : InvalidOperationException
     {
         public SingleMileageProgramRequiredException(string message) : base(message)

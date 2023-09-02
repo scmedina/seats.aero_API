@@ -9,6 +9,7 @@ using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Services;
 using static System.Formats.Asn1.AsnWriter;
 using Autofac;
+using System.Net;
 
 namespace SeatsAeroLibrary
 {
@@ -29,14 +30,12 @@ namespace SeatsAeroLibrary
         public async void LoadAvailability(MileageProgram mileageProgram, bool forceMostRecent = false)
         {
             _logger.Info($"Loading availability of: {mileageProgram}");
-            _messenger.ShowMessageBox("Test", "Test");
-            for (int i = 0; i<12; i++)
+
+            EnumHelper enumHelper = new EnumHelper();
+            List<MileageProgram> programs = enumHelper.GetBitFlagList(mileageProgram);
+            foreach (MileageProgram thisProgram in programs)
             {
-                MileageProgram thisProgram = (MileageProgram)Math.Pow(2, i);
-                if (mileageProgram.HasFlag(thisProgram))
-                {
-                    LoadAvailabilitySingle(thisProgram, forceMostRecent);
-                }
+                LoadAvailabilitySingle(thisProgram, forceMostRecent);
             }
         }
         public async void LoadAvailabilitySingle(MileageProgram mileageProgram, bool forceMostRecent = false)
@@ -51,7 +50,9 @@ namespace SeatsAeroLibrary
                 json = await TryGetAPIAvailabilityResults(mileageProgram);
             }
 
-            List<Availability> availabilities = JsonSerializer.Deserialize<List<Availability>>(json);
+            List<AvailabilityDataModel> availabilities = JsonSerializer.Deserialize<List<AvailabilityDataModel>>(json);
+
+            //TODO: cast to Flight then replace everything referencing availabilities.
 
             //System.Diagnostics.Debug.WriteLine("{0}", jsonResults);
         }

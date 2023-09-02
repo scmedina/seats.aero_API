@@ -8,7 +8,7 @@ using System.Data;
 
 namespace SeatsAeroLibrary.Models
 {
-    public class Availability
+    public class AvailabilityDataModel
     {
         [JsonPropertyName("ID")]
         public string Id { get; set; }
@@ -96,7 +96,6 @@ namespace SeatsAeroLibrary.Models
 
         [JsonPropertyName("AvailabilityTrips")]
         public object AvailabilityTrips { get; set; }
-
 
         public override string ToString()
         {

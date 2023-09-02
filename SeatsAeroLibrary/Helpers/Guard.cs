@@ -11,10 +11,19 @@ namespace SeatsAeroLibrary.Helpers
     {
         public static void AgainstMultipleSources(MileageProgram program, string argumentName)
         {
-
-            if (MileageProgramHelpers.IsSingleAirline(program) == false)
+            EnumHelper enumHelper = new EnumHelper();
+            if (enumHelper.IsSingleBitValue(program) == false)
             {
                 throw new SingleMileageProgramRequiredException(program.ToString());
+            }
+        }
+
+        public static void AgainstNonFlagEnumType(Type enumType, string argumentName)
+        {
+            EnumHelper enumHelper = new EnumHelper();
+            if (enumHelper.IsFlagsEnum(enumType) == false)
+            {
+                throw new InvalidCastException($"{argumentName} is not a flags enum");
             }
         }
     }
