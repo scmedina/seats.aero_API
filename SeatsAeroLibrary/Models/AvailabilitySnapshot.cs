@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SeatsAeroLibrary.Helpers;
 
-namespace SeatsAeroLibrary
+namespace SeatsAeroLibrary.Models
 {
     internal class FileSnapshot
     {
@@ -13,12 +13,13 @@ namespace SeatsAeroLibrary
         private static string SnapshotDateFormat = "yyyyMMdd";
         private static string SnapshotTimeFormat = "HH";
         public static string SnapshotFileDirectory = $@"{Environment.GetEnvironmentVariable("Temp")}\\";
+        public static int HoursRange = 4;
 
         public string GetFileNameBySourceAndDate(MileageProgram mileageProgram, DateTime currentTime)
         {
             string fileName = SnapshotFileName.Replace("[source]", mileageProgram.ToString());
-            fileName = fileName.Replace("[dateStamp]", DateTime.Today.ToString(SnapshotDateFormat));
-            fileName = fileName.Replace("[timeStamp]", DateTime.Now.ToString(SnapshotTimeFormat));
+            fileName = fileName.Replace("[dateStamp]", currentTime.ToString(SnapshotDateFormat));
+            fileName = fileName.Replace("[timeStamp]", currentTime.ToString(SnapshotTimeFormat));
             return fileName;
         }
 
@@ -28,17 +29,21 @@ namespace SeatsAeroLibrary
 
             bool success = false;
             results = "";
+            DateTime currentTime = DateTime.Now;
 
-            string fileName = GetFileNameBySourceAndDate(mileageProgram, DateTime.Now);
-
-            List<string> filesFromToday = FileIO.GetFilesInDirectory(SnapshotFileDirectory, fileName);
-            if (filesFromToday.Count <= 0)
+            for (int i = 0; i <= HoursRange; i++)
             {
-                return success;
-            }
+                string fileName = GetFileNameBySourceAndDate(mileageProgram, currentTime);
 
-            results = FileIO.ReadFileContents(filesFromToday[0]);
-            success = true;
+                List<string> filesFromToday = FileIO.GetFilesInDirectory(SnapshotFileDirectory, fileName);
+                if (filesFromToday.Count > 0)
+                {
+                    results = FileIO.ReadFileContents(filesFromToday[0]);
+                    success = true;
+                }
+
+                currentTime = currentTime.AddHours(-1);
+            }
 
             return success;
         }

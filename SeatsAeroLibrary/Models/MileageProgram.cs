@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeatsAeroLibrary
+namespace SeatsAeroLibrary.Models
 {
     //Source	Mileage Program	Supported Cabins	Has Seat Count	Has Trip Data
-    [FlagsAttribute]
+    [Flags]
     public enum MileageProgram
     {
         None = 0,
@@ -28,11 +28,11 @@ namespace SeatsAeroLibrary
         // emirates    Emirates Skywards   Y/W/J/F No  No
         emirates = 128,
         // aeroplan    Air Canada Aeroplan Y/W/J/F No  Yes
-        aeroplan =  256,
+        aeroplan = 256,
         // alaska  Alaska Mileage Plan Y/W/J/F Yes Yes
         alaska = 512,
         // velocity    Virgin Australia Velocity   Y/W/J/F Yes Yes
-        velocity=1024,
+        velocity = 1024,
         // qantas  Qantas Frequent Flyer   Y/W/J/F No  Yes
         qantas = 2048,
         all = 4095
@@ -43,7 +43,7 @@ namespace SeatsAeroLibrary
     {
         static bool IsPowerOf2(int num)
         {
-            return num > 0 && (num & (num - 1)) == 0;
+            return num > 0 && (num & num - 1) == 0;
         }
 
         public static bool IsSingleAirline(MileageProgram program)
@@ -54,11 +54,11 @@ namespace SeatsAeroLibrary
 
     }
 
-    public class SingleMileageProgramRequiredException: InvalidOperationException
+    public class SingleMileageProgramRequiredException : InvalidOperationException
     {
         public SingleMileageProgramRequiredException(string message) : base(message)
         {
-            
+
         }
     }
 }

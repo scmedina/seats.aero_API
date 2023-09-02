@@ -6,17 +6,30 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using SeatsAeroLibrary.Helpers;
+using SeatsAeroLibrary.Services;
+using static System.Formats.Asn1.AsnWriter;
+using Autofac;
 
 namespace SeatsAeroLibrary
 {
     public class SeatsAeroAPI
     {
+        private static ILogger _logger;
+        private static IMessenger _messenger;
+
         public SeatsAeroAPI ()
         {
+            using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
+            {
+                _logger = scope.Resolve<ILogger>();
+                _messenger = scope.Resolve<IMessenger>();
+            }
         }
 
         public async void LoadAvailability(MileageProgram mileageProgram, bool forceMostRecent = false)
         {
+            _logger.Info($"Loading availability of: {mileageProgram}");
+            _messenger.ShowMessageBox("Test", "Test");
             for (int i = 0; i<12; i++)
             {
                 MileageProgram thisProgram = (MileageProgram)Math.Pow(2, i);
