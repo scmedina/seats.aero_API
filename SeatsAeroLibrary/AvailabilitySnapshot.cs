@@ -24,7 +24,7 @@ namespace SeatsAeroLibrary
 
         public bool TryFindValidSnapshot(MileageProgram mileageProgram, ref string results)
         {
-            MileageProgramHelpers.CheckForSingleMileageProgram(mileageProgram);
+            Guard.AgainstMultipleSources(mileageProgram, nameof(mileageProgram));
 
             bool success = false;
             results = "";

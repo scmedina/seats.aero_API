@@ -52,14 +52,6 @@ namespace SeatsAeroLibrary
             return IsPowerOf2(num);
         }
 
-
-        internal static void CheckForSingleMileageProgram(MileageProgram program)
-        {
-            if (IsSingleAirline(program)== false) 
-            { 
-                throw new SingleMileageProgramRequiredException(program.ToString()); 
-            }
-        }
     }
 
     public class SingleMileageProgramRequiredException: InvalidOperationException

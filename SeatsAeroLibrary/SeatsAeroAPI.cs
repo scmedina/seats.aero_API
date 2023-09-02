@@ -5,6 +5,7 @@ using System.Text;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using SeatsAeroLibrary.Helpers;
 
 namespace SeatsAeroLibrary
 {
@@ -27,8 +28,7 @@ namespace SeatsAeroLibrary
         }
         public async void LoadAvailabilitySingle(MileageProgram mileageProgram, bool forceMostRecent = false)
         {
-
-            MileageProgramHelpers.CheckForSingleMileageProgram(mileageProgram);
+            Guard.AgainstMultipleSources(mileageProgram, nameof(mileageProgram));
 
             string json = "";
             FileSnapshot fileSnapshot = new FileSnapshot();
@@ -45,7 +45,7 @@ namespace SeatsAeroLibrary
 
         private async Task<string> TryGetAPIAvailabilityResults(MileageProgram mileageProgram)
         {
-            MileageProgramHelpers.CheckForSingleMileageProgram(mileageProgram);
+            Guard.AgainstMultipleSources(mileageProgram, nameof(mileageProgram));
 
             var options = new RestClientOptions($"https://seats.aero/api/availability?source={mileageProgram.ToString()}");
             var client = new RestClient(options);
