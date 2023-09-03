@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Models
 {
-    internal class Flight
+    public class Flight
     {
         public string Id { get; set; }
         public Route Route { get; set; }
@@ -26,8 +26,8 @@ namespace SeatsAeroLibrary.Models
 
         public override string ToString()
         {
-            return $"ID: {Id}, Date: {ParsedDate}, YAvailability: {YAvailability.ToString}, WAvailability: {WAvailability.ToString}," +
-                $" JAvailability: {JAvailability.ToString}, FAvailability: {FAvailability.ToString}, Source: {Source}";
+            return $"ID: {Id}, Date: {ParsedDate}, YAvailability: {YAvailability}, WAvailability: {WAvailability}," +
+                $" JAvailability: {JAvailability}, FAvailability: {FAvailability}, Source: {Source}";
         }
 
         public Flight(AvailabilityDataModel availability)

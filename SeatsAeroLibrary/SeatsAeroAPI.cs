@@ -50,9 +50,13 @@ namespace SeatsAeroLibrary
                 json = await TryGetAPIAvailabilityResults(mileageProgram);
             }
 
+            Guard.AgainstNullOrEmptyResultString(json, nameof(json));
+
             List<AvailabilityDataModel> availabilities = JsonSerializer.Deserialize<List<AvailabilityDataModel>>(json);
+            Guard.AgainstNullOrEmptyList(availabilities, nameof(availabilities));
 
             //TODO: cast to Flight then replace everything referencing availabilities.
+            List<Flight> flights = availabilities.Select(value => new Flight(value)).ToList();
 
             //System.Diagnostics.Debug.WriteLine("{0}", jsonResults);
         }

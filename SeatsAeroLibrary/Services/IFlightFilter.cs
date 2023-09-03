@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Services
 {
-    public interface IAvailabilityFilter
+    public interface IFlightFilter
     {
-        List<AvailabilityDataModel> Filter(List<AvailabilityDataModel> availabilityList);
+        List<Flight> Filter(List<Flight> flights);
     }
 }

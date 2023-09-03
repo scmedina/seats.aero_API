@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Models.AvailabilityFilters
 {
-    public class SeatAvailabilityFilter : IAvailabilityFilter
+    public class SeatAvailabilityFilter : IFlightFilter
+
     {
         private SeatType _seatTypes;
         List<SeatType> seatTypesList;
@@ -20,10 +21,9 @@ namespace SeatsAeroLibrary.Models.AvailabilityFilters
             seatTypesList = enumHelper.GetBitFlagList(_seatTypes);
         }
 
-        public List<AvailabilityDataModel> Filter(List<AvailabilityDataModel> availabilityList)
+        List<Flight> IFlightFilter.Filter(List<Flight> flights)
         {
-            
-
+            throw new NotImplementedException();
         }
     }
 }
