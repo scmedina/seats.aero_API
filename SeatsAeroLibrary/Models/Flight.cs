@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -18,6 +19,21 @@ namespace SeatsAeroLibrary.Models
         public ClassAvailability WAvailability { get; set; }
         public ClassAvailability JAvailability { get; set; }
         public ClassAvailability FAvailability { get; set; }
+
+        public ClassAvailability GetClassAvailability(SeatType seatType)
+        {
+            switch (seatType)
+            {
+                case SeatType.Y:
+                    return YAvailability;
+                case SeatType.W:
+                    return WAvailability;
+                case SeatType.J:
+                    return JAvailability;
+                default:
+                    return FAvailability;
+            }
+        }
 
         public MileageProgram Source { get; set; }
         public string ComputedLastSeen { get; set; }

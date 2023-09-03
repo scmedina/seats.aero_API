@@ -10,9 +10,19 @@ namespace SeatsAeroLibrary.Models
     public class FilterAggregate
     {
         private List<IFlightFilter> filters;
-        public FilterAggregate(List<IFlightFilter> filters) 
+        public FilterAggregate(List<IFlightFilterFactory> filterFactories) 
         { 
-            this.filters = filters;
+            this.filters = new List<IFlightFilter>();
+
+            if (filterFactories is null)
+            {
+                return;
+            }
+
+            foreach (IFlightFilterFactory factory in filterFactories)
+            {
+                this.filters.Add(factory.CreateFilter());
+            }
         }
 
         public List<Flight> Filter(List<Flight> flights)

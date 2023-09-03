@@ -27,7 +27,8 @@ namespace SeatsAeroLibrary
             }
         }
 
-        public async void LoadAvailability(MileageProgram mileageProgram, bool forceMostRecent = false)
+        public async void LoadAvailability(MileageProgram mileageProgram, bool forceMostRecent = false,
+            List<IFlightFilterFactory> filterFactories = null)
         {
             _logger.Info($"Loading availability of: {mileageProgram}");
 
@@ -35,10 +36,11 @@ namespace SeatsAeroLibrary
             List<MileageProgram> programs = enumHelper.GetBitFlagList(mileageProgram);
             foreach (MileageProgram thisProgram in programs)
             {
-                LoadAvailabilitySingle(thisProgram, forceMostRecent);
+                LoadAvailabilitySingle(thisProgram, forceMostRecent, filterFactories);
             }
         }
-        public async void LoadAvailabilitySingle(MileageProgram mileageProgram, bool forceMostRecent = false)
+        public async void LoadAvailabilitySingle(MileageProgram mileageProgram, bool forceMostRecent = false,
+            List<IFlightFilterFactory> filterFactories = null)
         {
             Guard.AgainstMultipleSources(mileageProgram, nameof(mileageProgram));
 
@@ -55,8 +57,10 @@ namespace SeatsAeroLibrary
             List<AvailabilityDataModel> availabilities = JsonSerializer.Deserialize<List<AvailabilityDataModel>>(json);
             Guard.AgainstNullOrEmptyList(availabilities, nameof(availabilities));
 
-            //TODO: cast to Flight then replace everything referencing availabilities.
             List<Flight> flights = availabilities.Select(value => new Flight(value)).ToList();
+
+            FilterAggregate filterAggregate = new FilterAggregate(filterFactories);
+            List<Flight> filteredFlights = filterAggregate.Filter(flights);
 
             //System.Diagnostics.Debug.WriteLine("{0}", jsonResults);
         }

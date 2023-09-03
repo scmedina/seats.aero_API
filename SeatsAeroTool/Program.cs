@@ -1,6 +1,7 @@
 using Autofac;
 using SeatsAeroLibrary;
 using SeatsAeroLibrary.Models;
+using SeatsAeroLibrary.Models.FlightFactories;
 using SeatsAeroLibrary.Services;
 using SeatsAeroTool.Services;
 
@@ -36,7 +37,10 @@ namespace SeatsAeroTool
 
             seatsAeroInfo = new SeatsAeroAPI();
 
-            seatsAeroInfo.LoadAvailability( MileageProgram.american);
+
+            List<IFlightFilterFactory> filterFactories = new List<IFlightFilterFactory>();
+            filterFactories.Add(new SeatAvailabilityFilterFactory(SeatType.Y | SeatType.W, 2));
+            seatsAeroInfo.LoadAvailability( MileageProgram.american,false, filterFactories);
 
             Application.Run(new MainForm());
         }
