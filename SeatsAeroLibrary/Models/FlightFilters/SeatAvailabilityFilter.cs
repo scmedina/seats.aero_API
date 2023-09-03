@@ -25,13 +25,20 @@ namespace SeatsAeroLibrary.Models.FlightFilters
 
         List<Flight> IFlightFilter.Filter(List<Flight> flights)
         {
-            List<Flight> results = new List<Flight>(flights);
+            return flights.Where(flight => FilterFlight(flight)).ToList();
+        }
+
+        private  bool FilterFlight(Flight flight)
+        {
             foreach (SeatType seatType in seatTypesList)
             {
-                results = results.Where(flight => flight.GetClassAvailability(seatType).RemainingSeats >= _minimumSeatsAvailable).ToList();
+                ClassAvailability classAvailability = flight.GetClassAvailability(seatType);
+                if (classAvailability.Available = true && classAvailability.RemainingSeats>= _minimumSeatsAvailable)
+                {
+                    return true;
+                }
             }
-            return null;
-            //return flights.Where(flight => flight.)
+            return false;
         }
     }
 }
