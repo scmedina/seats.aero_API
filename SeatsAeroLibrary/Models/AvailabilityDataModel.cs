@@ -26,16 +26,16 @@ namespace SeatsAeroLibrary.Models
         public DateTime ParsedDate { get; set; }
 
         [JsonPropertyName("YAvailable")]
-        public bool YAvailable { get; set; }
+        public bool? YAvailable { get; set; }
 
         [JsonPropertyName("WAvailable")]
-        public bool WAvailable { get; set; }
+        public bool? WAvailable { get; set; }
 
         [JsonPropertyName("JAvailable")]
-        public bool JAvailable { get; set; }
+        public bool? JAvailable { get; set; }
 
         [JsonPropertyName("FAvailable")]
-        public bool FAvailable { get; set; }
+        public bool? FAvailable { get; set; }
 
         [JsonPropertyName("YMileageCost")]
         public string YMileageCost { get; set; }
@@ -50,16 +50,16 @@ namespace SeatsAeroLibrary.Models
         public string FMileageCost { get; set; }
 
         [JsonPropertyName("YRemainingSeats")]
-        public int YRemainingSeats { get; set; }
+        public int? YRemainingSeats { get; set; }
 
         [JsonPropertyName("WRemainingSeats")]
-        public int WRemainingSeats { get; set; }
+        public int? WRemainingSeats { get; set; }
 
         [JsonPropertyName("JRemainingSeats")]
-        public int JRemainingSeats { get; set; }
+        public int? JRemainingSeats { get; set; }
 
         [JsonPropertyName("FRemainingSeats")]
-        public int FRemainingSeats { get; set; }
+        public int? FRemainingSeats { get; set; }
 
         [JsonPropertyName("YAirlines")]
         public string YAirlines { get; set; }
@@ -74,16 +74,16 @@ namespace SeatsAeroLibrary.Models
         public string FAirlines { get; set; }
 
         [JsonPropertyName("YDirect")]
-        public bool YDirect { get; set; }
+        public bool? YDirect { get; set; }
 
         [JsonPropertyName("WDirect")]
-        public bool WDirect { get; set; }
+        public bool? WDirect { get; set; }
 
         [JsonPropertyName("JDirect")]
-        public bool JDirect { get; set; }
+        public bool? JDirect { get; set; }
 
         [JsonPropertyName("FDirect")]
-        public bool FDirect { get; set; }
+        public bool? FDirect { get; set; }
 
         [JsonPropertyName("Source")]
         public string Source { get; set; }

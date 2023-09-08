@@ -36,13 +36,13 @@ namespace SeatsAeroLibrary.Models
                 $" Direct: {Direct}";
         }
 
-        public ClassAvailability(bool available, string mileageCostString, int remainingSeats, string airlines, bool direct)
+        public ClassAvailability(bool? available, string mileageCostString, int? remainingSeats, string airlines, bool? direct)
         {
-            Available = available;
+            Available = available?? false;
             MileageCostString = mileageCostString;
-            RemainingSeats = remainingSeats;
+            RemainingSeats = remainingSeats?? 0;
             Airlines = airlines;
-            Direct = direct;
+            Direct = direct?? false;
         }
     }
 }

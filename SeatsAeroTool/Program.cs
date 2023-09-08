@@ -40,7 +40,7 @@ namespace SeatsAeroTool
 
             List<IFlightFilterFactory> filterFactories = new List<IFlightFilterFactory>();
             filterFactories.Add(new SeatAvailabilityFilterFactory(SeatType.Any, 2));
-            seatsAeroInfo.LoadAvailability( MileageProgram.american,false, filterFactories);
+            seatsAeroInfo.LoadAvailability( MileageProgram.lifemiles,false, filterFactories);
 
             Application.Run(new MainForm());
         }

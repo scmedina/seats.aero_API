@@ -9,7 +9,7 @@ namespace SeatsAeroLibrary.Models
 {
     internal class FileSnapshot
     {
-        private static string SnapshotFileName = "seats_aero_[source]_[dateStamp]_[timeStamp]";
+        private static string SnapshotFileName = "seats_aero_[source]_[dateStamp]_[timeStamp].json";
         private static string SnapshotDateFormat = "yyyyMMdd";
         private static string SnapshotTimeFormat = "HH";
         public static string SnapshotFileDirectory = $@"{Environment.GetEnvironmentVariable("Temp")}\\";

@@ -33,7 +33,7 @@ namespace SeatsAeroLibrary.Models.FlightFilters
             foreach (SeatType seatType in seatTypesList)
             {
                 ClassAvailability classAvailability = flight.GetClassAvailability(seatType);
-                if (classAvailability.Available = true && classAvailability.RemainingSeats>= _minimumSeatsAvailable)
+                if (classAvailability.Available = true && classAvailability.RemainingSeats >= _minimumSeatsAvailable)
                 {
                     return true;
                 }
