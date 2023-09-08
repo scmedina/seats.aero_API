@@ -8,7 +8,7 @@ using System.Data;
 
 namespace SeatsAeroLibrary.Models
 {
-    public class Route
+    public class RouteDataModel
     {
         [JsonPropertyName("ID")]
         public string Id { get; set; }

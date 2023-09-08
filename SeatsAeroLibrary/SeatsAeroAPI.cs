@@ -10,7 +10,6 @@ using SeatsAeroLibrary.Services;
 using static System.Formats.Asn1.AsnWriter;
 using Autofac;
 using System.Net;
-using SeatsAeroLibrary.Models.Data;
 
 namespace SeatsAeroLibrary
 {

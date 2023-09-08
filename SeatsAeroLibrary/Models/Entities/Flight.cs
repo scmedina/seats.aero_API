@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using SeatsAeroLibrary.Models.Data;
 
 namespace SeatsAeroLibrary.Models
 {
@@ -58,10 +57,8 @@ namespace SeatsAeroLibrary.Models
             AvailabilityTrips = availability.AvailabilityTrips ;
 
             MileageProgram thisSource = MileageProgram.None;
-            if (Enum.TryParse(availability.Source, true, out thisSource) == true)
-            {
-                Source = thisSource;
-            }
+            Enum.TryParse(availability.Source, true, out thisSource);
+            Source = thisSource;
 
             EconomyAvailability = new ClassAvailability(
                 availability.YAvailable, availability.YMileageCost, availability.YRemainingSeats, 
