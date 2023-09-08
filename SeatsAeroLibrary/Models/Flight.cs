@@ -15,23 +15,25 @@ namespace SeatsAeroLibrary.Models
         public Route Route { get; set; }
         public DateTime ParsedDate { get; set; }
 
-        public ClassAvailability YAvailability { get; set; }
+        public ClassAvailability EconomyAvailability { get; set; }
         public ClassAvailability WAvailability { get; set; }
-        public ClassAvailability JAvailability { get; set; }
-        public ClassAvailability FAvailability { get; set; }
+        public ClassAvailability BusinessAvailability { get; set; }
+        public ClassAvailability FirstAvailability { get; set; }
 
         public ClassAvailability GetClassAvailability(SeatType seatType)
         {
             switch (seatType)
             {
-                case SeatType.Y:
-                    return YAvailability;
+                case SeatType.YEconomy:
+                    return EconomyAvailability;
                 case SeatType.W:
                     return WAvailability;
-                case SeatType.J:
-                    return JAvailability;
+                case SeatType.JBusiness:
+                    return BusinessAvailability;
+                case SeatType.FFirstClass: 
+                    return FirstAvailability;
                 default:
-                    return FAvailability;
+                    return EconomyAvailability;
             }
         }
 
@@ -42,8 +44,8 @@ namespace SeatsAeroLibrary.Models
 
         public override string ToString()
         {
-            return $"ID: {Id}, Date: {ParsedDate}, YAvailability: {YAvailability}, WAvailability: {WAvailability}," +
-                $" JAvailability: {JAvailability}, FAvailability: {FAvailability}, Source: {Source}";
+            return $"Date: {ParsedDate.Date:d}, Route: [{Route}], {nameof(EconomyAvailability)}: [{EconomyAvailability}], {nameof(BusinessAvailability)}: [{BusinessAvailability}]," +
+                $"{nameof(FirstAvailability)}: [{FirstAvailability}, Source: {Source}], {nameof(WAvailability)}: [{WAvailability}]";
         }
 
         public Flight(AvailabilityDataModel availability)
@@ -60,16 +62,16 @@ namespace SeatsAeroLibrary.Models
                 Source = thisSource;
             }
 
-            YAvailability = new ClassAvailability(
+            EconomyAvailability = new ClassAvailability(
                 availability.YAvailable, availability.YMileageCost, availability.YRemainingSeats, 
                 availability.YAirlines, availability.YDirect);
             WAvailability = new ClassAvailability(
                 availability.WAvailable, availability.WMileageCost, availability.WRemainingSeats,
                 availability.WAirlines, availability.WDirect);
-            JAvailability = new ClassAvailability(
+            BusinessAvailability = new ClassAvailability(
                 availability.JAvailable, availability.JMileageCost, availability.JRemainingSeats,
                 availability.JAirlines, availability.JDirect);
-            FAvailability = new ClassAvailability(
+            FirstAvailability = new ClassAvailability(
                 availability.FAvailable, availability.FMileageCost, availability.FRemainingSeats,
                 availability.FAirlines, availability.FDirect);
         }

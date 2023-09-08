@@ -32,8 +32,7 @@ namespace SeatsAeroLibrary.Models
 
         public override string ToString()
         {
-            return $"Available: {Available}, MileageCostString: {MileageCostString}, RemainingSeats: {RemainingSeats}, Airlines: {Airlines}," +
-                $" Direct: {Direct}";
+            return $"Available: {Available}, RemainingSeats: {RemainingSeats}, Direct: {Direct}";
         }
 
         public ClassAvailability(bool? available, string mileageCostString, int? remainingSeats, string airlines, bool? direct)

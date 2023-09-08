@@ -10,10 +10,10 @@ namespace SeatsAeroLibrary.Models
     public enum SeatType
     {
         None = 0,
-        Y = 1,
+        YEconomy = 1,
         W  = 2,
-        J = 4,
-        F = 8,
+        JBusiness = 4,
+        FFirstClass = 8,
         Any = 15
     }
 }

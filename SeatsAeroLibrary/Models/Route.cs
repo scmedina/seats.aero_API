@@ -33,5 +33,12 @@ namespace SeatsAeroLibrary.Models
 
         [JsonPropertyName("Source")]
         public string Source { get; set; }
+
+
+        public override string ToString()
+        {
+            return $"{OriginAirport},{OriginRegion} > {DestinationAirport},{DestinationRegion}";
+        }
     }
+
 }
