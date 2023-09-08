@@ -42,6 +42,7 @@ namespace SeatsAeroTool
             SeatType seatTypes = SeatType.FFirstClass | SeatType.W | SeatType.JBusiness;
             filterFactories.Add(new SeatAvailabilityFilterFactory(seatTypes, 1));
             filterFactories.Add(new DirectFilterFactory(seatTypes, true));
+            filterFactories.Add(new MaxMileageCostFilterFactory(seatTypes, 100000, true));
             seatsAeroInfo.LoadAvailability( MileageProgram.lifemiles | MileageProgram.american,false, filterFactories);
 
             Application.Run(new MainForm());
