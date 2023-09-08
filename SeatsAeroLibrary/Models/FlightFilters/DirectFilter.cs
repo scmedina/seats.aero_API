@@ -8,18 +8,22 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Models.FlightFilters
 {
-    public class SeatAvailabilityFilter : BasicSeatTypeFilter
-
+    public class DirectFilter : BasicSeatTypeFilter
     {
-        private int _minimumSeatsAvailable;
+        private bool? _direct;
 
-        public SeatAvailabilityFilter(SeatType seatTypes, int minimumSeatsAvailable = 0) : base(seatTypes)
+        public DirectFilter(SeatType seatTypes, bool? direct = null) : base(seatTypes)
         {
-            _minimumSeatsAvailable = minimumSeatsAvailable;
+            _direct = direct;
         }
+
         protected override bool FilterFlightBySeatType(Flight flight, ClassAvailability classAvailability)
         {
-            return classAvailability.Available = true && classAvailability.RemainingSeats >= _minimumSeatsAvailable;
+            if (_direct is null)
+            {
+                return true;
+            }
+            return classAvailability.Direct == (bool)_direct ;
         }
     }
 }

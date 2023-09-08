@@ -39,7 +39,8 @@ namespace SeatsAeroTool
 
 
             List<IFlightFilterFactory> filterFactories = new List<IFlightFilterFactory>();
-            filterFactories.Add(new SeatAvailabilityFilterFactory(SeatType.FFirstClass, 1));
+            filterFactories.Add(new SeatAvailabilityFilterFactory(SeatType.FFirstClass | SeatType.W | SeatType.JBusiness, 1));
+            filterFactories.Add(new DirectFilterFactory(SeatType.FFirstClass | SeatType.W | SeatType.JBusiness, true));
             seatsAeroInfo.LoadAvailability( MileageProgram.lifemiles | MileageProgram.american,false, filterFactories);
 
             Application.Run(new MainForm());
