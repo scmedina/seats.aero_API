@@ -6,13 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using SeatsAeroLibrary.Models.Data;
 
 namespace SeatsAeroLibrary.Models
 {
     public class Flight
     {
         public string Id { get; set; }
-        public Route Route { get; set; }
+        public RouteDataModel Route { get; set; }
         public DateTime ParsedDate { get; set; }
 
         public ClassAvailability EconomyAvailability { get; set; }
