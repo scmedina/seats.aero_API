@@ -39,11 +39,11 @@ namespace SeatsAeroTool
             seatsAeroInfo = new SeatsAeroAPI();
 
 
-            Task thisTask = seatsAeroInfo.SaveRandomAvailabilityData(MileageProgram.lifemiles | MileageProgram.american, false);
-            thisTask.Wait();
+            //Task thisTask = seatsAeroInfo.SaveRandomAvailabilityData(MileageProgram.lifemiles | MileageProgram.american, false);
+            //thisTask.Wait();
 
             List <IFlightFilterFactory> filterFactories = new List<IFlightFilterFactory>();
-            SeatType seatTypes = SeatType.FFirstClass | SeatType.W | SeatType.JBusiness;
+            SeatType seatTypes = SeatType.FFirstClass | SeatType.WPremiumEconomy | SeatType.JBusiness;
             filterFactories.Add(new SeatAvailabilityFilterFactory(seatTypes, 1));
             filterFactories.Add(new DirectFilterFactory(seatTypes, true));
             filterFactories.Add(new MaxMileageCostFilterFactory(seatTypes, 100000, true));

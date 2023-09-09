@@ -93,7 +93,7 @@ namespace SeatsAeroLibrary
             return availabilities;
         }
 
-        public async Task SaveRandomAvailabilityData(MileageProgram mileageProgram, bool forceMostRecent = false,  int countPerProgram = 0)
+        public async Task SaveRandomAvailabilityData(MileageProgram mileageProgram, bool forceMostRecent = false,  int countPerProgram = 250)
         {
             _logger.Info($"Saving availability of: {mileageProgram}");
 
@@ -105,7 +105,11 @@ namespace SeatsAeroLibrary
                 List<AvailabilityDataModel> availabilities = await LoadAvailabilitySingle(thisProgram, forceMostRecent);
                 if (availabilities != null)
                 {
-                    List<AvailabilityDataModel> randomAvailabilities = availabilities.GetRandomSubset(250);
+                    List<AvailabilityDataModel> randomAvailabilities = new List<AvailabilityDataModel>(availabilities);
+                    if (countPerProgram > 0)
+                    {
+                        randomAvailabilities = availabilities.GetRandomSubset(countPerProgram);
+                    }
                     string fileName = AvailabilitySnapshot.GetFileNameBySourceAndDate("seats_aero_[source]_[dateStamp].json", thisProgram, DateTime.Now);
                     fileSnapshot.SaveSnapshot(thisProgram, randomAvailabilities, fileName);
                 }

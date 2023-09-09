@@ -34,7 +34,7 @@ namespace SeatsAeroTests
             List<AvailabilityDataModel> data = GetAvailabilities();
 
             List<IFlightFilterFactory> filterFactories = new List<IFlightFilterFactory>();
-            SeatType seatTypes = SeatType.FFirstClass | SeatType.W | SeatType.JBusiness;
+            SeatType seatTypes = SeatType.FFirstClass | SeatType.WPremiumEconomy | SeatType.JBusiness;
             filterFactories.Add(new SeatAvailabilityFilterFactory(seatTypes, 1));
             filterFactories.Add(new DirectFilterFactory(seatTypes, true));
             filterFactories.Add(new MaxMileageCostFilterFactory(seatTypes, 100000, true));
@@ -49,9 +49,19 @@ namespace SeatsAeroTests
             List<Flight> flights = seatsAeroInfo.FilterAvailability(data, filterFactories);
         }
 
+        //[TestMethod]
+        public void SaveRandomTestData()
+        {
+            SeatsAeroAPI seatsAeroInfo = new SeatsAeroAPI();
+            seatsAeroInfo = new SeatsAeroAPI();
+
+            Task thisTask = seatsAeroInfo.SaveRandomAvailabilityData(MileageProgram.velocity, false,100);
+            thisTask.Wait();
+        }
+
         private List<AvailabilityDataModel> GetAvailabilities()
         {
-            List<string> fileNames = new List<string>() { "seats_aero_american_20230909.json", "seats_aero_lifemiles_20230909.json" };
+            List<string> fileNames = new List<string>() { "seats_aero_american_20230909.json", "seats_aero_lifemiles_20230909.json", "seats_aero_velocity_20230909.json" };
             AvailabilitySnapshot snapshot = new AvailabilitySnapshot();
 
             List<AvailabilityDataModel> results = new List<AvailabilityDataModel>();

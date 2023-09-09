@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -10,8 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Data\seats_aero_velocity_20230909.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Data\seats_aero_american_20230909.json" />
     <EmbeddedResource Include="Data\seats_aero_lifemiles_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_velocity_20230909.json" />
   </ItemGroup>
 
   <ItemGroup>

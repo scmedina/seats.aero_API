@@ -11,7 +11,7 @@ namespace SeatsAeroLibrary.Models
     {
         None = 0,
         YEconomy = 1,
-        W  = 2,
+        WPremiumEconomy  = 2,
         JBusiness = 4,
         FFirstClass = 8,
         Any = 15

@@ -17,7 +17,7 @@ namespace SeatsAeroLibrary.Models
         public DateTime ParsedDate { get; set; }
 
         public ClassAvailability EconomyAvailability { get; set; }
-        public ClassAvailability WAvailability { get; set; }
+        public ClassAvailability PremiumEconomyAvailability { get; set; }
         public ClassAvailability BusinessAvailability { get; set; }
         public ClassAvailability FirstAvailability { get; set; }
 
@@ -27,8 +27,8 @@ namespace SeatsAeroLibrary.Models
             {
                 case SeatType.YEconomy:
                     return EconomyAvailability;
-                case SeatType.W:
-                    return WAvailability;
+                case SeatType.WPremiumEconomy:
+                    return PremiumEconomyAvailability;
                 case SeatType.JBusiness:
                     return BusinessAvailability;
                 case SeatType.FFirstClass: 
@@ -46,7 +46,7 @@ namespace SeatsAeroLibrary.Models
         public override string ToString()
         {
             return $"Date: {ParsedDate.Date:d}, Route: [{Route}], {nameof(EconomyAvailability)}: [{EconomyAvailability}], {nameof(BusinessAvailability)}: [{BusinessAvailability}]," +
-                $"{nameof(FirstAvailability)}: [{FirstAvailability}, Source: {Source}], {nameof(WAvailability)}: [{WAvailability}]";
+                $"{nameof(FirstAvailability)}: [{FirstAvailability}, Source: {Source}], {nameof(PremiumEconomyAvailability)}: [{PremiumEconomyAvailability}]";
         }
 
         public Flight(AvailabilityDataModel availability)
@@ -64,7 +64,7 @@ namespace SeatsAeroLibrary.Models
             EconomyAvailability = new ClassAvailability(
                 availability.YAvailable, availability.YMileageCost, availability.YRemainingSeats, 
                 availability.YAirlines, availability.YDirect);
-            WAvailability = new ClassAvailability(
+            PremiumEconomyAvailability = new ClassAvailability(
                 availability.WAvailable, availability.WMileageCost, availability.WRemainingSeats,
                 availability.WAirlines, availability.WDirect);
             BusinessAvailability = new ClassAvailability(
