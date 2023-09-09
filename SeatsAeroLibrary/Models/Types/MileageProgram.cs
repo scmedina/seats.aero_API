@@ -48,6 +48,7 @@ namespace SeatsAeroLibrary.Models
         // qantas  Qantas Frequent Flyer   Y/W/J/F No  Yes
         [SourceDetailsAttribute(hasSeatCount: false, hasTripData: true)]
         qantas = 2048,
+        // flyingblue    Air France / KLM Flying Blue   Y/W/J/F Yes  Yes
         [SourceDetailsAttribute(hasSeatCount: true, hasTripData: true)]
         flyingblue = 4096,
         all = 8191

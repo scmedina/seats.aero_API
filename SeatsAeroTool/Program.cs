@@ -49,7 +49,7 @@ namespace SeatsAeroTool
                 isDestination: false
                 ));
 
-            Task<List<Flight>> flightsAsync = seatsAeroInfo.LoadAvailabilityAndFilter( MileageProgram.lifemiles | MileageProgram.american,false, filterFactories);
+            Task<List<Flight>> flightsAsync = seatsAeroInfo.LoadAvailabilityAndFilter(MileageProgram.flyingblue | MileageProgram.emirates, false, filterFactories);
             flightsAsync.Wait();
             List<Flight> flights = flightsAsync.Result;
 

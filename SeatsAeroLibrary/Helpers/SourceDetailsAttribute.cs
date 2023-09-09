@@ -16,5 +16,7 @@ namespace SeatsAeroLibrary.Helpers
             HasSeatCount = hasSeatCount;
             HasTripData = hasTripData;
         }
+
+        
     }
 }

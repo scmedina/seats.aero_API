@@ -11,11 +11,13 @@ namespace SeatsAeroLibrary.Models.FlightFilters
     public abstract class BasicSeatTypeFilter: BasicFilter
     {
         private SeatType _seatTypes;
-        List<SeatType> _seatTypesList;
+        private List<SeatType> _seatTypesList;
+        private bool _enforceSeatCount;
 
-        public BasicSeatTypeFilter(SeatType seatTypes)
+        public BasicSeatTypeFilter(SeatType seatTypes, bool enforceSeatCount = false)
         {
             _seatTypes = seatTypes;
+            _enforceSeatCount = enforceSeatCount;
 
             EnumHelper enumHelper = new EnumHelper();
             _seatTypesList = enumHelper.GetBitFlagList(_seatTypes);
