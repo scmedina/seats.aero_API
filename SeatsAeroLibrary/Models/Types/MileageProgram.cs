@@ -35,7 +35,8 @@ namespace SeatsAeroLibrary.Models
         velocity = 1024,
         // qantas  Qantas Frequent Flyer   Y/W/J/F No  Yes
         qantas = 2048,
-        all = 4095
+        flyingblue = 4096,
+        all = 8191
     }
 
 

@@ -55,7 +55,7 @@ namespace SeatsAeroTests
             SeatsAeroAPI seatsAeroInfo = new SeatsAeroAPI();
             seatsAeroInfo = new SeatsAeroAPI();
 
-            Task thisTask = seatsAeroInfo.SaveRandomAvailabilityData(MileageProgram.velocity, false,100);
+            Task thisTask = seatsAeroInfo.SaveRandomAvailabilityData(MileageProgram.flyingblue, false,100);
             thisTask.Wait();
         }
 
