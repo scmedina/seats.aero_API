@@ -38,7 +38,9 @@ namespace SeatsAeroTests
             filterFactories.Add(new SeatAvailabilityFilterFactory(seatTypes, 1));
             filterFactories.Add(new DirectFilterFactory(seatTypes, true));
             filterFactories.Add(new MaxMileageCostFilterFactory(seatTypes, 100000, true));
-            LocationByType houstonLocation = new LocationByType("IAH", SeatsAeroLibrary.Helpers.LocationType.Airport);
+            filterFactories.Add(new DateFilterFactory(new DateTime(2023,10,7)));
+            filterFactories.Add(new DateFilterFactory(new DateTime(2023, 10, 8), isEndDate: true));
+            LocationByType houstonLocation = new LocationByType("BOM", SeatsAeroLibrary.Helpers.LocationType.Airport);
             filterFactories.Add(new LocationFilterFactory(
                 new List<SeatsAeroLibrary.Models.Entities.LocationByType> { houstonLocation },
                 isDestination: false

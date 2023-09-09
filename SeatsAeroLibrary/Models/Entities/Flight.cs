@@ -14,7 +14,7 @@ namespace SeatsAeroLibrary.Models
     {
         public string Id { get; set; }
         public Route Route { get; set; }
-        public DateTime ParsedDate { get; set; }
+        public DateTime Date { get; set; }
 
         public ClassAvailability EconomyAvailability { get; set; }
         public ClassAvailability PremiumEconomyAvailability { get; set; }
@@ -45,7 +45,7 @@ namespace SeatsAeroLibrary.Models
 
         public override string ToString()
         {
-            return $"Date: {ParsedDate.Date:d}, Route: [{Route}], {nameof(EconomyAvailability)}: [{EconomyAvailability}], {nameof(BusinessAvailability)}: [{BusinessAvailability}]," +
+            return $"Date: {Date.Date:d}, Route: [{Route}], {nameof(EconomyAvailability)}: [{EconomyAvailability}], {nameof(BusinessAvailability)}: [{BusinessAvailability}]," +
                 $"{nameof(FirstAvailability)}: [{FirstAvailability}, Source: {Source}], {nameof(PremiumEconomyAvailability)}: [{PremiumEconomyAvailability}]";
         }
 
@@ -53,7 +53,7 @@ namespace SeatsAeroLibrary.Models
         {
             Id = availability.Id ;
             Route = Route.GetRoute(availability.Route) ;
-            ParsedDate = availability.ParsedDate ;
+            Date = availability.ParsedDate ;
             ComputedLastSeen = availability.ComputedLastSeen ;
             AvailabilityTrips = availability.AvailabilityTrips ;
 
