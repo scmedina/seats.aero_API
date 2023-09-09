@@ -17,7 +17,7 @@ namespace SeatsAeroLibrary.Models
         public string RouteId { get; set; }
 
         [JsonPropertyName("Route")]
-        public Route Route { get; set; }
+        public RouteDataModel Route { get; set; }
 
         [JsonPropertyName("Date")]
         public string Date { get; set; }

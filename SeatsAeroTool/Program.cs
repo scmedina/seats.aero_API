@@ -1,6 +1,7 @@
 using Autofac;
 using SeatsAeroLibrary;
 using SeatsAeroLibrary.Models;
+using SeatsAeroLibrary.Models.Entities;
 using SeatsAeroLibrary.Models.FlightFactories;
 using SeatsAeroLibrary.Services;
 using SeatsAeroTool.Services;
@@ -43,6 +44,12 @@ namespace SeatsAeroTool
             filterFactories.Add(new SeatAvailabilityFilterFactory(seatTypes, 1));
             filterFactories.Add(new DirectFilterFactory(seatTypes, true));
             filterFactories.Add(new MaxMileageCostFilterFactory(seatTypes, 100000, true));
+            LocationByType houstonLocation = new LocationByType("IAH", SeatsAeroLibrary.Helpers.LocationType.Airport);
+            filterFactories.Add(new LocationFilterFactory(
+                new List<SeatsAeroLibrary.Models.Entities.LocationByType> { houstonLocation },
+                isDestination: false
+                ));
+
             seatsAeroInfo.LoadAvailability( MileageProgram.lifemiles | MileageProgram.american,false, filterFactories);
 
             Application.Run(new MainForm());
