@@ -9,7 +9,7 @@ namespace SeatsAeroLibrary.Models.Entities
 {
     public class Route
     {
-        public static List<Route> List { get; set; } = new List<Route>();
+        protected static List<Route> Routes { get; set; } = new List<Route>();
 
         public string Id { get; set; }
         public Location Origin { get; set; }
@@ -34,9 +34,14 @@ namespace SeatsAeroLibrary.Models.Entities
             return $"{Origin} > {Destination}";
         }
 
-        public Route GetRoute(RouteDataModel routeDataModel)
+        public static Route GetRoute(RouteDataModel routeDataModel)
         {
-            //Route result = Lis
+            Route result = Routes.FirstOrDefault(route => route.Id == routeDataModel.Id);
+            if (result == null)
+            {
+                result = new Route(routeDataModel);
+            }
+            return result;
         }
     }
 }

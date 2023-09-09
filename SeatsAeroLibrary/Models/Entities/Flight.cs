@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SeatsAeroLibrary.Models.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Eventing.Reader;
@@ -12,7 +13,7 @@ namespace SeatsAeroLibrary.Models
     public class Flight
     {
         public string Id { get; set; }
-        public RouteDataModel Route { get; set; }
+        public Route Route { get; set; }
         public DateTime ParsedDate { get; set; }
 
         public ClassAvailability EconomyAvailability { get; set; }
@@ -51,7 +52,7 @@ namespace SeatsAeroLibrary.Models
         public Flight(AvailabilityDataModel availability)
         {
             Id = availability.Id ;
-            Route = availability.Route ;
+            Route = Route.GetRoute(availability.Route) ;
             ParsedDate = availability.ParsedDate ;
             ComputedLastSeen = availability.ComputedLastSeen ;
             AvailabilityTrips = availability.AvailabilityTrips ;
