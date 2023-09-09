@@ -68,18 +68,28 @@ namespace SeatsAeroLibrary
         {
             Guard.AgainstMultipleSources(mileageProgram, nameof(mileageProgram));
 
-            string json = "";
+            string json = ""; bool createFile = false;
             AvailabilitySnapshot fileSnapshot = new AvailabilitySnapshot();
 
             if (forceMostRecent == true ||  fileSnapshot.TryFindValidSnapshot(mileageProgram, ref json) == false)
             {
                 json = await TryGetAPIAvailabilityResults(mileageProgram);
-                fileSnapshot.SaveSnapshot(mileageProgram, json);
+                createFile = true;
+                //fileSnapshot.SaveSnapshot(mileageProgram, json);
             }
 
             Guard.AgainstNullOrEmptyResultString(json, nameof(json));
 
             List<AvailabilityDataModel> availabilities = JsonSerializer.Deserialize<List<AvailabilityDataModel>>(json);
+
+
+            // Added to save the file in formatted JSON.
+            if (createFile = true)
+            {
+                string fileName = fileSnapshot.GetFileNameBySourceAndDate(mileageProgram, DateTime.Now);
+                fileSnapshot.SaveSnapshot(mileageProgram, availabilities, fileName);
+            }
+
             return availabilities;
         }
 
