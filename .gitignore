@@ -12,3 +12,4 @@ debug/
 *.v2
 .vs/SeatsAeroTool/DesignTimeBuild/.dtbcache.v2
 .vs/SeatsAeroTool/v17/.suo
+*.dll

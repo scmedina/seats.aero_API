@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using SeatsAeroLibrary.Helpers;
 
 namespace SeatsAeroLibrary.Models
 {
-    public class FileSnapshot
+    public class AvailabilitySnapshot
     {
         private static string SnapshotFileName = "seats_aero_[source]_[dateStamp]_[timeStamp].json";
         private static string SnapshotDateFormat = "yyyyMMdd";
@@ -39,6 +40,20 @@ namespace SeatsAeroLibrary.Models
         {
             string filePath = SnapshotFileDirectory + fileName;
             FileIO.ExportJsonFile(results, filePath);
+        }
+
+        public List<AvailabilityDataModel> LoadAvailabilityByFile(string filePath)
+        {
+            string json = FileIO.ReadFileContents(filePath);
+            return LoadAvailabilityByFileContents(json);
+        }
+
+        public List<AvailabilityDataModel> LoadAvailabilityByFileContents(string json)
+        {
+            Guard.AgainstNullOrEmptyResultString(json, nameof(json));
+
+            List<AvailabilityDataModel> availabilities = JsonSerializer.Deserialize<List<AvailabilityDataModel>>(json);
+            return availabilities;
         }
 
         public bool TryFindValidSnapshot(MileageProgram mileageProgram, ref string results)

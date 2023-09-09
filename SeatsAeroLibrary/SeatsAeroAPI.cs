@@ -33,6 +33,10 @@ namespace SeatsAeroLibrary
         {
             List<AvailabilityDataModel> availableData = await LoadAvailability(mileageProgram, forceMostRecent);
 
+            return FilterAvailability(availableData, filterFactories);
+        }
+        public List<Flight> FilterAvailability(List<AvailabilityDataModel> availableData, List<IFlightFilterFactory> filterFactories = null)
+        {
             Guard.AgainstNullOrEmptyList(availableData, nameof(availableData));
 
             List<Flight> flights = availableData.Select(value => new Flight(value)).ToList();
@@ -65,7 +69,7 @@ namespace SeatsAeroLibrary
             Guard.AgainstMultipleSources(mileageProgram, nameof(mileageProgram));
 
             string json = "";
-            FileSnapshot fileSnapshot = new FileSnapshot();
+            AvailabilitySnapshot fileSnapshot = new AvailabilitySnapshot();
 
             if (forceMostRecent == true ||  fileSnapshot.TryFindValidSnapshot(mileageProgram, ref json) == false)
             {
@@ -84,7 +88,7 @@ namespace SeatsAeroLibrary
             _logger.Info($"Saving availability of: {mileageProgram}");
 
             EnumHelper enumHelper = new EnumHelper();
-            FileSnapshot fileSnapshot = new FileSnapshot();
+            AvailabilitySnapshot fileSnapshot = new AvailabilitySnapshot();
             List<MileageProgram> programs = enumHelper.GetBitFlagList(mileageProgram);
             foreach (MileageProgram thisProgram in programs)
             {
@@ -92,7 +96,7 @@ namespace SeatsAeroLibrary
                 if (availabilities != null)
                 {
                     List<AvailabilityDataModel> randomAvailabilities = availabilities.GetRandomSubset(250);
-                    string fileName = FileSnapshot.GetFileNameBySourceAndDate("seats_aero_[source]_[dateStamp].json", thisProgram, DateTime.Now);
+                    string fileName = AvailabilitySnapshot.GetFileNameBySourceAndDate("seats_aero_[source]_[dateStamp].json", thisProgram, DateTime.Now);
                     fileSnapshot.SaveSnapshot(thisProgram, randomAvailabilities, fileName);
                 }
             }

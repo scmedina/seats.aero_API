@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Text.Json;
 using System.Collections;
+using System.Reflection;
 
 namespace SeatsAeroLibrary.Helpers
 {
-    internal class FileIO
+    public class FileIO
     {
         internal static List<string> GetFilesInDirectory(string directoryPath, string filePattern)
         {
@@ -56,6 +57,32 @@ namespace SeatsAeroLibrary.Helpers
                 WriteIndented = true // For pretty-printing the JSON
             });
             File.WriteAllText(filePath,json);
+        }
+
+        public static string ReadEmbeddedResource( string resourceName, Assembly assembly)
+        {
+            // Get the current assembly.
+            if (assembly is null)
+            {
+                assembly = Assembly.GetExecutingAssembly();
+            }
+
+            // Construct the full resource name, including the namespace.
+            string fullResourceName = $"{assembly.GetName().Name}.{resourceName}";
+
+            // Read the embedded resource into a string.
+            using (Stream stream = assembly.GetManifestResourceStream(fullResourceName))
+            {
+                if (stream == null)
+                {
+                    throw new InvalidOperationException($"Resource '{fullResourceName}' not found.");
+                }
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
         }
     }
 }
