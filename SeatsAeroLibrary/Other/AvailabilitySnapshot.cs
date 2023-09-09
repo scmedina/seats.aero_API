@@ -7,7 +7,7 @@ using SeatsAeroLibrary.Helpers;
 
 namespace SeatsAeroLibrary.Models
 {
-    internal class FileSnapshot
+    public class FileSnapshot
     {
         private static string SnapshotFileName = "seats_aero_[source]_[dateStamp]_[timeStamp].json";
         private static string SnapshotDateFormat = "yyyyMMdd";
@@ -17,10 +17,28 @@ namespace SeatsAeroLibrary.Models
 
         public string GetFileNameBySourceAndDate(MileageProgram mileageProgram, DateTime currentTime)
         {
-            string fileName = SnapshotFileName.Replace("[source]", mileageProgram.ToString());
+            return GetFileNameBySourceAndDate(SnapshotFileName, mileageProgram, currentTime);
+        }
+
+        public static string GetFileNameBySourceAndDate(string pattern, MileageProgram mileageProgram, DateTime currentTime)
+        {
+            string fileName = pattern.Replace("[source]", mileageProgram.ToString());
             fileName = fileName.Replace("[dateStamp]", currentTime.ToString(SnapshotDateFormat));
             fileName = fileName.Replace("[timeStamp]", currentTime.ToString(SnapshotTimeFormat));
             return fileName;
+        }
+
+        public void SaveSnapshot(MileageProgram mileageProgram, string results)
+        {
+            string filePath = SnapshotFileDirectory + GetFileNameBySourceAndDate(mileageProgram, DateTime.Now);
+            System.IO.File.WriteAllText(filePath, results);
+        }
+
+
+        public void SaveSnapshot<T>(MileageProgram mileageProgram, List<T> results, string fileName)
+        {
+            string filePath = SnapshotFileDirectory + fileName;
+            FileIO.ExportJsonFile(results, filePath);
         }
 
         public bool TryFindValidSnapshot(MileageProgram mileageProgram, ref string results)

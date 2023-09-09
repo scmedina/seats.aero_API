@@ -39,7 +39,10 @@ namespace SeatsAeroTool
             seatsAeroInfo = new SeatsAeroAPI();
 
 
-            List<IFlightFilterFactory> filterFactories = new List<IFlightFilterFactory>();
+            Task thisTask = seatsAeroInfo.SaveRandomAvailabilityData(MileageProgram.lifemiles | MileageProgram.american, false);
+            thisTask.Wait();
+
+            List <IFlightFilterFactory> filterFactories = new List<IFlightFilterFactory>();
             SeatType seatTypes = SeatType.FFirstClass | SeatType.W | SeatType.JBusiness;
             filterFactories.Add(new SeatAvailabilityFilterFactory(seatTypes, 1));
             filterFactories.Add(new DirectFilterFactory(seatTypes, true));
@@ -50,7 +53,9 @@ namespace SeatsAeroTool
                 isDestination: false
                 ));
 
-            seatsAeroInfo.LoadAvailability( MileageProgram.lifemiles | MileageProgram.american,false, filterFactories);
+            Task<List<Flight>> flightsAsync = seatsAeroInfo.LoadAvailabilityAndFilter( MileageProgram.lifemiles | MileageProgram.american,false, filterFactories);
+            flightsAsync.Wait();
+            List<Flight> flights = flightsAsync.Result;
 
             Application.Run(new MainForm());
         }

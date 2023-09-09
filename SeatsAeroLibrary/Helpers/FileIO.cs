@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Text.Json;
+using System.Collections;
 
 namespace SeatsAeroLibrary.Helpers
 {
@@ -45,6 +47,15 @@ namespace SeatsAeroLibrary.Helpers
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 return null;
             }
+        }
+
+        public static void ExportJsonFile<T>(List<T> jsonClass,  string filePath)
+        {
+            string json = JsonSerializer.Serialize(jsonClass, new JsonSerializerOptions
+            {
+                WriteIndented = true // For pretty-printing the JSON
+            });
+            File.WriteAllText(filePath,json);
         }
     }
 }

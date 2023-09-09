@@ -10,6 +10,8 @@ using SeatsAeroLibrary.Services;
 using static System.Formats.Asn1.AsnWriter;
 using Autofac;
 using System.Net;
+using System.ComponentModel;
+using System.Collections.Specialized;
 
 namespace SeatsAeroLibrary
 {
@@ -26,21 +28,39 @@ namespace SeatsAeroLibrary
                 _messenger = scope.Resolve<IMessenger>();
             }
         }
-
-        public async void LoadAvailability(MileageProgram mileageProgram, bool forceMostRecent = false,
+        public async Task<List<Flight>> LoadAvailabilityAndFilter(MileageProgram mileageProgram, bool forceMostRecent = false,
             List<IFlightFilterFactory> filterFactories = null)
         {
+            List<AvailabilityDataModel> availableData = await LoadAvailability(mileageProgram, forceMostRecent);
+
+            Guard.AgainstNullOrEmptyList(availableData, nameof(availableData));
+
+            List<Flight> flights = availableData.Select(value => new Flight(value)).ToList();
+
+            FilterAggregate filterAggregate = new FilterAggregate(filterFactories);
+            List<Flight> filteredFlights = filterAggregate.Filter(flights);
+            return filteredFlights;
+        }
+
+        public async Task<List<AvailabilityDataModel>> LoadAvailability(MileageProgram mileageProgram, bool forceMostRecent = false)
+        {
             _logger.Info($"Loading availability of: {mileageProgram}");
+
+            List<AvailabilityDataModel> results = new List<AvailabilityDataModel>();
 
             EnumHelper enumHelper = new EnumHelper();
             List<MileageProgram> programs = enumHelper.GetBitFlagList(mileageProgram);
             foreach (MileageProgram thisProgram in programs)
             {
-                LoadAvailabilitySingle(thisProgram, forceMostRecent, filterFactories);
+                List< AvailabilityDataModel> availabilities = await LoadAvailabilitySingle(thisProgram, forceMostRecent);
+                if (availabilities != null)
+                {
+                    results.AddRange(availabilities);
+                }
             }
+            return results;
         }
-        public async void LoadAvailabilitySingle(MileageProgram mileageProgram, bool forceMostRecent = false,
-            List<IFlightFilterFactory> filterFactories = null)
+        public async Task<List<AvailabilityDataModel>> LoadAvailabilitySingle(MileageProgram mileageProgram, bool forceMostRecent = false)
         {
             Guard.AgainstMultipleSources(mileageProgram, nameof(mileageProgram));
 
@@ -50,20 +70,34 @@ namespace SeatsAeroLibrary
             if (forceMostRecent == true ||  fileSnapshot.TryFindValidSnapshot(mileageProgram, ref json) == false)
             {
                 json = await TryGetAPIAvailabilityResults(mileageProgram);
+                fileSnapshot.SaveSnapshot(mileageProgram, json);
             }
 
             Guard.AgainstNullOrEmptyResultString(json, nameof(json));
 
             List<AvailabilityDataModel> availabilities = JsonSerializer.Deserialize<List<AvailabilityDataModel>>(json);
-            Guard.AgainstNullOrEmptyList(availabilities, nameof(availabilities));
-
-            List<Flight> flights = availabilities.Select(value => new Flight(value)).ToList();
-
-            FilterAggregate filterAggregate = new FilterAggregate(filterFactories);
-            List<Flight> filteredFlights = filterAggregate.Filter(flights);
-
-            //System.Diagnostics.Debug.WriteLine("{0}", jsonResults);
+            return availabilities;
         }
+
+        public async Task SaveRandomAvailabilityData(MileageProgram mileageProgram, bool forceMostRecent = false,  int countPerProgram = 0)
+        {
+            _logger.Info($"Saving availability of: {mileageProgram}");
+
+            EnumHelper enumHelper = new EnumHelper();
+            FileSnapshot fileSnapshot = new FileSnapshot();
+            List<MileageProgram> programs = enumHelper.GetBitFlagList(mileageProgram);
+            foreach (MileageProgram thisProgram in programs)
+            {
+                List<AvailabilityDataModel> availabilities = await LoadAvailabilitySingle(thisProgram, forceMostRecent);
+                if (availabilities != null)
+                {
+                    List<AvailabilityDataModel> randomAvailabilities = availabilities.GetRandomSubset(250);
+                    string fileName = FileSnapshot.GetFileNameBySourceAndDate("seats_aero_[source]_[dateStamp].json", thisProgram, DateTime.Now);
+                    fileSnapshot.SaveSnapshot(thisProgram, randomAvailabilities, fileName);
+                }
+            }
+        }
+
 
         private async Task<string> TryGetAPIAvailabilityResults(MileageProgram mileageProgram)
         {
@@ -77,13 +111,10 @@ namespace SeatsAeroLibrary
 
             string results = response.Content == null ? "" : response.Content;
 
-            FileSnapshot fileSnapshot = new FileSnapshot();
-            string filePath = FileSnapshot.SnapshotFileDirectory + fileSnapshot.GetFileNameBySourceAndDate(mileageProgram, DateTime.Now);
-            System.IO.File.WriteAllText(filePath, results);
-
             return results;
         }
 
+        
         
     }
 }
