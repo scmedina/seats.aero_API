@@ -38,10 +38,6 @@ namespace SeatsAeroTool
 
             seatsAeroInfo = new SeatsAeroAPI();
 
-
-            //Task thisTask = seatsAeroInfo.SaveRandomAvailabilityData(MileageProgram.lifemiles | MileageProgram.american, false);
-            //thisTask.Wait();
-
             List <IFlightFilterFactory> filterFactories = new List<IFlightFilterFactory>();
             SeatType seatTypes = SeatType.FFirstClass | SeatType.WPremiumEconomy | SeatType.JBusiness;
             filterFactories.Add(new SeatAvailabilityFilterFactory(seatTypes, 1));

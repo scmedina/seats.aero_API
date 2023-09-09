@@ -41,6 +41,10 @@ namespace SeatsAeroLibrary.Models.Entities
             {
                 result = new Route(routeDataModel);
             }
+            else
+            {
+                return result;
+            }
             return result;
         }
     }
