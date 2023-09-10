@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Models.Entities
 {
-    public class Location
+    public class Location : IEquatable<Location>
     {
 
         public string AirportCode  { get; set; }
@@ -23,6 +23,13 @@ namespace SeatsAeroLibrary.Models.Entities
         public override string ToString()
         {
             return $"{AirportCode} ({Region})";
+        }
+
+        public bool Equals(Location? other)
+        {
+            if (other is null) return false;
+            if (other.AirportCode != AirportCode) return false;
+            return true;
         }
     }
 }

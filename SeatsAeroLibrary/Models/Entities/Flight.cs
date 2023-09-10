@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Models
 {
-    public class Flight
+    public class Flight : IEquatable<Route>, IEquatable<Flight>, IComparable<Flight>
     {
         public Route Route { get; set; }
         public DateTime Date { get; set; }
@@ -20,6 +20,7 @@ namespace SeatsAeroLibrary.Models
         {
             get { return Source.ToString(); }
         }
+        public SeatType SeatType { get; set; }
         public bool Available { get; set; }
         public int RemainingSeats { get; set; }
         public string Airlines { get; set; }
@@ -28,15 +29,16 @@ namespace SeatsAeroLibrary.Models
 
         public override string ToString()
         {
-            return $"Available: {Available}, RemainingSeats: {RemainingSeats}, Direct: {Direct}";
+            return $"Route: {Route}, SeatType: {SeatType}, Date: {Date}, Available: {Available}, RemainingSeats: {RemainingSeats}, Direct: {Direct}, MileageCost: {MileageCost}, Source: {Source}";
         }
 
         public Flight(AvailabilityDataModel availability, SeatType seatType)
         {
-            Route = Route.GetRoute(availability.Route);
+            Route = new Route(availability.Route);
             Date = availability.ParsedDate;
             ComputedLastSeen = availability.ComputedLastSeen;
             AvailabilityTrips = availability.AvailabilityTrips;
+            SeatType = seatType;
 
             MileageProgram thisSource = MileageProgram.None;
             Enum.TryParse(availability.Source, true, out thisSource);
@@ -85,6 +87,44 @@ namespace SeatsAeroLibrary.Models
             results.Add(new Flight(availability, SeatType.JBusiness));
             results.Add(new Flight(availability, SeatType.FFirstClass));
             return results;
+        }
+
+        public bool Equals(Route? other)
+        {
+            if (other is null) return false;
+            if (Route.Origin.Equals(other.Origin) == false) return false;
+            if (Route.Destination.Equals(other.Destination) == false) return false;
+            return true;
+        }
+
+        public bool Equals(Flight? other)
+        {
+            if (other == null) return false;
+            if (other.Route.Equals(this.Route) == false) return false;
+            if (other.SeatType.Equals(this.SeatType) == false) return false;
+            if (other.Date.Equals(this.Date) == false) return false;
+            if (other.Source.Equals(this.Source) == false) return false;
+            if (other.Available.Equals(this.Available) == false) return false;
+            if (other.RemainingSeats.Equals(this.RemainingSeats) == false) return false;
+            if (other.Airlines.Equals(this.Airlines) == false) return false;
+            if (other.Direct.Equals(this.Direct) == false) return false;
+            if (other.MileageCost.Equals(this.MileageCost) == false) return false;
+            return true;
+        }
+
+        public int CompareTo(Flight? other)
+        {
+            int i = 0;
+            if (other == null) return 1;
+            if (MiscHelper.IfNotComparable(other, this, (Flight x) => x.Route.Origin.AirportCode.ToString() , out i) == false) return i;
+            if (MiscHelper.IfNotComparable(other, this, (Flight x) => x.Route.Destination.AirportCode.ToString(), out i) == false) return i;
+            if (MiscHelper.IfNotComparable((int)other.SeatType,(int)this.SeatType, out i) == false) return i;
+            if (MiscHelper.IfNotComparable(other.Direct, this.Direct, out i) == false) return i;
+            if (MiscHelper.IfNotComparable(other.MileageCost, this.MileageCost, out i) == false) return i;
+            if (MiscHelper.IfNotComparable(other.RemainingSeats, this.RemainingSeats, out i) == false) return i;
+            if (MiscHelper.IfNotComparable(other.Date, this.Date, out i) == false) return i;
+            if (MiscHelper.IfNotComparable((int)other.Source, (int)this.Source, out i) == false) return i;
+            return 0;
         }
     }
 }
