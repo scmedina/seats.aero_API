@@ -50,6 +50,20 @@ namespace SeatsAeroLibrary.Helpers
             }
         }
 
+        public static void SaveStringToFile(string content, string filePath)
+        {
+            try
+            {
+                // Write the string content to the specified file path
+                File.WriteAllText(filePath, content);
+                Console.WriteLine($"String saved to {filePath} successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
         public static void ExportJsonFile<T>(List<T> jsonClass,  string filePath)
         {
             string json = JsonSerializer.Serialize(jsonClass, new JsonSerializerOptions

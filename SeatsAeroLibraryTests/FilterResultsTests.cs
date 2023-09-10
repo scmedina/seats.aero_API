@@ -59,7 +59,7 @@ namespace SeatsAeroTests
             List<IFlightFilterFactory> filterFactories = new List<IFlightFilterFactory>();
             SeatType seatTypes = SeatType.FFirstClass | SeatType.JBusiness | SeatType.WPremiumEconomy;
             filterFactories.Add(new SeatAvailabilityFilterFactory(seatTypes, 2));
-            //filterFactories.Add(new DirectFilterFactory(seatTypes, true));
+            filterFactories.Add(new DirectFilterFactory(seatTypes, true));
             filterFactories.Add(new MaxMileageCostFilterFactory(seatTypes, 100000, true));
             filterFactories.Add(new LocationFilterFactory(
                 new List<LocationByType> { new LocationByType("IAH") },
@@ -77,17 +77,19 @@ namespace SeatsAeroTests
                 ));
 
             SeatsAeroAPI seatsAeroInfo = new SeatsAeroAPI();
-            Task<List<Flight>> flightsAsync = seatsAeroInfo.LoadAvailabilityAndFilter(MileageProgram.flyingblue, false, filterFactories);
+            Task<List<Flight>> flightsAsync = seatsAeroInfo.LoadAvailabilityAndFilter(MileageProgram.all, false, filterFactories);
             flightsAsync.Wait();
             List<Flight> flights = flightsAsync.Result;
 
             var routes = Route.GetRoutes(flights);
             flights.Sort();
 
-            string filePath = $@"{Environment.GetEnvironmentVariable("Temp")}\\seats_aero_flights_[dateStamp]_[timeStamp].json";
+            string filePath = $@"{Environment.GetEnvironmentVariable("Temp")}\\seats_aero_flights_[dateStamp]_[timeStamp]";
             filePath = filePath.Replace("[dateStamp]", DateTime.Now.ToString("yyyyMMdd"));
             filePath = filePath.Replace("[timeStamp]", DateTime.Now.ToString("HHmmss"));
-            FileIO.ExportJsonFile(flights, filePath);
+            FileIO.ExportJsonFile(flights, filePath + ".json");
+
+            FileIO.SaveStringToFile(Flight.GetAsCSVString(flights), filePath + ".csv");
         }
 
 

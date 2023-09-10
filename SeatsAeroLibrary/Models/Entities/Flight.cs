@@ -12,7 +12,15 @@ namespace SeatsAeroLibrary.Models
     public class Flight : IEquatable<Route>, IEquatable<Flight>, IComparable<Flight>
     {
         public Route Route { get; set; }
+        public string RouteString
+        {
+            get { return Route.ToString(); }
+        }
         public DateTime Date { get; set; }
+        public string DateString
+        {
+            get { return Date.ToString("d"); }
+        }
         private string ComputedLastSeen { get; set; }
         private object AvailabilityTrips { get; set; }
         public MileageProgram Source { get; set; }
@@ -21,6 +29,10 @@ namespace SeatsAeroLibrary.Models
             get { return Source.ToString(); }
         }
         public SeatType SeatType { get; set; }
+        public string SeatTypeString
+        {
+            get { return SeatType.ToString(); }
+        }
         public bool Available { get; set; }
         public int RemainingSeats { get; set; }
         public string Airlines { get; set; }
@@ -29,7 +41,23 @@ namespace SeatsAeroLibrary.Models
 
         public override string ToString()
         {
-            return $"Route: {Route}, SeatType: {SeatType}, Date: {Date}, Available: {Available}, RemainingSeats: {RemainingSeats}, Direct: {Direct}, MileageCost: {MileageCost}, Source: {Source}";
+            return $"\"{Route}\", {SeatType}, {DateString}, {Date.DayOfWeek}, {RemainingSeats}, {Direct}, {MileageCost}, \"{Airlines.Replace(",",";")}\", {Source}";
+        }
+
+        public static string GetHeaderString()
+        {
+            return $"Route, SeatType, DateString, DayOfWeek, RemainingSeats, Direct, MileageCost, Airlines, Source";
+        }
+
+        public static string GetAsCSVString (List<Flight> flights)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(GetHeaderString());
+            foreach (Flight flight in flights)
+            {
+                sb.AppendLine(flight.ToString());
+            }
+            return sb.ToString();
         }
 
         public Flight(AvailabilityDataModel availability, SeatType seatType)
