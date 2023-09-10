@@ -79,7 +79,7 @@ namespace SeatsAeroLibrary.Models
             Direct = direct ?? false;
         }
 
-        public static List<Flight> GetClassAvailabilities(AvailabilityDataModel availability)
+        public static List<Flight> GetFlights(AvailabilityDataModel availability)
         {
             List<Flight> results = new List<Flight>();
             results.Add(new Flight(availability, SeatType.YEconomy));
@@ -87,6 +87,16 @@ namespace SeatsAeroLibrary.Models
             results.Add(new Flight(availability, SeatType.JBusiness));
             results.Add(new Flight(availability, SeatType.FFirstClass));
             return results;
+        }
+
+        public static List<Flight> GetFlights(List<AvailabilityDataModel> availableData)
+        {
+            List<Flight> flights = new List<Flight>();
+            foreach (var availability in availableData)
+            {
+                flights.AddRange(Flight.GetFlights(availability));
+            }
+            return flights;
         }
 
         public bool Equals(Route? other)
@@ -116,14 +126,14 @@ namespace SeatsAeroLibrary.Models
         {
             int i = 0;
             if (other == null) return 1;
-            if (MiscHelper.IfNotComparable(other, this, (Flight x) => x.Route.Origin.AirportCode.ToString() , out i) == false) return i;
-            if (MiscHelper.IfNotComparable(other, this, (Flight x) => x.Route.Destination.AirportCode.ToString(), out i) == false) return i;
+            if (MiscHelper.IfNotComparable(this, other, (Flight x) => x.Route.Origin.AirportCode.ToString() , out i) == false) return i;
+            if (MiscHelper.IfNotComparable(this, other, (Flight x) => x.Route.Destination.AirportCode.ToString(), out i) == false) return i;
             if (MiscHelper.IfNotComparable((int)other.SeatType,(int)this.SeatType, out i) == false) return i;
             if (MiscHelper.IfNotComparable(other.Direct, this.Direct, out i) == false) return i;
-            if (MiscHelper.IfNotComparable(other.MileageCost, this.MileageCost, out i) == false) return i;
+            if (MiscHelper.IfNotComparable(this.MileageCost, other.MileageCost, out i) == false) return i;
             if (MiscHelper.IfNotComparable(other.RemainingSeats, this.RemainingSeats, out i) == false) return i;
-            if (MiscHelper.IfNotComparable(other.Date, this.Date, out i) == false) return i;
-            if (MiscHelper.IfNotComparable((int)other.Source, (int)this.Source, out i) == false) return i;
+            if (MiscHelper.IfNotComparable(this.Date, other.Date, out i) == false) return i;
+            if (MiscHelper.IfNotComparable((int)this.Source, (int)other.Source, out i) == false) return i;
             return 0;
         }
     }

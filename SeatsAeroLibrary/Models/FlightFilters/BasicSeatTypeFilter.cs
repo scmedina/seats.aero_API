@@ -40,6 +40,10 @@ namespace SeatsAeroLibrary.Models.FlightFilters
                     }
                 }
             }
+            else if (_seatTypesList.Contains(flight.SeatType) == false)
+            {
+                return false;
+            }
 
             return FilterFlightBySeatType(flight);
         }

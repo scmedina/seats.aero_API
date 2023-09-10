@@ -31,39 +31,38 @@ namespace SeatsAeroLibrary
         public async Task<List<Flight>> LoadAvailabilityAndFilter(MileageProgram mileageProgram, bool forceMostRecent = false,
             List<IFlightFilterFactory> filterFactories = null)
         {
-            List<AvailabilityDataModel> availableData = await LoadAvailability(mileageProgram, forceMostRecent);
+            FilterAggregate filterAggregate = new FilterAggregate(filterFactories);
+            List<Flight> flights = await LoadAvailability(mileageProgram, forceMostRecent, filterAggregate);
 
-            return FilterAvailability(availableData, filterFactories);
+            return flights;
         }
         public List<Flight> FilterAvailability(List<AvailabilityDataModel> availableData, List<IFlightFilterFactory> filterFactories = null)
         {
             Guard.AgainstNullOrEmptyList(availableData, nameof(availableData));
 
-            List<Flight> flights = new List<Flight>();
-            foreach (var availability in availableData)
-            {
-                flights.AddRange(Flight.GetClassAvailabilities(availability));
-            }
-
             FilterAggregate filterAggregate = new FilterAggregate(filterFactories);
+            List<Flight> flights = Flight.GetFlights(availableData);
             List<Flight> filteredFlights = filterAggregate.Filter(flights);
             return filteredFlights;
         }
 
-        public async Task<List<AvailabilityDataModel>> LoadAvailability(MileageProgram mileageProgram, bool forceMostRecent = false)
+        public async Task<List<Flight>> LoadAvailability(MileageProgram mileageProgram, 
+            bool forceMostRecent = false, FilterAggregate filterAggregate = null)
         {
             _logger.Info($"Loading availability of: {mileageProgram}");
 
-            List<AvailabilityDataModel> results = new List<AvailabilityDataModel>();
+            List<Flight> results = new List<Flight>();
 
             EnumHelper enumHelper = new EnumHelper();
             List<MileageProgram> programs = enumHelper.GetBitFlagList(mileageProgram);
             foreach (MileageProgram thisProgram in programs)
             {
-                List< AvailabilityDataModel> availabilities = await LoadAvailabilitySingle(thisProgram, forceMostRecent);
-                if (availabilities != null)
+                List<AvailabilityDataModel> availableData = await LoadAvailabilitySingle(thisProgram, forceMostRecent);
+                if (availableData != null)
                 {
-                    results.AddRange(availabilities);
+                    List<Flight> flights = Flight.GetFlights(availableData);
+                    List<Flight> filteredFlights = filterAggregate.Filter(flights);
+                    results.AddRange(filteredFlights);
                 }
             }
             return results;
