@@ -17,17 +17,17 @@ namespace SeatsAeroLibrary.Models.FlightFilters
             _nonZero = nonZero;
         }
 
-        protected override bool FilterFlightBySeatType(Flight flight, ClassAvailability classAvailability)
+        protected override bool FilterFlightBySeatType(Flight flight)
         {
             if (_maxPoints is null)
             {
                 return true;
             }
-            else if (_nonZero == true && classAvailability.MileageCost== 0)
+            else if (_nonZero == true && flight.MileageCost== 0)
             {
                 return false;
             }
-            return classAvailability.MileageCost <= (int)_maxPoints;
+            return flight.MileageCost <= (int)_maxPoints;
         }
     }
 }

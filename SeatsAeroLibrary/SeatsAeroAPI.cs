@@ -39,7 +39,11 @@ namespace SeatsAeroLibrary
         {
             Guard.AgainstNullOrEmptyList(availableData, nameof(availableData));
 
-            List<Flight> flights = availableData.Select(value => new Flight(value)).ToList();
+            List<Flight> flights = new List<Flight>();
+            foreach (var availability in availableData)
+            {
+                flights.AddRange(Flight.GetClassAvailabilities(availability));
+            }
 
             FilterAggregate filterAggregate = new FilterAggregate(filterFactories);
             List<Flight> filteredFlights = filterAggregate.Filter(flights);

@@ -41,17 +41,9 @@ namespace SeatsAeroLibrary.Models.FlightFilters
                 }
             }
 
-            foreach (SeatType seatType in _seatTypesList)
-            {
-                ClassAvailability classAvailability = flight.GetClassAvailability(seatType);
-                if (FilterFlightBySeatType(flight,classAvailability))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return FilterFlightBySeatType(flight);
         }
 
-        protected abstract bool FilterFlightBySeatType(Flight flight, ClassAvailability classAvailability);
+        protected abstract bool FilterFlightBySeatType(Flight flight);
     }
 }

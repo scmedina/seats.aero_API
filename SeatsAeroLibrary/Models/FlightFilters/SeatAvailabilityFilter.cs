@@ -17,9 +17,9 @@ namespace SeatsAeroLibrary.Models.FlightFilters
         {
             _minimumSeatsAvailable = minimumSeatsAvailable;
         }
-        protected override bool FilterFlightBySeatType(Flight flight, ClassAvailability classAvailability)
+        protected override bool FilterFlightBySeatType(Flight flight)
         {
-            return classAvailability.Available = true && classAvailability.RemainingSeats >= _minimumSeatsAvailable;
+            return flight.Available = true && flight.RemainingSeats >= _minimumSeatsAvailable;
         }
     }
 }

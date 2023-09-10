@@ -17,13 +17,13 @@ namespace SeatsAeroLibrary.Models.FlightFilters
             _direct = direct;
         }
 
-        protected override bool FilterFlightBySeatType(Flight flight, ClassAvailability classAvailability)
+        protected override bool FilterFlightBySeatType(Flight flight)
         {
             if (_direct is null)
             {
                 return true;
             }
-            return classAvailability.Direct == (bool)_direct ;
+            return flight.Direct == (bool)_direct ;
         }
     }
 }
