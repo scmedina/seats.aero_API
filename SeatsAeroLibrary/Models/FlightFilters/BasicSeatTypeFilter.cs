@@ -25,6 +25,21 @@ namespace SeatsAeroLibrary.Models.FlightFilters
 
         protected override bool FilterFlight(Flight flight)
         {
+            if (_enforceSeatCount)
+            {
+                SourceDetailsAttribute details = SourceDetailsAttribute.GetDetails(flight.Source);
+                if (details != null)
+                {
+                    if (details.HasSeatCount == false)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+            }
 
             foreach (SeatType seatType in _seatTypesList)
             {

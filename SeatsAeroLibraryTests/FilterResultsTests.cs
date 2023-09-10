@@ -8,6 +8,7 @@ using SeatsAeroLibrary.Services;
 using System;
 using System.Reflection;
 using Autofac;
+using SeatsAeroLibrary.Models.Types;
 
 namespace SeatsAeroTests
 {
@@ -51,13 +52,44 @@ namespace SeatsAeroTests
             List<Flight> flights = seatsAeroInfo.FilterAvailability(data, filterFactories);
         }
 
+        [TestMethod]
+        public void HoustonSearch()
+        {
+
+            List<IFlightFilterFactory> filterFactories = new List<IFlightFilterFactory>();
+            SeatType seatTypes = SeatType.FFirstClass | SeatType.JBusiness;
+            filterFactories.Add(new SeatAvailabilityFilterFactory(seatTypes, 4));
+            filterFactories.Add(new DirectFilterFactory(seatTypes, true));
+            filterFactories.Add(new MaxMileageCostFilterFactory(seatTypes, 100000, true));
+            filterFactories.Add(new LocationFilterFactory(
+                new List<LocationByType> { new LocationByType("IAH") },
+                isDestination: false
+                ));
+
+            filterFactories.Add(new LocationFilterFactory(
+                new List<LocationByType> {
+                    new LocationByType(RegionName.Europe),
+                    new LocationByType(RegionName.Africa),
+                    new LocationByType(RegionName.Asia),
+                    new LocationByType(RegionName.Oceania),
+                    new LocationByType(RegionName.SouthAmerica)},
+                isDestination: true
+                ));
+
+            SeatsAeroAPI seatsAeroInfo = new SeatsAeroAPI();
+            Task<List<Flight>> flightsAsync = seatsAeroInfo.LoadAvailabilityAndFilter(MileageProgram.all, false, filterFactories);
+            flightsAsync.Wait();
+            List<Flight> flights = flightsAsync.Result;
+        }
+
+
         //[TestMethod]
         public void SaveRandomTestData()
         {
             SeatsAeroAPI seatsAeroInfo = new SeatsAeroAPI();
             seatsAeroInfo = new SeatsAeroAPI();
 
-            Task thisTask = seatsAeroInfo.SaveRandomAvailabilityData(MileageProgram.flyingblue, false,100);
+            Task thisTask = seatsAeroInfo.SaveRandomAvailabilityData(MileageProgram.eurobonus, false,100);
             thisTask.Wait();
         }
 

@@ -1,8 +1,10 @@
 using Autofac;
 using SeatsAeroLibrary;
+using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Models;
 using SeatsAeroLibrary.Models.Entities;
 using SeatsAeroLibrary.Models.FlightFactories;
+using SeatsAeroLibrary.Models.Types;
 using SeatsAeroLibrary.Services;
 using SeatsAeroTool.Services;
 
@@ -39,17 +41,26 @@ namespace SeatsAeroTool
             seatsAeroInfo = new SeatsAeroAPI();
 
             List <IFlightFilterFactory> filterFactories = new List<IFlightFilterFactory>();
-            SeatType seatTypes = SeatType.FFirstClass | SeatType.WPremiumEconomy | SeatType.JBusiness;
-            filterFactories.Add(new SeatAvailabilityFilterFactory(seatTypes, 1));
+            SeatType seatTypes = SeatType.FFirstClass | SeatType.JBusiness;
+            filterFactories.Add(new SeatAvailabilityFilterFactory(seatTypes, 4));
             filterFactories.Add(new DirectFilterFactory(seatTypes, true));
             filterFactories.Add(new MaxMileageCostFilterFactory(seatTypes, 100000, true));
-            LocationByType houstonLocation = new LocationByType("IAH", SeatsAeroLibrary.Helpers.LocationType.Airport);
             filterFactories.Add(new LocationFilterFactory(
-                new List<SeatsAeroLibrary.Models.Entities.LocationByType> { houstonLocation },
+                new List<LocationByType> { new LocationByType("IAH") },
                 isDestination: false
                 ));
 
-            Task<List<Flight>> flightsAsync = seatsAeroInfo.LoadAvailabilityAndFilter(MileageProgram.flyingblue | MileageProgram.emirates, false, filterFactories);
+            filterFactories.Add(new LocationFilterFactory(
+                new List<LocationByType> { 
+                    new LocationByType(RegionName.Europe),
+                    new LocationByType(RegionName.Africa),
+                    new LocationByType(RegionName.Asia),
+                    new LocationByType(RegionName.Oceania),
+                    new LocationByType(RegionName.SouthAmerica)},
+                isDestination: true
+                ));
+
+            Task<List<Flight>> flightsAsync = seatsAeroInfo.LoadAvailabilityAndFilter(MileageProgram.all, false, filterFactories);
             flightsAsync.Wait();
             List<Flight> flights = flightsAsync.Result;
 

@@ -27,9 +27,9 @@ namespace SeatsAeroLibrary.Models
         // delta   Delta SkyMiles  Y/W/J   Yes Yes
         [SourceDetailsAttribute(hasSeatCount: true, hasTripData: true)]
         delta = 16,
-        // etihad  Etihad Guest    Y/J Yes No
-        [SourceDetailsAttribute(hasSeatCount: true, hasTripData: false)]
-        etihad = 32,
+        // eurobonus  SAS Eurobonus    Y/J No Yes
+        [SourceDetailsAttribute(hasSeatCount: false, hasTripData: true)]
+        eurobonus = 32,
         // united  United MileagePlus  Y/W/J/F Yes Yes
         [SourceDetailsAttribute(hasSeatCount: true, hasTripData: true)]
         united = 64,

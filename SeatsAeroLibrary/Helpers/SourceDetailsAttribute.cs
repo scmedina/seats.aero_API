@@ -17,6 +17,9 @@ namespace SeatsAeroLibrary.Helpers
             HasTripData = hasTripData;
         }
 
-        
+        public static SourceDetailsAttribute GetDetails(Enum enumVal)
+        {
+            return AttributeHelper.GetAttribute< SourceDetailsAttribute>(enumVal.GetType());
+        }
     }
 }

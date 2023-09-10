@@ -10,13 +10,35 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Data\seats_aero_aeromexico_20230909.json" />
+    <None Remove="Data\seats_aero_aeroplan_20230909.json" />
+    <None Remove="Data\seats_aero_alaska_20230909.json" />
+    <None Remove="Data\seats_aero_delta_20230909.json" />
+    <None Remove="Data\seats_aero_emirates_20230909.json" />
+    <None Remove="Data\seats_aero_etihad_20230909.json" />
+    <None Remove="Data\seats_aero_eurobonus_20230909.json" />
+    <None Remove="Data\seats_aero_flyingblue_20230909.json" />
+    <None Remove="Data\seats_aero_qantas_20230909.json" />
+    <None Remove="Data\seats_aero_united_20230909.json" />
     <None Remove="Data\seats_aero_velocity_20230909.json" />
+    <None Remove="Data\seats_aero_virginatlantic_20230909.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Data\seats_aero_aeromexico_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_aeroplan_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_alaska_20230909.json" />
     <EmbeddedResource Include="Data\seats_aero_american_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_delta_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_emirates_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_etihad_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_eurobonus_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_flyingblue_20230909.json" />
     <EmbeddedResource Include="Data\seats_aero_lifemiles_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_qantas_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_united_20230909.json" />
     <EmbeddedResource Include="Data\seats_aero_velocity_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_virginatlantic_20230909.json" />
   </ItemGroup>
 
   <ItemGroup>
