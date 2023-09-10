@@ -12,13 +12,38 @@ namespace SeatsAeroLibrary.Models
 {
     public class Flight
     {
+        [JsonPropertyName("id")]
         public string Id { get; set; }
+
+        [JsonPropertyName("route")]
         public Route Route { get; set; }
+
+        [JsonPropertyName("date")]
         public DateTime Date { get; set; }
 
+        [JsonPropertyName("computedLastSeen")]
+        public string ComputedLastSeen { get; set; }
+
+        [JsonPropertyName("availabilityTrips")]
+        public object AvailabilityTrips { get; set; }
+        public MileageProgram Source { get; set; }
+
+        [JsonPropertyName("sourceName")]
+        public string SourceString
+        {
+            get { return Source.ToString(); }
+        }
+
+        [JsonPropertyName("economyAvailability")]
         public ClassAvailability EconomyAvailability { get; set; }
+
+        [JsonPropertyName("premiumEconomyAvailability")]
         public ClassAvailability PremiumEconomyAvailability { get; set; }
+
+        [JsonPropertyName("businessAvailability")]
         public ClassAvailability BusinessAvailability { get; set; }
+
+        [JsonPropertyName("firstAvailability")]
         public ClassAvailability FirstAvailability { get; set; }
 
         public ClassAvailability GetClassAvailability(SeatType seatType)
@@ -38,9 +63,6 @@ namespace SeatsAeroLibrary.Models
             }
         }
 
-        public MileageProgram Source { get; set; }
-        public string ComputedLastSeen { get; set; }
-        public object AvailabilityTrips { get; set; }
 
 
         public override string ToString()

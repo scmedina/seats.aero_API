@@ -80,6 +80,11 @@ namespace SeatsAeroTests
             Task<List<Flight>> flightsAsync = seatsAeroInfo.LoadAvailabilityAndFilter(MileageProgram.all, false, filterFactories);
             flightsAsync.Wait();
             List<Flight> flights = flightsAsync.Result;
+
+            string filePath = $@"{Environment.GetEnvironmentVariable("Temp")}\\seats_aero_flights_[dateStamp]_[timeStamp].json";
+            filePath = filePath.Replace("[dateStamp]", DateTime.Now.ToString("yyyyMMdd"));
+            filePath = filePath.Replace("[timeStamp]", DateTime.Now.ToString("HHmmss"));
+            FileIO.ExportJsonFile(flights, filePath);
         }
 
 
