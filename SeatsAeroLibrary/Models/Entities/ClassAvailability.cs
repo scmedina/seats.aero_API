@@ -9,23 +9,11 @@ namespace SeatsAeroLibrary.Models
 {
     public class ClassAvailability
     {
-
-        [JsonPropertyName("available")]
         public bool Available { get; set; }
-
-        [JsonPropertyName("mileageCostString")]
         public string MileageCostString { get; set; }
-
-        [JsonPropertyName("remainingSeats")]
         public int RemainingSeats { get; set; }
-
-        [JsonPropertyName("airlines")]
         public string Airlines { get; set; }
-
-        [JsonPropertyName("direct")]
         public bool Direct { get; set; }
-
-        [JsonPropertyName("mileageCost")]
         public int MileageCost
         {
             get

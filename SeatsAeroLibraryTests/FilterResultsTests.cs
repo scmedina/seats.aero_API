@@ -77,7 +77,7 @@ namespace SeatsAeroTests
                 ));
 
             SeatsAeroAPI seatsAeroInfo = new SeatsAeroAPI();
-            Task<List<Flight>> flightsAsync = seatsAeroInfo.LoadAvailabilityAndFilter(MileageProgram.all, false, filterFactories);
+            Task<List<Flight>> flightsAsync = seatsAeroInfo.LoadAvailabilityAndFilter(MileageProgram.flyingblue, false, filterFactories);
             flightsAsync.Wait();
             List<Flight> flights = flightsAsync.Result;
 

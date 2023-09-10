@@ -10,10 +10,7 @@ namespace SeatsAeroLibrary.Models.Entities
     public class Location
     {
 
-        [JsonPropertyName("airportCode")]
         public string AirportCode  { get; set; }
-
-        [JsonPropertyName("region")]
         public string Region { get; set; }
 
         public Location(string airportCode, string region)

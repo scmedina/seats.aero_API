@@ -10,13 +10,9 @@ namespace SeatsAeroLibrary.Models.Entities
     public class Route
     {
         protected static List<Route> Routes { get; set; } = new List<Route>();
-        [JsonPropertyName("id")]
         public string Id { get; set; }
-        [JsonPropertyName("origin")]
         public Location Origin { get; set; }
-        [JsonPropertyName("destination")]
         public Location Destination { get; set; }
-        [JsonPropertyName("distance")]
         public int Distance { get; set; }
         public MileageProgram Source { get; set; }
 
