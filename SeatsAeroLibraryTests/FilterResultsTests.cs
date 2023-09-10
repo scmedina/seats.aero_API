@@ -82,6 +82,7 @@ namespace SeatsAeroTests
             List<Flight> flights = flightsAsync.Result;
 
             var routes = Route.GetRoutes(flights);
+            flights.Sort();
 
             string filePath = $@"{Environment.GetEnvironmentVariable("Temp")}\\seats_aero_flights_[dateStamp]_[timeStamp].json";
             filePath = filePath.Replace("[dateStamp]", DateTime.Now.ToString("yyyyMMdd"));
