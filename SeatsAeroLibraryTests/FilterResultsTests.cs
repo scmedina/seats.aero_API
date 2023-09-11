@@ -49,40 +49,46 @@ namespace SeatsAeroTests
 
             SeatsAeroAPI seatsAeroInfo = new SeatsAeroAPI();
 
-            List<Flight> flights = seatsAeroInfo.FilterAvailability(data, filterFactories);
+            List<Flight> flights = seatsAeroInfo.FilterAvailability(data, new List<List<IFlightFilterFactory>> { filterFactories });
         }
 
         [TestMethod]
         public void HoustonSearch()
         {
 
-            List<IFlightFilterFactory> filterFactories = new List<IFlightFilterFactory>();
-            SeatType seatTypes = SeatType.FFirstClass | SeatType.JBusiness | SeatType.WPremiumEconomy;
-            filterFactories.Add(new SeatAvailabilityFilterFactory(seatTypes, 2));
-            filterFactories.Add(new DirectFilterFactory(seatTypes, true));
-            filterFactories.Add(new MaxMileageCostFilterFactory(seatTypes, 100000, true));
-            filterFactories.Add(new LocationFilterFactory(
+            List<List<IFlightFilterFactory>> allFilterFactories = new List<List<IFlightFilterFactory>>();
+            List<IFlightFilterFactory> filterFactories1 = new List<IFlightFilterFactory>();
+            allFilterFactories.Add(filterFactories1);
+            SeatType seatTypes = SeatType.Any;
+            filterFactories1.Add(new SeatAvailabilityFilterFactory(seatTypes, 2));
+            filterFactories1.Add(new DirectFilterFactory(seatTypes, true));
+            filterFactories1.Add(new MaxMileageCostFilterFactory(seatTypes, 100000, true));
+            filterFactories1.Add(new LocationFilterFactory(
                 new List<LocationByType> { new LocationByType("IAH") },
                 isDestination: false
                 ));
-
-            filterFactories.Add(new LocationFilterFactory(
+            LocationFilterFactory destination = new LocationFilterFactory(
                 new List<LocationByType> {
                     new LocationByType(RegionName.Europe),
                     new LocationByType(RegionName.Africa),
                     new LocationByType(RegionName.Asia),
                     new LocationByType(RegionName.Oceania),
                     new LocationByType(RegionName.SouthAmerica)},
-                isDestination: true
-                ));
+                isDestination: true);
+            filterFactories1.Add(destination);
+
+
+            List<IFlightFilterFactory> filterFactories2 = new List<IFlightFilterFactory>();
+            allFilterFactories.Add(filterFactories2);
+            filterFactories2.AddRange(filterFactories1);
+            filterFactories2.Remove(destination);
+            filterFactories2.Add(new LocationFilterFactory(
+                new List<LocationByType> {
+                    new LocationByType("HNL")},
+                isDestination: true));
 
             SeatsAeroAPI seatsAeroInfo = new SeatsAeroAPI();
-            Task<List<Flight>> flightsAsync = seatsAeroInfo.LoadAvailabilityAndFilter(MileageProgram.all, false, filterFactories);
-            flightsAsync.Wait();
-            List<Flight> flights = flightsAsync.Result;
-
-            var routes = Route.GetRoutes(flights);
-            flights.Sort();
+            List<Flight> flights = seatsAeroInfo.LoadAvailabilityAndFilterSync(MileageProgram.all, false, allFilterFactories);
 
             string filePath = $@"{Environment.GetEnvironmentVariable("Temp")}\\seats_aero_flights_[dateStamp]_[timeStamp]";
             filePath = filePath.Replace("[dateStamp]", DateTime.Now.ToString("yyyyMMdd"));

@@ -28,22 +28,58 @@ namespace SeatsAeroLibrary
                 _messenger = scope.Resolve<IMessenger>();
             }
         }
-        public async Task<List<Flight>> LoadAvailabilityAndFilter(MileageProgram mileageProgram, bool forceMostRecent = false,
-            List<IFlightFilterFactory> filterFactories = null)
-        {
-            FilterAggregate filterAggregate = new FilterAggregate(filterFactories);
-            List<Flight> flights = await LoadAvailability(mileageProgram, forceMostRecent, filterAggregate);
 
-            return flights;
+        public List<Flight> LoadAvailabilityAndFilterSync(MileageProgram mileageProgram, bool forceMostRecent = false,
+            List<List<IFlightFilterFactory>> filterFactories = null)
+        {
+            Task<List<Flight>> flightsAsync = LoadAvailabilityAndFilter(MileageProgram.all, false, filterFactories);
+            flightsAsync.Wait();
+            return flightsAsync.Result;
         }
-        public List<Flight> FilterAvailability(List<AvailabilityDataModel> availableData, List<IFlightFilterFactory> filterFactories = null)
+        public async Task<List<Flight>> LoadAvailabilityAndFilter(MileageProgram mileageProgram, bool forceMostRecent = false,
+            List<List<IFlightFilterFactory>> filterFactories = null)
+        {
+            CheckFilterFactories(filterFactories);
+
+            List<Flight> results = new List<Flight>();
+            foreach (List<IFlightFilterFactory> theseFilterFactories in filterFactories)
+            {
+                FilterAggregate filterAggregate = new FilterAggregate(theseFilterFactories);
+                results.AddRange(await LoadAvailabilityAndFilter(mileageProgram,forceMostRecent,filterAggregate));
+            }
+
+            results.Sort();
+            return results;
+        }
+        public async Task<List<Flight>> LoadAvailabilityAndFilter(MileageProgram mileageProgram, bool forceMostRecent = false,
+            FilterAggregate filterAggregate = null)
+        {
+            return await LoadAvailability(mileageProgram, forceMostRecent, filterAggregate);
+        }
+        public List<Flight> FilterAvailability(List<AvailabilityDataModel> availableData, List<List<IFlightFilterFactory>> filterFactories = null)
         {
             Guard.AgainstNullOrEmptyList(availableData, nameof(availableData));
+            CheckFilterFactories(filterFactories);
 
-            FilterAggregate filterAggregate = new FilterAggregate(filterFactories);
+            List<Flight> results = new List<Flight>();
             List<Flight> flights = Flight.GetFlights(availableData);
-            List<Flight> filteredFlights = filterAggregate.Filter(flights);
-            return filteredFlights;
+
+            foreach (List<IFlightFilterFactory> theseFilterFactories in filterFactories)
+            {
+                FilterAggregate filterAggregate = new FilterAggregate(theseFilterFactories);
+                results.AddRange(filterAggregate.Filter(flights));
+            }
+
+            return results;
+        }
+
+        protected static void CheckFilterFactories( List<List<IFlightFilterFactory>>  filterFactories)
+        {
+            if (filterFactories is null)
+            {
+                filterFactories = new List<List<IFlightFilterFactory>>();
+                filterFactories.Add(null);
+            }
         }
 
         public async Task<List<Flight>> LoadAvailability(MileageProgram mileageProgram, 

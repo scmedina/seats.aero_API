@@ -60,7 +60,7 @@ namespace SeatsAeroTool
                 isDestination: true
                 ));
 
-            Task<List<Flight>> flightsAsync = seatsAeroInfo.LoadAvailabilityAndFilter(MileageProgram.all, false, filterFactories);
+            Task<List<Flight>> flightsAsync = seatsAeroInfo.LoadAvailabilityAndFilter(MileageProgram.all, false, new List<List<IFlightFilterFactory>> { filterFactories });
             flightsAsync.Wait();
             List<Flight> flights = flightsAsync.Result;
 
