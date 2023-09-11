@@ -59,7 +59,7 @@ namespace SeatsAeroTests
             List<List<IFlightFilterFactory>> allFilterFactories = new List<List<IFlightFilterFactory>>();
             List<IFlightFilterFactory> filterFactories1 = new List<IFlightFilterFactory>();
             allFilterFactories.Add(filterFactories1);
-            SeatType seatTypes = SeatType.Any;
+            SeatType seatTypes = SeatType.FFirstClass | SeatType.JBusiness | SeatType.WPremiumEconomy;
             filterFactories1.Add(new SeatAvailabilityFilterFactory(seatTypes, 2));
             filterFactories1.Add(new DirectFilterFactory(seatTypes, true));
             filterFactories1.Add(new MaxMileageCostFilterFactory(seatTypes, 100000, true));
