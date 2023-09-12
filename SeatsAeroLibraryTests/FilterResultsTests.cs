@@ -88,8 +88,10 @@ namespace SeatsAeroTests
                 isDestination: true));
 
             SeatsAeroAPI seatsAeroInfo = new SeatsAeroAPI();
+            DateTime timer = DateTime.Now;
             List<Flight> flights = seatsAeroInfo.LoadAvailabilityAndFilterSync(MileageProgram.all, false, allFilterFactories);
 
+            double totalTime = (DateTime.Now - timer).TotalMilliseconds;
             string filePath = $@"{Environment.GetEnvironmentVariable("Temp")}\\seats_aero_flights_[dateStamp]_[timeStamp]";
             filePath = filePath.Replace("[dateStamp]", DateTime.Now.ToString("yyyyMMdd"));
             filePath = filePath.Replace("[timeStamp]", DateTime.Now.ToString("HHmmss"));
@@ -98,6 +100,36 @@ namespace SeatsAeroTests
             FileIO.SaveStringToFile(Flight.GetAsCSVString(flights), filePath + ".csv");
         }
 
+        [TestMethod]
+        public void AtlantaSearch()
+        {
+
+            List<List<IFlightFilterFactory>> allFilterFactories = new List<List<IFlightFilterFactory>>();
+            List<IFlightFilterFactory> filterFactories1 = new List<IFlightFilterFactory>();
+            allFilterFactories.Add(filterFactories1);
+            SeatType seatTypes = SeatType.Any;
+            //filterFactories1.Add(new SeatAvailabilityFilterFactory(seatTypes, 2));
+            //filterFactories1.Add(new DirectFilterFactory(seatTypes, true));
+            //filterFactories1.Add(new MaxMileageCostFilterFactory(seatTypes, 100000, true));
+            filterFactories1.Add(new LocationFilterFactory(
+                new List<LocationByType> { new LocationByType("ATL") },
+                isDestination: false
+                ));
+            LocationFilterFactory destination = new LocationFilterFactory(
+                new List<LocationByType> {
+                    new LocationByType("SJU")},
+                isDestination: true);
+            filterFactories1.Add(destination);
+
+            SeatsAeroAPI seatsAeroInfo = new SeatsAeroAPI();
+            List<Flight> flights = seatsAeroInfo.LoadAvailabilityAndFilterSync(MileageProgram.all, false, allFilterFactories);
+
+            string filePath = $@"{Environment.GetEnvironmentVariable("Temp")}\\seats_aero_flights_[dateStamp]_[timeStamp]";
+            filePath = filePath.Replace("[dateStamp]", DateTime.Now.ToString("yyyyMMdd"));
+            filePath = filePath.Replace("[timeStamp]", DateTime.Now.ToString("HHmmss"));
+
+            FileIO.SaveStringToFile(Flight.GetAsCSVString(flights), filePath + ".csv");
+        }
 
         //[TestMethod]
         public void SaveRandomTestData()

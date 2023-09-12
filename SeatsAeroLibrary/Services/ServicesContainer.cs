@@ -20,7 +20,7 @@ namespace SeatsAeroLibrary.Services
 
 #if (DEBUG) 
             // If in debug mode, log to console instead of file
-            builder.RegisterType<ConsoleLogger>()
+            builder.RegisterType<DebuggerLogger>()
                 .As<ILogger>()
                 .SingleInstance();
 #else

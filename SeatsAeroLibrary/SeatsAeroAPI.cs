@@ -32,7 +32,7 @@ namespace SeatsAeroLibrary
         public List<Flight> LoadAvailabilityAndFilterSync(MileageProgram mileageProgram, bool forceMostRecent = false,
             List<List<IFlightFilterFactory>> filterFactories = null)
         {
-            Task<List<Flight>> flightsAsync = LoadAvailabilityAndFilter(MileageProgram.all, false, filterFactories);
+            Task<List<Flight>> flightsAsync = LoadAvailabilityAndFilter(mileageProgram, false, filterFactories);
             flightsAsync.Wait();
             return flightsAsync.Result;
         }
@@ -91,18 +91,34 @@ namespace SeatsAeroLibrary
 
             EnumHelper enumHelper = new EnumHelper();
             List<MileageProgram> programs = enumHelper.GetBitFlagList(mileageProgram);
+            List<Task<List<AvailabilityDataModel>>> myTasks = new List<Task<List<AvailabilityDataModel>>>();
             foreach (MileageProgram thisProgram in programs)
             {
-                List<AvailabilityDataModel> availableData = await LoadAvailabilitySingle(thisProgram, forceMostRecent);
-                if (availableData != null)
-                {
-                    List<Flight> flights = Flight.GetFlights(availableData);
-                    List<Flight> filteredFlights = filterAggregate.Filter(flights);
-                    results.AddRange(filteredFlights);
-                }
+                Task<List<AvailabilityDataModel>> task = LoadAvailabilitySingle(thisProgram, forceMostRecent);
+                myTasks.Add(task);
+                //await task;
             }
+
+            Task.WaitAll(myTasks.ToArray());
+
+            foreach (Task<List<AvailabilityDataModel>> task in myTasks)
+            {
+                AddFilteredFlights(filterAggregate, results, task.Result);
+            }
+
             return results;
         }
+
+        private static void AddFilteredFlights(FilterAggregate filterAggregate, List<Flight> results, List<AvailabilityDataModel> availableData)
+        {
+            if (availableData != null)
+            {
+                List<Flight> flights = Flight.GetFlights(availableData);
+                List<Flight> filteredFlights = filterAggregate.Filter(flights);
+                results.AddRange(filteredFlights);
+            }
+        }
+
         public async Task<List<AvailabilityDataModel>> LoadAvailabilitySingle(MileageProgram mileageProgram, bool forceMostRecent = false)
         {
             Guard.AgainstMultipleSources(mileageProgram, nameof(mileageProgram));
@@ -112,10 +128,13 @@ namespace SeatsAeroLibrary
 
             if (forceMostRecent == true ||  fileSnapshot.TryFindValidSnapshot(mileageProgram, ref json) == false)
             {
+                _logger.Info($"Querying Availability API Result: {mileageProgram}");
                 json = await TryGetAPIAvailabilityResults(mileageProgram);
                 createFile = true;
                 //fileSnapshot.SaveSnapshot(mileageProgram, json);
             }
+
+            _logger.Info($"Availability API Result Completed: {mileageProgram}");
 
             Guard.AgainstNullOrEmptyResultString(json, nameof(json));
 
