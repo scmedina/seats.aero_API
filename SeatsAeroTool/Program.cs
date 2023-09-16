@@ -16,7 +16,7 @@ namespace SeatsAeroTool
         private static ILogger _logger;
         private static IMessenger _messenger;
 
-        public static SeatsAeroAPI seatsAeroInfo;
+        public static SeatsAeroHelper seatsAeroInfo;
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -38,7 +38,7 @@ namespace SeatsAeroTool
                 _messenger = scope.Resolve<IMessenger>();
             }
 
-            seatsAeroInfo = new SeatsAeroAPI();
+            seatsAeroInfo = new SeatsAeroHelper();
 
             List <IFlightFilterFactory> filterFactories = new List<IFlightFilterFactory>();
             SeatType seatTypes = SeatType.FFirstClass | SeatType.JBusiness;

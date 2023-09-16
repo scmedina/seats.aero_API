@@ -12,15 +12,17 @@ using Autofac;
 using System.Net;
 using System.ComponentModel;
 using System.Collections.Specialized;
+using SeatsAeroLibrary.API;
+using SeatsAeroLibrary.API.Models;
 
 namespace SeatsAeroLibrary
 {
-    public class SeatsAeroAPI
+    public class SeatsAeroHelper
     {
         private static ILogger _logger;
         private static IMessenger _messenger;
 
-        public SeatsAeroAPI ()
+        public SeatsAeroHelper ()
         {
             using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
             {
@@ -44,7 +46,7 @@ namespace SeatsAeroLibrary
             List<Flight> results = new List<Flight>();
             foreach (List<IFlightFilterFactory> theseFilterFactories in filterFactories)
             {
-                FilterAggregate filterAggregate = new FilterAggregate(theseFilterFactories);
+                FilterAggregate filterAggregate = new FilterAggregate(theseFilterFactories, new FilterAnalyzer());
                 results.AddRange(await LoadAvailabilityAndFilter(mileageProgram,forceMostRecent,filterAggregate));
             }
 
@@ -54,7 +56,7 @@ namespace SeatsAeroLibrary
         public async Task<List<Flight>> LoadAvailabilityAndFilter(MileageProgram mileageProgram, bool forceMostRecent = false,
             FilterAggregate filterAggregate = null)
         {
-            return await LoadAvailability(mileageProgram, forceMostRecent, filterAggregate);
+            return await LoadAvailability(mileageProgram, forceMostRecent: forceMostRecent, filterAggregate: filterAggregate);
         }
         public List<Flight> FilterAvailability(List<AvailabilityDataModel> availableData, List<List<IFlightFilterFactory>> filterFactories = null)
         {
@@ -66,7 +68,7 @@ namespace SeatsAeroLibrary
 
             foreach (List<IFlightFilterFactory> theseFilterFactories in filterFactories)
             {
-                FilterAggregate filterAggregate = new FilterAggregate(theseFilterFactories);
+                FilterAggregate filterAggregate = new FilterAggregate(theseFilterFactories, new FilterAnalyzer());
                 results.AddRange(filterAggregate.Filter(flights));
             }
 
@@ -82,10 +84,12 @@ namespace SeatsAeroLibrary
             }
         }
 
-        public async Task<List<Flight>> LoadAvailability(MileageProgram mileageProgram, 
-            bool forceMostRecent = false, FilterAggregate filterAggregate = null)
+        public async Task<List<Flight>> LoadAvailability(MileageProgram mileageProgram,  
+            bool forceMostRecent = false, FilterAggregate filterAggregate = null, IFilterAnalyzer filterAnalyzer = null)
         {
             _logger.Info($"Loading availability of: {mileageProgram}");
+
+            filterAggregate = FilterAggregate.CheckNullAggregate(filterAggregate, filterAnalyzer);
 
             List<Flight> results = new List<Flight>();
 
@@ -94,7 +98,7 @@ namespace SeatsAeroLibrary
             List<Task<List<AvailabilityDataModel>>> myTasks = new List<Task<List<AvailabilityDataModel>>>();
             foreach (MileageProgram thisProgram in programs)
             {
-                Task<List<AvailabilityDataModel>> task = LoadAvailabilitySingle(thisProgram, forceMostRecent);
+                Task<List<AvailabilityDataModel>> task = LoadAvailabilitySingle(thisProgram, forceMostRecent, filterAggregate);
                 myTasks.Add(task);
                 //await task;
             }
@@ -119,26 +123,30 @@ namespace SeatsAeroLibrary
             }
         }
 
-        public async Task<List<AvailabilityDataModel>> LoadAvailabilitySingle(MileageProgram mileageProgram, bool forceMostRecent = false)
+        public async Task<List<AvailabilityDataModel>> LoadAvailabilitySingle(MileageProgram mileageProgram, bool forceMostRecent = false, 
+            FilterAggregate filterAggregate = null, IFilterAnalyzer filterAnalyzer = null)
         {
             Guard.AgainstMultipleSources(mileageProgram, nameof(mileageProgram));
+
+            filterAggregate = FilterAggregate.CheckNullAggregate(filterAggregate, filterAnalyzer);
 
             string json = ""; bool createFile = false;
             AvailabilitySnapshot fileSnapshot = new AvailabilitySnapshot();
 
+            List<AvailabilityDataModel> availabilities = null;
             if (forceMostRecent == true ||  fileSnapshot.TryFindValidSnapshot(mileageProgram, ref json) == false)
             {
                 _logger.Info($"Querying Availability API Result: {mileageProgram}");
-                json = await TryGetAPIAvailabilityResults(mileageProgram);
+
+                SeatsAeroAvailabilityAPI apiCall = new SeatsAeroAvailabilityAPI(mileageProgram,filterAggregate);
+                var result = await apiCall.QueryResults();
+                availabilities = result.Data;
                 createFile = true;
                 //fileSnapshot.SaveSnapshot(mileageProgram, json);
             }
 
             _logger.Info($"Availability API Result Completed: {mileageProgram}");
 
-            Guard.AgainstNullOrEmptyResultString(json, nameof(json));
-
-            List<AvailabilityDataModel> availabilities = JsonSerializer.Deserialize<List<AvailabilityDataModel>>(json);
 
 
             // Added to save the file in formatted JSON.
@@ -172,22 +180,6 @@ namespace SeatsAeroLibrary
                     fileSnapshot.SaveSnapshot(thisProgram, randomAvailabilities, fileName);
                 }
             }
-        }
-
-
-        private async Task<string> TryGetAPIAvailabilityResults(MileageProgram mileageProgram)
-        {
-            Guard.AgainstMultipleSources(mileageProgram, nameof(mileageProgram));
-
-            var options = new RestClientOptions($"https://seats.aero/api/availability?source={mileageProgram.ToString()}");
-            var client = new RestClient(options);
-            var request = new RestRequest("");
-            request.AddHeader("accept", "application/json");
-            var response = await client.GetAsync(request);
-
-            string results = response.Content == null ? "" : response.Content;
-
-            return results;
         }
 
         

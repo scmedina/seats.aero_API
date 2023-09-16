@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using SeatsAeroLibrary.API.Models;
 
 namespace SeatsAeroLibrary.Models.Entities
 {

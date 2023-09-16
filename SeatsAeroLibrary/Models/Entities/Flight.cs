@@ -1,4 +1,5 @@
-﻿using SeatsAeroLibrary.Helpers;
+﻿using SeatsAeroLibrary.API.Models;
+using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Models.Entities;
 using System;
 using System.Collections.Generic;
@@ -39,14 +40,22 @@ namespace SeatsAeroLibrary.Models
         public bool Direct { get; set; }
         public int MileageCost { get; set; }
 
+        public decimal MileageCostUSD
+        {
+            get
+            {
+                return MileageCost / 100;
+            }
+        }
+
         public override string ToString()
         {
-            return $"\"{Route}\", {SeatType}, {DateString}, {Date.DayOfWeek}, {RemainingSeats}, {Direct}, {MileageCost}, \"{Airlines.Replace(",",";")}\", {Source}";
+            return $"{Route.Origin}, {Route.Destination}, {SeatType}, {DateString}, {Date.DayOfWeek}, {RemainingSeats}, {Direct}, {MileageCost}, {MileageCostUSD.ToString("C")}, \"{Airlines.Replace(",",";")}\", {Source}";
         }
 
         public static string GetHeaderString()
         {
-            return $"Route, SeatType, DateString, DayOfWeek, RemainingSeats, Direct, MileageCost, Airlines, Source";
+            return $"Origin, Destination, Seat Type, Date, Day Of Week, Remaining Seats, Direct, Mileage Cost, Cost Equivalent $, Airlines, Source";
         }
 
         public static string GetAsCSVString (List<Flight> flights)

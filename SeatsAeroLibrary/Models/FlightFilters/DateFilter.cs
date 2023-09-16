@@ -1,4 +1,6 @@
-﻿using SeatsAeroLibrary.Models.Entities;
+﻿using NLog.Filters;
+using SeatsAeroLibrary.Models.Entities;
+using SeatsAeroLibrary.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,5 +31,26 @@ namespace SeatsAeroLibrary.Models.FlightFilters
                 return (flight.Date >= Date);
             }
         }
+
+        public static DateTime? GetDateVal(List<IFlightFilter> filters, out DateFilter dateFilter, bool isEndDate, DateTime? defaultVal = null)
+        {
+            dateFilter = null;
+            if (filters == null || filters.Count == 0)
+            {
+                return defaultVal;
+            }
+
+            dateFilter = filters.OfType<DateFilter>().FirstOrDefault(df => df.IsEndDate == isEndDate);
+            DateTime? result = dateFilter?.Date ?? defaultVal;
+            return result;
+        }
+
+
+        public static DateTime? GetDateVal(List<IFlightFilter> filters, bool isEndDate, DateTime? defaultVal = null)
+        {
+            DateFilter dateFilter = null;
+            return GetDateVal(filters,out dateFilter, isEndDate, defaultVal);
+        }
+
     }
 }

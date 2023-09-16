@@ -47,7 +47,7 @@ namespace SeatsAeroTests
                 isDestination: false
                 ));
 
-            SeatsAeroAPI seatsAeroInfo = new SeatsAeroAPI();
+            SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper();
 
             List<Flight> flights = seatsAeroInfo.FilterAvailability(data, new List<List<IFlightFilterFactory>> { filterFactories });
         }
@@ -87,7 +87,7 @@ namespace SeatsAeroTests
                     new LocationByType("HNL")},
                 isDestination: true));
 
-            SeatsAeroAPI seatsAeroInfo = new SeatsAeroAPI();
+            SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper();
             DateTime timer = DateTime.Now;
             List<Flight> flights = seatsAeroInfo.LoadAvailabilityAndFilterSync(MileageProgram.all, false, allFilterFactories);
 
@@ -121,7 +121,7 @@ namespace SeatsAeroTests
                 isDestination: true);
             filterFactories1.Add(destination);
 
-            SeatsAeroAPI seatsAeroInfo = new SeatsAeroAPI();
+            SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper();
             List<Flight> flights = seatsAeroInfo.LoadAvailabilityAndFilterSync(MileageProgram.all, false, allFilterFactories);
 
             string filePath = $@"{Environment.GetEnvironmentVariable("Temp")}\\seats_aero_flights_[dateStamp]_[timeStamp]";
@@ -134,8 +134,8 @@ namespace SeatsAeroTests
         //[TestMethod]
         public void SaveRandomTestData()
         {
-            SeatsAeroAPI seatsAeroInfo = new SeatsAeroAPI();
-            seatsAeroInfo = new SeatsAeroAPI();
+            SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper();
+            seatsAeroInfo = new SeatsAeroHelper();
 
             Task thisTask = seatsAeroInfo.SaveRandomAvailabilityData(MileageProgram.eurobonus, false,100);
             thisTask.Wait();

@@ -35,6 +35,15 @@ namespace SeatsAeroLibrary.Helpers
                 throw new ArgumentNullException(argumentName);
             }
         }
+
+        public static void AgainstNull(object value, string argumentName)
+        {
+            if (value is null)
+            {
+                throw new ArgumentNullException(argumentName);
+            }
+        }
+
         public static void AgainstNullOrEmptyList<T>(List<T> value, string argumentName)
         {
             if (value is null)
@@ -44,6 +53,40 @@ namespace SeatsAeroLibrary.Helpers
             else if (value.Count == 0) 
             {
                 throw new ArgumentException($"{argumentName} is empty.");
+            }
+        }
+
+        internal static void AgainstMissingDictionaryKeys(Dictionary<string, string> dictionary, string[] requiredParams, 
+            string dictionaryArgName, string requiredParamsArgName)
+        {
+            if (requiredParams is null || requiredParams.ToList().Count == 0)
+            {
+                return;
+            }
+
+            if (dictionary is null)
+            {
+                throw new ArgumentNullException(dictionaryArgName);
+            }
+            else if (dictionary.Count == 0)
+            {
+                throw new ArgumentException($"{dictionaryArgName} is empty.");
+            }
+
+            foreach (string requiredParam in requiredParams)
+            {
+                if (dictionary.ContainsKey(requiredParam) == false)
+                {
+                    throw new ArgumentException($"{dictionaryArgName} is missing the required key {requiredParam} from {requiredParamsArgName}");
+                }
+            }
+        }
+
+        internal static void AgainstInvalidDateRange(DateTime startDate, DateTime endDate, string startDateArgName, string endDateArgName)
+        {
+            if (endDate< startDate)
+            {
+                throw new ArgumentException($"{startDateArgName} must be greater than or equal to {endDateArgName}.");
             }
         }
     }
