@@ -73,7 +73,6 @@ namespace SeatsAeroLibrary.Models
         {
             Route = new Route(availability.Route);
             Date = availability.ParsedDate;
-            ComputedLastSeen = availability.ComputedLastSeen;
             AvailabilityTrips = availability.AvailabilityTrips;
             SeatType = seatType;
 

@@ -9,10 +9,10 @@ namespace SeatsAeroLibrary.API.Models
 {
     public class AvailabilityResultDataModel
     {
-        public List<AvailabilityDataModel> Data { get; set; }
-        public int Count { get; set; }
-        public bool HasMore { get; set; }
-        public string MoreURL { get; set; }
-        public int Cursor { get; set; }
+        public List<AvailabilityDataModel> data { get; set; }
+        public int count { get; set; }
+        public bool hasMore { get; set; }
+        public string moreURL { get; set; }
+        public long cursor { get; set; }
     }
 }

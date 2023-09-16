@@ -9,35 +9,47 @@ using System.Threading.Tasks;
 using System.Configuration;
 using System.Net.Http;
 using System.Text.Json;
+using SeatsAeroLibrary.Services;
+using Autofac;
 
 namespace SeatsAeroLibrary.API
 {
     public abstract class SeatsAeroAPI<T> where T : class
     {
 
-        private const string _baseUrl = "https://seats.aero/api/";
+        private const string _baseUrl = "https://seats.aero/partnerapi";
         public string[] RequiredParams { get; set; }
         public Dictionary<string,string> QueryParams { get; set; }
         public string EndPoint { get; set; }
+
+        protected IConfigSettings _configSettings { get; set; }
 
         public SeatsAeroAPI(string endPoint, string[] requiredParams, Dictionary<string, string> queryParams = null)
         {
             EndPoint = endPoint;
             RequiredParams = requiredParams;
             QueryParams = queryParams;
+
+
+            using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
+            {
+                _configSettings = scope.Resolve<IConfigSettings>();
+            }
+            _configSettings.Load();
         }
 
         public async Task<T> QueryResults()
         {
             string json = await MakeApiRequestAsync();
-            return JsonSerializer.Deserialize<T>(json);
+            var result =  JsonSerializer.Deserialize<T>(json);
+            return result;
         }
 
         protected async Task<string> MakeApiRequestAsync()
         {
             try
             {
-                Guard.AgainstNullOrEmptyResultString(ConfigurationManager.AppSettings["ApiKey"], "ConfigurationManager.AppSettings[\"ApiKey\"]");
+                Guard.AgainstNullOrEmptyResultString(_configSettings.APIKey, nameof(_configSettings.APIKey));
                 Guard.AgainstMissingDictionaryKeys(QueryParams, RequiredParams, nameof(QueryParams), nameof(RequiredParams));
 
                 // Build the request URL
@@ -54,7 +66,7 @@ namespace SeatsAeroLibrary.API
                 var client = new RestClient(options);
                 var request = new RestRequest("");
                 request.AddHeader("accept", "application/json");
-                request.AddHeader("Partner-Authorization", ConfigurationManager.AppSettings["ApiKey"]);
+                request.AddHeader("Partner-Authorization", _configSettings.APIKey);
                 var response = await client.GetAsync(request);
 
                 if (response.IsSuccessStatusCode)

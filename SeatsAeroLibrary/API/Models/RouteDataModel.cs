@@ -10,30 +10,14 @@ namespace SeatsAeroLibrary.Models
 {
     public class RouteDataModel
     {
-        [JsonPropertyName("ID")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("OriginAirport")]
+        public string ID { get; set; }
         public string OriginAirport { get; set; }
-
-        [JsonPropertyName("OriginRegion")]
         public string OriginRegion { get; set; }
-
-        [JsonPropertyName("DestinationAirport")]
         public string DestinationAirport { get; set; }
-
-        [JsonPropertyName("DestinationRegion")]
         public string DestinationRegion { get; set; }
-
-        [JsonPropertyName("NumDaysOut")]
         public int NumDaysOut { get; set; }
-
-        [JsonPropertyName("Distance")]
         public int Distance { get; set; }
-
-        [JsonPropertyName("Source")]
         public string Source { get; set; }
-
 
         public override string ToString()
         {

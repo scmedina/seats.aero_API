@@ -9,6 +9,11 @@ using System;
 using System.Reflection;
 using Autofac;
 using SeatsAeroLibrary.Models.Types;
+using System.Collections.Specialized;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using System.Text.Json;
+using SeatsAeroLibrary.API.Models;
 
 namespace SeatsAeroTests
 {
@@ -53,10 +58,19 @@ namespace SeatsAeroTests
         }
 
         [TestMethod]
-        public void HoustonSearch()
+        public void TestJsonStuff()
         {
 
-            List<List<IFlightFilterFactory>> allFilterFactories = new List<List<IFlightFilterFactory>>();
+            string json = FileIO.ReadEmbeddedResource("Data.test.json", Assembly.GetExecutingAssembly());
+
+            var result = JsonSerializer.Deserialize<AvailabilityResultDataModel>(json);
+        }
+
+
+        [TestMethod]
+        public void HoustonSearch()
+        {
+            List <List<IFlightFilterFactory>> allFilterFactories = new List<List<IFlightFilterFactory>>();
             List<IFlightFilterFactory> filterFactories1 = new List<IFlightFilterFactory>();
             allFilterFactories.Add(filterFactories1);
             SeatType seatTypes = SeatType.FFirstClass | SeatType.JBusiness | SeatType.WPremiumEconomy;
@@ -89,7 +103,7 @@ namespace SeatsAeroTests
 
             SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper();
             DateTime timer = DateTime.Now;
-            List<Flight> flights = seatsAeroInfo.LoadAvailabilityAndFilterSync(MileageProgram.all, false, allFilterFactories);
+            List<Flight> flights = seatsAeroInfo.LoadAvailabilityAndFilterSync(MileageProgram.delta, false, allFilterFactories);
 
             double totalTime = (DateTime.Now - timer).TotalMilliseconds;
             string filePath = $@"{Environment.GetEnvironmentVariable("Temp")}\\seats_aero_flights_[dateStamp]_[timeStamp]";

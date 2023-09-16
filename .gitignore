@@ -15,3 +15,7 @@ debug/
 *.dll
 .vs/SeatsAeroTool/v17/TestStore/0/000.testlog
 SeatsAeroLibrary/App.config
+*.config
+SeatsAeroLibrary/appsettings.json
+SeatsAeroTool/appsettings.json
+SeatsAeroLibraryTests/appsettings.json

@@ -140,7 +140,7 @@ namespace SeatsAeroLibrary
 
                 SeatsAeroAvailabilityAPI apiCall = new SeatsAeroAvailabilityAPI(mileageProgram,filterAggregate);
                 var result = await apiCall.QueryResults();
-                availabilities = result.Data;
+                //availabilities = result.Data;
                 createFile = true;
                 //fileSnapshot.SaveSnapshot(mileageProgram, json);
             }

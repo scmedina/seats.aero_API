@@ -23,6 +23,10 @@ namespace SeatsAeroLibrary.Services
             builder.RegisterType<DebuggerLogger>()
                 .As<ILogger>()
                 .SingleInstance();
+
+            builder.RegisterType<ConfigSettings>()
+                .As<IConfigSettings>()
+                .SingleInstance();
 #else
             builder.RegisterType<Logger>()
                 .As<ILogger>()
