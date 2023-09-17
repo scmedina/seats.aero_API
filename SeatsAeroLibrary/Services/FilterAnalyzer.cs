@@ -11,7 +11,7 @@ namespace SeatsAeroLibrary.Services
 {
     public class FilterAnalyzer : IFilterAnalyzer
     {
-        public static int DefaultDaysOut = 60;
+        public static int DefaultDaysOut = 30;
 
         public void AnalyzeFilters(FilterAggregate filter) 
         {

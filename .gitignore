@@ -19,3 +19,6 @@ SeatsAeroLibrary/App.config
 SeatsAeroLibrary/appsettings.json
 SeatsAeroTool/appsettings.json
 SeatsAeroLibraryTests/appsettings.json
+*.testlog
+*.manifest
+*.testlog

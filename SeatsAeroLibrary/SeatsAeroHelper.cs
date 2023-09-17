@@ -139,8 +139,8 @@ namespace SeatsAeroLibrary
                 _logger.Info($"Querying Availability API Result: {mileageProgram}");
 
                 SeatsAeroAvailabilityAPI apiCall = new SeatsAeroAvailabilityAPI(mileageProgram,filterAggregate);
-                var result = await apiCall.QueryResults();
-                //availabilities = result.Data;
+                AvailabilityResultDataModel result = await apiCall.QueryResults();
+                availabilities = result.data;
                 createFile = true;
                 //fileSnapshot.SaveSnapshot(mileageProgram, json);
             }
