@@ -17,7 +17,7 @@ namespace SeatsAeroLibrary.API
     public abstract class SeatsAeroAPI<T> where T : class
     {
 
-        private const string _baseUrl = "https://seats.aero/partnerapi";
+        private const string _baseUrl = "https://seats.aero";
         public string[] RequiredParams { get; set; }
         public Dictionary<string,string> QueryParams { get; set; }
         public string EndPoint { get; set; }

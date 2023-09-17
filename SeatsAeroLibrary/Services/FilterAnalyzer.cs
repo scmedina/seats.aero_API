@@ -11,7 +11,8 @@ namespace SeatsAeroLibrary.Services
 {
     public class FilterAnalyzer : IFilterAnalyzer
     {
-        public static int DefaultDaysOut = 30;
+        public static int DefaultDaysOutStart = 30;
+        public static int DefaultDaysOutAfterStart = 30;
 
         public void AnalyzeFilters(FilterAggregate filter) 
         {
@@ -25,13 +26,13 @@ namespace SeatsAeroLibrary.Services
             DateFilter startDateFilter, endDateFilter;
             DateTime startDate, endDate;
 
-            startDate = (DateTime)DateFilter.GetDateVal(filter.Filters, out startDateFilter, isEndDate: false, DateTime.Today);
+            startDate = (DateTime)DateFilter.GetDateVal(filter.Filters, out startDateFilter, isEndDate: false, DateTime.Today.AddDays(DefaultDaysOutStart));
             if (startDateFilter == null )
             {
                 filter.Filters.Add(new DateFilter(startDate, isEndDate: false));
             }
 
-            endDate = (DateTime)DateFilter.GetDateVal(filter.Filters, out endDateFilter, isEndDate: true, startDate.AddDays(DefaultDaysOut));
+            endDate = (DateTime)DateFilter.GetDateVal(filter.Filters, out endDateFilter, isEndDate: true, startDate.AddDays(DefaultDaysOutAfterStart));
             if (endDateFilter == null)
             {
                 filter.Filters.Add(new DateFilter(endDate, isEndDate: true));

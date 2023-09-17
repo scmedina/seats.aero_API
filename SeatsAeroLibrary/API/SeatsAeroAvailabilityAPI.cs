@@ -16,10 +16,10 @@ namespace SeatsAeroLibrary.API
 {
     public class SeatsAeroAvailabilityAPI : SeatsAeroAPI<AvailabilityResultDataModel>
     {
-        public SeatsAeroAvailabilityAPI(Dictionary<string, string> queryParams = null) : base("availability", new string[] { "source" }, queryParams)
+        public SeatsAeroAvailabilityAPI(Dictionary<string, string> queryParams = null) : base("partnerapi/availability", new string[] { "source" }, queryParams)
         {
         }
-        public SeatsAeroAvailabilityAPI(MileageProgram mileageProgram, FilterAggregate filterAggregate) : base("availability", new string[] { "source" }, null)
+        public SeatsAeroAvailabilityAPI(MileageProgram mileageProgram, FilterAggregate filterAggregate) : base("partnerapi/availability", new string[] { "source" }, null)
         {
             Guard.AgainstMultipleSources(mileageProgram, nameof(mileageProgram));
             Guard.AgainstNull(filterAggregate, nameof(filterAggregate));

@@ -103,7 +103,7 @@ namespace SeatsAeroTests
 
             SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper();
             DateTime timer = DateTime.Now;
-            List<Flight> flights = seatsAeroInfo.LoadAvailabilityAndFilterSync(MileageProgram.all, false, allFilterFactories);
+            List<Flight> flights = seatsAeroInfo.LoadAvailabilityAndFilterSync(MileageProgram.united, false, allFilterFactories);
 
             double totalTime = (DateTime.Now - timer).TotalMilliseconds;
             string filePath = $@"{Environment.GetEnvironmentVariable("Temp")}\\seats_aero_flights_[dateStamp]_[timeStamp]";
