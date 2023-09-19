@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeatsAeroLibrary.Models.FlightFactories
+namespace SeatsAeroLibrary.Services.FlightFactories
 {
     public class LocationFilterFactory : IFlightFilterFactory
     {
@@ -21,7 +21,7 @@ namespace SeatsAeroLibrary.Models.FlightFactories
 
         public IFlightFilter CreateFilter()
         {
-            return new SeatsAeroLibrary.Models.FlightFilters.LocationFilter(Locations, IsDestination);
+            return new FlightFilters.LocationFilter(Locations, IsDestination);
         }
     }
 }

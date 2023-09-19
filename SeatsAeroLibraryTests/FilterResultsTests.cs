@@ -3,7 +3,6 @@ using SeatsAeroLibrary;
 using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Models;
 using SeatsAeroLibrary.Models.Entities;
-using SeatsAeroLibrary.Models.FlightFactories;
 using SeatsAeroLibrary.Services;
 using System;
 using System.Reflection;
@@ -15,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using System.Text.Json;
 using SeatsAeroLibrary.API.Models;
 using System.Collections.Generic;
+using SeatsAeroLibrary.Services.FlightFactories;
 
 namespace SeatsAeroTests
 {

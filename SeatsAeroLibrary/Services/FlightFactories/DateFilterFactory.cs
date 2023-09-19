@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeatsAeroLibrary.Models.FlightFactories
+namespace SeatsAeroLibrary.Services.FlightFactories
 {
     public class DateFilterFactory : IFlightFilterFactory
     {
@@ -20,7 +20,7 @@ namespace SeatsAeroLibrary.Models.FlightFactories
 
         public IFlightFilter CreateFilter()
         {
-            return new SeatsAeroLibrary.Models.FlightFilters.DateFilter(Date, IsEndDate);
+            return new Models.FlightFilters.DateFilter(Date, IsEndDate);
         }
     }
 }

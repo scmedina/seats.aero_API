@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SeatsAeroLibrary.Models;
 
-namespace SeatsAeroLibrary.Models.FlightFilters
+namespace SeatsAeroLibrary.Services.FlightFilters
 {
     internal class MaxMileageCostFilter : BasicSeatTypeFilter
     {
@@ -23,7 +24,7 @@ namespace SeatsAeroLibrary.Models.FlightFilters
             {
                 return true;
             }
-            else if (_nonZero == true && flight.MileageCost== 0)
+            else if (_nonZero == true && flight.MileageCost == 0)
             {
                 return false;
             }

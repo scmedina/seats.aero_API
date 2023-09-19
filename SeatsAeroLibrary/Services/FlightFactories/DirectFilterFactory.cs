@@ -1,11 +1,12 @@
-﻿using SeatsAeroLibrary.Services;
+﻿using SeatsAeroLibrary.Models;
+using SeatsAeroLibrary.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeatsAeroLibrary.Models.FlightFactories
+namespace SeatsAeroLibrary.Services.FlightFactories
 {
     public class DirectFilterFactory : IFlightFilterFactory
     {
@@ -20,7 +21,7 @@ namespace SeatsAeroLibrary.Models.FlightFactories
 
         public IFlightFilter CreateFilter()
         {
-            return new SeatsAeroLibrary.Models.FlightFilters.DirectFilter(_seatTypes, _direct);
+            return new FlightFilters.DirectFilter(_seatTypes, _direct);
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using SeatsAeroLibrary.Helpers;
+using SeatsAeroLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeatsAeroLibrary.Models.FlightFilters
+namespace SeatsAeroLibrary.Services.FlightFilters
 {
     public class SourceFilter : BasicFilter
     {
@@ -13,13 +14,13 @@ namespace SeatsAeroLibrary.Models.FlightFilters
 
         public SourceFilter(string sources)
         {
-            if (String.IsNullOrEmpty(sources)) { return; }
+            if (string.IsNullOrEmpty(sources)) { return; }
 
             string[] sourceArray = sources.Split(',');
             foreach (string source in sourceArray)
             {
                 MileageProgram program = MileageProgram.None;
-                Guard.AgainstInvalidSource(source, nameof(source),out program);
+                Guard.AgainstInvalidSource(source, nameof(source), out program);
                 Programs.Add(program);
             }
         }

@@ -1,18 +1,19 @@
-﻿using SeatsAeroLibrary.Models.Entities;
+﻿using SeatsAeroLibrary.Models;
+using SeatsAeroLibrary.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeatsAeroLibrary.Models.FlightFilters
+namespace SeatsAeroLibrary.Services.FlightFilters
 {
     public class LocationFilter : BasicFilter
     {
         public List<LocationByType> Locations { get; set; }
         public bool IsDestination { get; set; }
 
-        public LocationFilter(List<LocationByType> locations, bool isDestination) 
+        public LocationFilter(List<LocationByType> locations, bool isDestination)
         {
             Locations = locations;
             IsDestination = isDestination;

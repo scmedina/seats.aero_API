@@ -1,4 +1,5 @@
 ﻿using SeatsAeroLibrary.Helpers;
+using SeatsAeroLibrary.Models;
 using SeatsAeroLibrary.Services;
 using System;
 using System.Collections.Generic;
@@ -6,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeatsAeroLibrary.Models.FlightFilters
+namespace SeatsAeroLibrary.Services.FlightFilters
 {
-    public abstract class BasicSeatTypeFilter: BasicFilter
+    public abstract class BasicSeatTypeFilter : BasicFilter
     {
         private SeatType _seatTypes;
         private List<SeatType> _seatTypesList;

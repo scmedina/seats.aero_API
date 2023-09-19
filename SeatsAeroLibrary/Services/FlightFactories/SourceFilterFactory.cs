@@ -1,19 +1,19 @@
-﻿using SeatsAeroLibrary.Models.FlightFilters;
-using SeatsAeroLibrary.Services;
+﻿using SeatsAeroLibrary.Services;
+using SeatsAeroLibrary.Services.FlightFilters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeatsAeroLibrary.Models.FlightFactories
+namespace SeatsAeroLibrary.Services.FlightFactories
 {
     public class SourceFilterFactory : IFlightFilterFactory
     {
         public string Sources { get; set; }
 
-        public SourceFilterFactory(string sources) 
-        { 
+        public SourceFilterFactory(string sources)
+        {
             Sources = sources;
         }
 

@@ -1,4 +1,5 @@
 ﻿using SeatsAeroLibrary.Helpers;
+using SeatsAeroLibrary.Models;
 using SeatsAeroLibrary.Services;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeatsAeroLibrary.Models.FlightFilters
+namespace SeatsAeroLibrary.Services.FlightFilters
 {
     public class DirectFilter : BasicSeatTypeFilter
     {
@@ -23,7 +24,7 @@ namespace SeatsAeroLibrary.Models.FlightFilters
             {
                 return true;
             }
-            return flight.Direct == (bool)_direct ;
+            return flight.Direct == (bool)_direct;
         }
     }
 }

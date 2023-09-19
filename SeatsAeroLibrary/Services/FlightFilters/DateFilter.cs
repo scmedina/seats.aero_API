@@ -1,4 +1,5 @@
 ﻿using NLog.Filters;
+using SeatsAeroLibrary.Models;
 using SeatsAeroLibrary.Models.Entities;
 using SeatsAeroLibrary.Services;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeatsAeroLibrary.Models.FlightFilters
+namespace SeatsAeroLibrary.Services.FlightFilters
 {
     public class DateFilter : BasicFilter
     {
@@ -24,11 +25,11 @@ namespace SeatsAeroLibrary.Models.FlightFilters
         {
             if (IsEndDate)
             {
-                return (flight.Date <= Date);
+                return flight.Date <= Date;
             }
             else
             {
-                return (flight.Date >= Date);
+                return flight.Date >= Date;
             }
         }
 
@@ -49,7 +50,7 @@ namespace SeatsAeroLibrary.Models.FlightFilters
         public static DateTime? GetDateVal(List<IFlightFilter> filters, bool isEndDate, DateTime? defaultVal = null)
         {
             DateFilter dateFilter = null;
-            return GetDateVal(filters,out dateFilter, isEndDate, defaultVal);
+            return GetDateVal(filters, out dateFilter, isEndDate, defaultVal);
         }
 
     }
