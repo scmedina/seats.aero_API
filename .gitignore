@@ -22,3 +22,4 @@ SeatsAeroLibraryTests/appsettings.json
 *.testlog
 *.manifest
 *.testlog
+.vs/SeatsAeroTool/v17/TestStore/0/testlog.manifest

@@ -25,7 +25,16 @@ namespace SeatsAeroLibrary.Models
 
         public static string GetFileNameBySourceAndDate(string pattern, MileageProgram mileageProgram, DateTime currentTime)
         {
-            string fileName = pattern.Replace("[source]", mileageProgram.ToString());
+            return GetFileNameByTypeAndDate(pattern, mileageProgram.ToString(), currentTime);
+        }
+        public  string GetFileNameByTypeAndDate(string type, DateTime currentTime)
+        {
+            return GetFileNameByTypeAndDate(SnapshotFileName, type, currentTime);
+        }
+
+        public static string GetFileNameByTypeAndDate(string pattern, string type, DateTime currentTime)
+        {
+            string fileName = pattern.Replace("[source]", type.ToString());
             fileName = fileName.Replace("[dateStamp]", currentTime.ToString(SnapshotDateFormat));
             fileName = fileName.Replace("[timeStamp]", currentTime.ToString(SnapshotTimeFormat));
             return fileName;
@@ -38,7 +47,7 @@ namespace SeatsAeroLibrary.Models
         }
 
 
-        public void SaveSnapshot<T>(MileageProgram mileageProgram, List<T> results, string fileName)
+        public void SaveSnapshot<T>(List<T> results, string fileName)
         {
             string filePath = SnapshotFileDirectory + fileName;
             FileIO.ExportJsonFile(results, filePath);
@@ -62,13 +71,18 @@ namespace SeatsAeroLibrary.Models
         {
             Guard.AgainstMultipleSources(mileageProgram, nameof(mileageProgram));
 
+            return TryFindValidSnapshot(mileageProgram.ToString(), ref results);
+        }
+        public bool TryFindValidSnapshot(string type, ref string results)
+        {
+
             bool success = false;
             results = "";
             DateTime currentTime = DateTime.Now;
 
             for (int i = 0; i <= HoursRange; i++)
             {
-                string fileName = GetFileNameBySourceAndDate(mileageProgram, currentTime);
+                string fileName = GetFileNameByTypeAndDate(type, currentTime);
 
                 List<string> filesFromToday = FileIO.GetFilesInDirectory(SnapshotFileDirectory, fileName);
                 if (filesFromToday.Count > 0)

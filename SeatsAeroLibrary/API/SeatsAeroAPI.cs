@@ -18,24 +18,27 @@ namespace SeatsAeroLibrary.API
     {
 
         private const string _baseUrl = "https://seats.aero";
-        public string[] RequiredParams { get; set; }
-        public Dictionary<string,string> QueryParams { get; set; }
-        public string EndPoint { get; set; }
+        public virtual string[] RequiredParams { get; set; }
+        public virtual Dictionary<string,string> QueryParams { get; set; }
+        public virtual string EndPoint { get; set; }
+
 
         protected IConfigSettings _configSettings { get; set; }
 
-        public SeatsAeroAPI(string endPoint, string[] requiredParams, Dictionary<string, string> queryParams = null)
+        public SeatsAeroAPI()
         {
-            EndPoint = endPoint;
-            RequiredParams = requiredParams;
-            QueryParams = queryParams;
-
-
             using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
             {
                 _configSettings = scope.Resolve<IConfigSettings>();
             }
             _configSettings.Load();
+        }
+
+        public SeatsAeroAPI(string endPoint, string[] requiredParams, Dictionary<string, string> queryParams = null)  : this()
+        {
+            EndPoint = endPoint;
+            RequiredParams = requiredParams;
+            QueryParams = queryParams;
         }
 
         public async Task<T> QueryResults()
@@ -49,6 +52,7 @@ namespace SeatsAeroLibrary.API
         {
             try
             {
+                Guard.AgainstNull(_configSettings, nameof(_configSettings));
                 Guard.AgainstNullOrEmptyResultString(_configSettings.APIKey, nameof(_configSettings.APIKey));
                 Guard.AgainstMissingDictionaryKeys(QueryParams, RequiredParams, nameof(QueryParams), nameof(RequiredParams));
 

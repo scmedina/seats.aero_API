@@ -19,6 +19,14 @@ namespace SeatsAeroLibrary.Helpers
             }
         }
 
+        public static void AgainstInvalidSource(string argument, string argumentName, out MileageProgram program)
+        {
+            if (Enum.TryParse(argument,out program) == false)
+            {
+                throw new ArgumentException($"{argumentName} is not a valid MileageProgram source.");
+            }
+        }
+
         public static void AgainstNonFlagEnumType(Type enumType, string argumentName)
         {
             EnumHelper enumHelper = new EnumHelper();

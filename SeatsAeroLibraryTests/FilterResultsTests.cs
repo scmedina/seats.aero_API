@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using System.Text.Json;
 using SeatsAeroLibrary.API.Models;
+using System.Collections.Generic;
 
 namespace SeatsAeroTests
 {
@@ -68,7 +69,35 @@ namespace SeatsAeroTests
 
 
         [TestMethod]
-        public void HoustonSearch()
+        public void HoustonCacheSearch()
+        {
+            List<List<IFlightFilterFactory>> allFilterFactories = new List<List<IFlightFilterFactory>>();
+            List<IFlightFilterFactory> filterFactories1 = new List<IFlightFilterFactory>();
+            allFilterFactories.Add(filterFactories1);
+            SeatType seatTypes = SeatType.FFirstClass | SeatType.JBusiness | SeatType.WPremiumEconomy;
+            filterFactories1.Add(new SeatAvailabilityFilterFactory(seatTypes, 2));
+            filterFactories1.Add(new DirectFilterFactory(seatTypes, true));
+            filterFactories1.Add(new MaxMileageCostFilterFactory(seatTypes, 100000, true));
+            FilterAggregate filterAggregate = new FilterAggregate(filterFactories1, new FilterAnalyzer());
+
+            SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper();
+            DateTime timer = DateTime.Now;
+            Task<List<Flight>> task = seatsAeroInfo.LoadSearch("IAH,HOU", "FRA,LHR,CDG,AMS,MUC,HNL", filterAggregate: filterAggregate);
+            task.Wait();
+            List<Flight> flights = task.Result;
+
+
+            double totalTime = (DateTime.Now - timer).TotalMilliseconds;
+            string filePath = $@"{Environment.GetEnvironmentVariable("Temp")}\\seats_aero_flights_[dateStamp]_[timeStamp]";
+            filePath = filePath.Replace("[dateStamp]", DateTime.Now.ToString("yyyyMMdd"));
+            filePath = filePath.Replace("[timeStamp]", DateTime.Now.ToString("HHmmss"));
+            FileIO.ExportJsonFile(flights, filePath + ".json");
+
+            FileIO.SaveStringToFile(Flight.GetAsCSVString(flights), filePath + ".csv");
+        }
+
+        [TestMethod]
+        public void HoustonAvailabilitySearch()
         {
             List <List<IFlightFilterFactory>> allFilterFactories = new List<List<IFlightFilterFactory>>();
             List<IFlightFilterFactory> filterFactories1 = new List<IFlightFilterFactory>();

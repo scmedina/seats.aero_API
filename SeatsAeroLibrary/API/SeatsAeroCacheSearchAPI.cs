@@ -14,21 +14,21 @@ using static SeatsAeroLibrary.API.SeatsAeroAvailabilityAPI;
 
 namespace SeatsAeroLibrary.API
 {
-    public class SeatsAeroAvailabilityAPI : SeatsAeroAPI<AvailabilityResultDataModel>
+    public class SeatsAeroCacheSearchAPI : SeatsAeroAPI<AvailabilityResultDataModel>
     {
-        public SeatsAeroAvailabilityAPI(MileageProgram mileageProgram, FilterAggregate filterAggregate) : base("partnerapi/availability", new string[] { "source" }, null)
+        public SeatsAeroCacheSearchAPI(string originAirports, string destinationAirports,FilterAggregate filterAggregate) : base("partnerapi/search", new string[] { "origin_airport", "destination_airport" }, null)
         {
-            Guard.AgainstMultipleSources(mileageProgram, nameof(mileageProgram));
             Guard.AgainstNull(filterAggregate, nameof(filterAggregate));
 
             this.QueryParams = new Dictionary<string, string>();
-            this.QueryParams.Add("source", mileageProgram.ToString());
 
             DateTime startDate = (DateTime)DateFilter.GetDateVal(filterAggregate.Filters, isEndDate: false, DateTime.Today);
             DateTime? endDate = (DateTime)DateFilter.GetDateVal(filterAggregate.Filters, isEndDate: true);
             Guard.AgainstNull(endDate, nameof(endDate));
             Guard.AgainstInvalidDateRange(startDate,(DateTime)endDate, nameof(startDate),nameof(endDate));
 
+            this.QueryParams.Add("origin_airport", originAirports);
+            this.QueryParams.Add("destination_airport", destinationAirports);
             this.QueryParams.Add("start_date", startDate.ToString("yyyy-MM-dd"));
             this.QueryParams.Add("end_date", ((DateTime)endDate).ToString("yyyy-MM-dd"));
             this.QueryParams.Add("take", "1000");

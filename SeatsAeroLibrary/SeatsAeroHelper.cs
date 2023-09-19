@@ -153,7 +153,60 @@ namespace SeatsAeroLibrary
             if (createFile = true)
             {
                 string fileName = fileSnapshot.GetFileNameBySourceAndDate(mileageProgram, DateTime.Now);
-                fileSnapshot.SaveSnapshot(mileageProgram, availabilities, fileName);
+                fileSnapshot.SaveSnapshot(availabilities, fileName);
+            }
+
+            return availabilities;
+        }
+
+
+
+
+        public async Task<List<Flight>> LoadSearch(string originAirports, string destinationAirports, bool forceMostRecent = false,
+            FilterAggregate filterAggregate = null, IFilterAnalyzer filterAnalyzer = null)
+        {
+            _logger.Info($"Loading availability of: {originAirports} > {destinationAirports}");
+
+            filterAggregate = FilterAggregate.CheckNullAggregate(filterAggregate, filterAnalyzer);
+
+            List<Flight> results = new List<Flight>();
+
+            Task<List<AvailabilityDataModel>> task = LoadCacheSearchSingle(originAirports, destinationAirports, forceMostRecent, filterAggregate);
+            task.Wait();
+            AddFilteredFlights(filterAggregate, results, task.Result);
+
+            return results;
+        }
+        public async Task<List<AvailabilityDataModel>> LoadCacheSearchSingle(string originAirports, string destinationAirports, bool forceMostRecent = false,
+            FilterAggregate filterAggregate = null, IFilterAnalyzer filterAnalyzer = null)
+        {
+            Guard.AgainstNullOrEmptyResultString(originAirports, nameof(originAirports));
+            Guard.AgainstNullOrEmptyResultString(destinationAirports, nameof(destinationAirports));
+
+            filterAggregate = FilterAggregate.CheckNullAggregate(filterAggregate, filterAnalyzer);
+
+            string json = ""; bool createFile = false;
+            AvailabilitySnapshot fileSnapshot = new AvailabilitySnapshot();
+
+            List<AvailabilityDataModel> availabilities = null;
+            if (forceMostRecent == true || fileSnapshot.TryFindValidSnapshot($"{originAirports}_{destinationAirports}", ref json) == false)
+            {
+                _logger.Info($"Querying Availability API Result: {originAirports} > {destinationAirports}");
+
+                SeatsAeroCacheSearchAPI apiCall = new SeatsAeroCacheSearchAPI(originAirports, destinationAirports, filterAggregate);
+                AvailabilityResultDataModel result = await apiCall.QueryResults();
+                availabilities = result.data;
+                createFile = true;
+                //fileSnapshot.SaveSnapshot(mileageProgram, json);
+            }
+
+            _logger.Info($"Availability API Result Completed: {originAirports} > {destinationAirports}");
+
+            // Added to save the file in formatted JSON.
+            if (createFile = true)
+            {
+                string fileName = fileSnapshot.GetFileNameByTypeAndDate($"{originAirports}_{destinationAirports}", DateTime.Now);
+                fileSnapshot.SaveSnapshot(availabilities, fileName);
             }
 
             return availabilities;
@@ -177,7 +230,7 @@ namespace SeatsAeroLibrary
                         randomAvailabilities = availabilities.GetRandomSubset(countPerProgram);
                     }
                     string fileName = AvailabilitySnapshot.GetFileNameBySourceAndDate("seats_aero_[source]_[dateStamp].json", thisProgram, DateTime.Now);
-                    fileSnapshot.SaveSnapshot(thisProgram, randomAvailabilities, fileName);
+                    fileSnapshot.SaveSnapshot( randomAvailabilities, fileName);
                 }
             }
         }
