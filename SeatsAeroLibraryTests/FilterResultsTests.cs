@@ -42,9 +42,9 @@ namespace SeatsAeroTests
 
             List<IFlightFilterFactory> filterFactories = new List<IFlightFilterFactory>();
             SeatType seatTypes = SeatType.FFirstClass | SeatType.WPremiumEconomy | SeatType.JBusiness;
-            filterFactories.Add(new SeatAvailabilityFilterFactory(seatTypes, 1));
-            filterFactories.Add(new DirectFilterFactory(seatTypes, true));
-            filterFactories.Add(new MaxMileageCostFilterFactory(seatTypes, 100000, true));
+            filterFactories.Add(new SeatAvailabilityFilterFactory(1));
+            filterFactories.Add(new DirectFilterFactory(true));
+            filterFactories.Add(new MaxMileageCostFilterFactory(100000, true));
             filterFactories.Add(new DateFilterFactory(new DateTime(2023,10,7)));
             filterFactories.Add(new DateFilterFactory(new DateTime(2023, 10, 8), isEndDate: true));
             LocationByType houstonLocation = new LocationByType("BOM", SeatsAeroLibrary.Helpers.LocationType.Airport);
@@ -75,9 +75,9 @@ namespace SeatsAeroTests
             List<IFlightFilterFactory> filterFactories1 = new List<IFlightFilterFactory>();
             allFilterFactories.Add(filterFactories1);
             SeatType seatTypes = SeatType.FFirstClass | SeatType.JBusiness | SeatType.WPremiumEconomy;
-            filterFactories1.Add(new SeatAvailabilityFilterFactory(seatTypes, 2));
-            filterFactories1.Add(new DirectFilterFactory(seatTypes, true));
-            filterFactories1.Add(new MaxMileageCostFilterFactory(seatTypes, 100000, true));
+            filterFactories1.Add(new SeatAvailabilityFilterFactory(2));
+            filterFactories1.Add(new DirectFilterFactory(true));
+            filterFactories1.Add(new MaxMileageCostFilterFactory(100000, true));
             FilterAggregate filterAggregate = new FilterAggregate(filterFactories1, new FilterAnalyzer());
 
             SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper();
@@ -103,9 +103,9 @@ namespace SeatsAeroTests
             List<IFlightFilterFactory> filterFactories1 = new List<IFlightFilterFactory>();
             allFilterFactories.Add(filterFactories1);
             SeatType seatTypes = SeatType.FFirstClass | SeatType.JBusiness | SeatType.WPremiumEconomy;
-            filterFactories1.Add(new SeatAvailabilityFilterFactory(seatTypes, 2));
-            filterFactories1.Add(new DirectFilterFactory(seatTypes, true));
-            filterFactories1.Add(new MaxMileageCostFilterFactory(seatTypes, 100000, true));
+            filterFactories1.Add(new SeatAvailabilityFilterFactory( 2));
+            filterFactories1.Add(new DirectFilterFactory(true));
+            filterFactories1.Add(new MaxMileageCostFilterFactory(100000, true));
             filterFactories1.Add(new LocationFilterFactory(
                 new List<LocationByType> { new LocationByType("IAH") },
                 isDestination: false
