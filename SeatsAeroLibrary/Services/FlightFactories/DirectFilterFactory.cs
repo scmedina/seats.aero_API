@@ -1,4 +1,5 @@
 ﻿using SeatsAeroLibrary.Models;
+using SeatsAeroLibrary.Models.DataModels;
 using SeatsAeroLibrary.Services;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,13 @@ namespace SeatsAeroLibrary.Services.FlightFactories
         public IFlightFilter CreateFilter()
         {
             return new FlightFilters.DirectFilter(_seatTypes, _direct);
+        }
+
+        public List<IFlightFilter> CreateFilters(SearchCriteriaDataModel searchCriteriaDataModel)
+        {
+            List<IFlightFilter> filters = new List<IFlightFilter>();
+            throw new NotImplementedException();
+            return filters;
         }
     }
 }

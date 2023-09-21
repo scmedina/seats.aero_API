@@ -1,4 +1,6 @@
-﻿using SeatsAeroLibrary.Services;
+﻿using SeatsAeroLibrary.Models.DataModels;
+using SeatsAeroLibrary.Services;
+using SeatsAeroLibrary.Services.FlightFilters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +22,24 @@ namespace SeatsAeroLibrary.Services.FlightFactories
 
         public IFlightFilter CreateFilter()
         {
-            return new Models.FlightFilters.DateFilter(Date, IsEndDate);
+            return new FlightFilters.DateFilter(Date, IsEndDate);
+        }
+
+        public List<IFlightFilter> CreateFilters(SearchCriteriaDataModel searchCriteriaDataModel)
+        {
+            List<IFlightFilter> filters = new List<IFlightFilter>();
+
+            if (searchCriteriaDataModel.StartDate != null) 
+            {
+                filters.Add(new DateFilter((DateTime)searchCriteriaDataModel.StartDate, isEndDate: false));
+            }
+
+            if (searchCriteriaDataModel.EndDate != null)
+            {
+                filters.Add(new DateFilter((DateTime)searchCriteriaDataModel.EndDate, isEndDate: true));
+            }
+
+            return filters;
         }
     }
 }

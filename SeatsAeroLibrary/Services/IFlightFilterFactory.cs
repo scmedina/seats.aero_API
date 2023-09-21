@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SeatsAeroLibrary.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,6 @@ namespace SeatsAeroLibrary.Services
     public interface IFlightFilterFactory
     {
         IFlightFilter CreateFilter();
+        List<IFlightFilter> CreateFilters(SearchCriteriaDataModel searchCriteriaDataModel);
     }
 }

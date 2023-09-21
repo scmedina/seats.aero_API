@@ -3,9 +3,9 @@ using SeatsAeroLibrary;
 using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Models;
 using SeatsAeroLibrary.Models.Entities;
-using SeatsAeroLibrary.Models.FlightFactories;
 using SeatsAeroLibrary.Models.Types;
 using SeatsAeroLibrary.Services;
+using SeatsAeroLibrary.Services.FlightFactories;
 using SeatsAeroTool.Services;
 
 namespace SeatsAeroTool

@@ -8,14 +8,14 @@ namespace SeatsAeroLibrary.Models.DataModels
 {
     public class SearchCriteriaDataModel
     {
-        public string OriginAirports { get; set; }
-        public string DestinationAirports { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public bool Direct { get; set; }
-        public string SeatTypes { get; set; }
-        public int MaxMileage { get; set; }
-        public int MinimumSeats { get; set; }
-        public bool Exclude { get; set; }
+        public string? OriginAirports { get; set; }
+        public string? DestinationAirports { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public bool? Direct { get; set; }
+        public string? SeatTypes { get; set; }
+        public int? MaxMileage { get; set; }
+        public int? MinimumSeats { get; set; }
+        public bool? Exclude { get; set; }
     }
 }
