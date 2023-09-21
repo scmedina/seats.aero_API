@@ -27,5 +27,20 @@ namespace SeatsAeroLibrary.Models.Entities
             Name = AttributeHelper.GetDescription(value, value.ToString());
             Type = LocationType.Region;
         }
+
+        public static List<LocationByType> GetAirportsFromString(string airports)
+        {
+            List<LocationByType> results = new List<LocationByType>();
+            string[] airportsArray = airports.Split(',');
+            foreach (string airport in airportsArray)
+            {
+                if (string.IsNullOrEmpty(airport))
+                {
+                    continue;
+                }
+                results.Add(new LocationByType(airport, LocationType.Airport));
+            }
+            return results;
+        }
     }
 }

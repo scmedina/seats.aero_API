@@ -7,18 +7,18 @@ using SeatsAeroLibrary.Models;
 
 namespace SeatsAeroLibrary.Services.FlightFilters
 {
-    internal class MaxMileageCostFilter : BasicSeatTypeFilter
+    internal class MaxMileageCostFilter : BasicFilter
     {
         private int? _maxPoints;
         private bool _nonZero;
 
-        public MaxMileageCostFilter(SeatType seatTypes, int? maxPoints = null, bool nonZero = false) : base(seatTypes)
+        public MaxMileageCostFilter( int? maxPoints = null, bool nonZero = false) : base()
         {
             _maxPoints = maxPoints;
             _nonZero = nonZero;
         }
 
-        protected override bool FilterFlightBySeatType(Flight flight)
+        protected override bool FilterFlight(Flight flight)
         {
             if (_maxPoints is null)
             {

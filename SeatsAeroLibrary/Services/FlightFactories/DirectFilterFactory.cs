@@ -1,6 +1,8 @@
 ﻿using SeatsAeroLibrary.Models;
 using SeatsAeroLibrary.Models.DataModels;
+using SeatsAeroLibrary.Models.Entities;
 using SeatsAeroLibrary.Services;
+using SeatsAeroLibrary.Services.FlightFilters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,24 +13,24 @@ namespace SeatsAeroLibrary.Services.FlightFactories
 {
     public class DirectFilterFactory : IFlightFilterFactory
     {
-
-        private SeatType _seatTypes;
         private bool? _direct;
-        public DirectFilterFactory(SeatType seatTypes, bool? direct = null)
+
+        public DirectFilterFactory() { }
+
+        public DirectFilterFactory(bool? direct = null)
         {
-            _seatTypes = seatTypes;
             _direct = direct;
         }
 
         public IFlightFilter CreateFilter()
         {
-            return new FlightFilters.DirectFilter(_seatTypes, _direct);
+            return new FlightFilters.DirectFilter(_direct);
         }
 
-        public List<IFlightFilter> CreateFilters(SearchCriteriaDataModel searchCriteriaDataModel)
+        public List<IFlightFilter> CreateFilters(SearchCriteria searchCriteria)
         {
             List<IFlightFilter> filters = new List<IFlightFilter>();
-            throw new NotImplementedException();
+            filters.Add(new DirectFilter(searchCriteria.Direct));
             return filters;
         }
     }

@@ -1,6 +1,8 @@
 ﻿using SeatsAeroLibrary.Models;
 using SeatsAeroLibrary.Models.DataModels;
+using SeatsAeroLibrary.Models.Entities;
 using SeatsAeroLibrary.Services;
+using SeatsAeroLibrary.Services.FlightFilters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,26 +14,28 @@ namespace SeatsAeroLibrary.Services.FlightFactories
     public class MaxMileageCostFilterFactory : IFlightFilterFactory
     {
 
-        private SeatType _seatTypes;
         private int? _maxPoints;
-        private bool _nonZero;
+        private bool _nonZero = false;
 
-        public MaxMileageCostFilterFactory(SeatType seatTypes, int? maxPoints = null, bool nonZero = false)
+        public MaxMileageCostFilterFactory(bool nonZero = false)
         {
-            _seatTypes = seatTypes;
-            _maxPoints = maxPoints;
             _nonZero = nonZero;
+        }
+
+        public MaxMileageCostFilterFactory(int? maxPoints = null, bool nonZero = false) : this(nonZero)
+        {
+            _maxPoints = maxPoints;
         }
 
         public IFlightFilter CreateFilter()
         {
-            return new FlightFilters.MaxMileageCostFilter(_seatTypes, _maxPoints, _nonZero);
+            return new MaxMileageCostFilter(_maxPoints, _nonZero);
         }
 
-        public List<IFlightFilter> CreateFilters(SearchCriteriaDataModel searchCriteriaDataModel)
+        public List<IFlightFilter> CreateFilters(SearchCriteria searchCriteria)
         {
             List<IFlightFilter> filters = new List<IFlightFilter>();
-            throw new NotImplementedException();
+            filters.Add(new MaxMileageCostFilter(searchCriteria.MaxMileage, _nonZero));
             return filters;
         }
     }

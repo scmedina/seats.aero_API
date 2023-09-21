@@ -17,5 +17,6 @@ namespace SeatsAeroLibrary.Models.DataModels
         public int? MaxMileage { get; set; }
         public int? MinimumSeats { get; set; }
         public bool? Exclude { get; set; }
+        public string Sources { get; set; }
     }
 }

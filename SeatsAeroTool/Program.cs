@@ -42,9 +42,9 @@ namespace SeatsAeroTool
 
             List <IFlightFilterFactory> filterFactories = new List<IFlightFilterFactory>();
             SeatType seatTypes = SeatType.FFirstClass | SeatType.JBusiness;
-            filterFactories.Add(new SeatAvailabilityFilterFactory(seatTypes, 4));
-            filterFactories.Add(new DirectFilterFactory(seatTypes, true));
-            filterFactories.Add(new MaxMileageCostFilterFactory(seatTypes, 100000, true));
+            filterFactories.Add(new SeatAvailabilityFilterFactory(4));
+            filterFactories.Add(new DirectFilterFactory(true));
+            filterFactories.Add(new MaxMileageCostFilterFactory(100000, true));
             filterFactories.Add(new LocationFilterFactory(
                 new List<LocationByType> { new LocationByType("IAH") },
                 isDestination: false

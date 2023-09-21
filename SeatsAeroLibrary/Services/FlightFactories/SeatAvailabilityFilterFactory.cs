@@ -1,6 +1,8 @@
 ﻿using SeatsAeroLibrary.Models;
 using SeatsAeroLibrary.Models.DataModels;
+using SeatsAeroLibrary.Models.Entities;
 using SeatsAeroLibrary.Services;
+using SeatsAeroLibrary.Services.FlightFilters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,24 +13,22 @@ namespace SeatsAeroLibrary.Services.FlightFactories
 {
     public class SeatAvailabilityFilterFactory : IFlightFilterFactory
     {
-
-        private SeatType _seatTypes;
         private int _minimumSeatsAvailable;
-        public SeatAvailabilityFilterFactory(SeatType seatTypes, int minimumSeatsAvailable = 0)
+
+        public SeatAvailabilityFilterFactory(int minimumSeatsAvailable = 0)
         {
-            _seatTypes = seatTypes;
             _minimumSeatsAvailable = minimumSeatsAvailable;
         }
 
         public IFlightFilter CreateFilter()
         {
-            return new FlightFilters.SeatAvailabilityFilter(_seatTypes, _minimumSeatsAvailable);
+            return new FlightFilters.SeatAvailabilityFilter(_minimumSeatsAvailable);
         }
 
-        public List<IFlightFilter> CreateFilters(SearchCriteriaDataModel searchCriteriaDataModel)
+        public List<IFlightFilter> CreateFilters(SearchCriteria searchCriteria)
         {
             List<IFlightFilter> filters = new List<IFlightFilter>();
-            throw new NotImplementedException();
+            filters.Add(new SeatAvailabilityFilter(searchCriteria.MinimumSeats));
             return filters;
         }
     }

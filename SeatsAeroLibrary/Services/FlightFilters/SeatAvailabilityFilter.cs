@@ -9,18 +9,20 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Services.FlightFilters
 {
-    public class SeatAvailabilityFilter : BasicSeatTypeFilter
+    public class SeatAvailabilityFilter : BasicFilter
 
     {
         private int _minimumSeatsAvailable;
 
-        public SeatAvailabilityFilter(SeatType seatTypes, int minimumSeatsAvailable = 0) : base(seatTypes)
+        public SeatAvailabilityFilter(int minimumSeatsAvailable = 0) 
         {
             _minimumSeatsAvailable = minimumSeatsAvailable;
         }
-        protected override bool FilterFlightBySeatType(Flight flight)
+
+        protected override bool FilterFlight(Flight flight)
         {
             return flight.Available = true && flight.RemainingSeats >= _minimumSeatsAvailable;
         }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SeatsAeroLibrary.Models.DataModels;
+using SeatsAeroLibrary.Models.Entities;
 using SeatsAeroLibrary.Services;
 using SeatsAeroLibrary.Services.FlightFilters;
 using System;
@@ -14,6 +15,9 @@ namespace SeatsAeroLibrary.Services.FlightFactories
         public DateTime Date { get; set; }
         public bool IsEndDate { get; set; }
 
+
+        public DateFilterFactory() { }
+
         public DateFilterFactory(DateTime date, bool isEndDate = false)
         {
             Date = date;
@@ -25,18 +29,18 @@ namespace SeatsAeroLibrary.Services.FlightFactories
             return new FlightFilters.DateFilter(Date, IsEndDate);
         }
 
-        public List<IFlightFilter> CreateFilters(SearchCriteriaDataModel searchCriteriaDataModel)
+        public List<IFlightFilter> CreateFilters(SearchCriteria searchCriteria)
         {
             List<IFlightFilter> filters = new List<IFlightFilter>();
 
-            if (searchCriteriaDataModel.StartDate != null) 
+            if (searchCriteria.StartDate != null) 
             {
-                filters.Add(new DateFilter((DateTime)searchCriteriaDataModel.StartDate, isEndDate: false));
+                filters.Add(new DateFilter((DateTime)searchCriteria.StartDate, isEndDate: false));
             }
 
-            if (searchCriteriaDataModel.EndDate != null)
+            if (searchCriteria.EndDate != null)
             {
-                filters.Add(new DateFilter((DateTime)searchCriteriaDataModel.EndDate, isEndDate: true));
+                filters.Add(new DateFilter((DateTime)searchCriteria.EndDate, isEndDate: true));
             }
 
             return filters;
