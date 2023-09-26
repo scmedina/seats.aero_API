@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Models.DataModels
 {
-    public class TripDataModel
+    public class TripSearchDataModel
     {
+        public int ID { get; set; }
         public string Name { get; set; }
         public string Contact { get; set; }
         public List<SearchCriteriaDataModel> SearchCriteria { get; set; }

@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Models.Entities
 {
-    public class Trip
+    public class TripSearch
     {
+        public int ID { get; set; }
         public string Name { get; set; }
         public string Contact { get; set; }
         public List<SearchCriteria> SearchCriteria { get; set; }
