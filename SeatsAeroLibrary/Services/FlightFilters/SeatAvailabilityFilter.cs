@@ -21,6 +21,15 @@ namespace SeatsAeroLibrary.Services.FlightFilters
 
         protected override bool FilterFlight(Flight flight)
         {
+
+            SourceDetailsAttribute details = SourceDetailsAttribute.GetDetails(flight.Source);
+            if (details != null)
+            {
+                if (details.HasSeatCount == false)
+                {
+                    return true;
+                }
+            }
             return flight.Available = true && flight.RemainingSeats >= _minimumSeatsAvailable;
         }
 
