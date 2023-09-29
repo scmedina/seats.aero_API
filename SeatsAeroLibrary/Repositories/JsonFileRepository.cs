@@ -5,17 +5,17 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace SeatsAeroLibrary.Services
+namespace SeatsAeroLibrary.Repositories
 {
     public abstract class JsonFileRepository<T> : IRepository<T>
     {
-        private readonly string filePath;
-        private readonly List<T> entities;
+        protected readonly string filePath;
+        protected readonly List<T> entities;
 
         public JsonFileRepository(string filePath)
         {
             this.filePath = filePath;
-            this.entities = LoadDataFromFile();
+            entities = LoadDataFromFile();
         }
 
         public IEnumerable<T> GetAll()

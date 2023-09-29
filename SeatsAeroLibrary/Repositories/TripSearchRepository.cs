@@ -1,5 +1,5 @@
-﻿using SeatsAeroLibrary.Models.Entities;
-using SeatsAeroLibrary.Services;
+﻿using SeatsAeroLibrary.Models.DataModels;
+using SeatsAeroLibrary.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Repositories
 {
-    public class TripSearchRepository : JsonFileRepository<TripSearch>
+    public class TripSearchRepository : JsonFileRepository<TripSearchDataModel>
     {
         private int currentID;
         public TripSearchRepository(string filePath) : base(filePath)
@@ -25,12 +25,12 @@ namespace SeatsAeroLibrary.Repositories
            return currentID++;
         }
 
-        protected override int GetEntityId(TripSearch entity)
+        protected override int GetEntityId(TripSearchDataModel entity)
         {
             return entity.ID;
         }
 
-        protected override void SetEntityId(TripSearch entity, int id)
+        protected override void SetEntityId(TripSearchDataModel entity, int id)
         {
             entity.ID = id;
         }
