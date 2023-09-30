@@ -104,5 +104,13 @@ namespace SeatsAeroLibrary.Helpers
                 throw new ArgumentException($"{startDateArgName} must be greater than or equal to {endDateArgName}.");
             }
         }
+
+        public static void AgainstFailure(bool argument, string argumentName)
+        {
+            if (argument == false)
+            { 
+                throw new ArgumentException($"{argumentName} is a failure.");
+            }
+        }   
     }
 }

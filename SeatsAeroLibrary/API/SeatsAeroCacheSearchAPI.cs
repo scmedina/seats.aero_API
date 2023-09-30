@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using NLog.Filters;
+using RestSharp;
 using SeatsAeroLibrary.API.Models;
 using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Models;
@@ -31,6 +32,15 @@ namespace SeatsAeroLibrary.API
             Guard.AgainstInvalidDateRange(startDate,(DateTime)endDate, nameof(startDate),nameof(endDate));
 
 
+            List<LocationFilter> originLocations = new List<LocationFilter>();
+            Guard.AgainstFailure(FlightFiltersHelpers.GetFilters<LocationFilter>(filterAggregate.Filters, ref originLocations, df => df.IsDestination = false), "Origin flights");
+
+            List<LocationFilter> destinationLocations = new List<LocationFilter>();
+            Guard.AgainstFailure(FlightFiltersHelpers.GetFilters<LocationFilter>(filterAggregate.Filters, ref originLocations, df => df.IsDestination = true), "Origin flights");
+
+            // TODO: get variables into a string and remove these as parameters.  Repeat for Availabilty API
+
+            throw new NotImplementedException();
 
             this.QueryParams.Add("origin_airport", originAirports);
             this.QueryParams.Add("destination_airport", destinationAirports);
