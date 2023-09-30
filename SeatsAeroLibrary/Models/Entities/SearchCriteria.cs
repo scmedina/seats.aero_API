@@ -1,6 +1,8 @@
 ﻿using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Models.DataModels;
 using SeatsAeroLibrary.Services;
+using SeatsAeroLibrary.Services.FlightFactories;
+using SeatsAeroLibrary.Services.FlightFilters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +32,7 @@ namespace SeatsAeroLibrary.Models.Entities
             return $"{OriginAirports} > {DestinationAirports} ({StartDate} - {EndDate})";
         }
 
-        public SearchCriteria(SearchCriteriaDataModel searchCriteriaDataModel) 
+        public SearchCriteria(SearchCriteriaDataModel searchCriteriaDataModel, IFilterAnalyzer filterAnalyzer = null) 
         {
             this.OriginAirports = searchCriteriaDataModel.OriginAirports ?? "";
             this.DestinationAirports = searchCriteriaDataModel.DestinationAirports ?? "";
@@ -54,14 +56,30 @@ namespace SeatsAeroLibrary.Models.Entities
 
             EnumHelper enumHelper = new EnumHelper();
             SeatTypesList = enumHelper.GetBitFlagList(seatTypesEnum);
+
+            FilterAggregate = BuildFilter(filterAnalyzer);
         }
 
-        public static List<SearchCriteria> GetSearchCriteria(List<SearchCriteriaDataModel> searchCriteria)
+        protected virtual FilterAggregate BuildFilter(IFilterAnalyzer filterAnalyzer = null)
+        {
+            List<IFlightFilter> filters = new List<IFlightFilter>();
+            filters.AddRange(FlightFilterFactoryHelpers.GetFilters<DateFilterFactory>(this));
+            filters.AddRange(FlightFilterFactoryHelpers.GetFilters<DirectFilterFactory>(this));
+            filters.AddRange(FlightFilterFactoryHelpers.GetFilters<LocationFilterFactory>(this));
+            filters.AddRange(FlightFilterFactoryHelpers.GetFilters<MaxMileageCostFilterFactory>(this));
+            filters.AddRange(FlightFilterFactoryHelpers.GetFilters<SeatAvailabilityFilterFactory>(this));
+
+
+            FilterAggregate filterAggregate = new FilterAggregate(filters, filterAnalyzer);
+            return filterAggregate;
+        }
+
+        public static List<SearchCriteria> GetSearchCriteria(List<SearchCriteriaDataModel> searchCriteria, IFilterAnalyzer filterAnalyzer = null)
         {
             List<SearchCriteria> results = new List<SearchCriteria>();
             foreach (SearchCriteriaDataModel searchCriteriaDataModel in searchCriteria)
             {
-                results.Add(new SearchCriteria(searchCriteriaDataModel));
+                results.Add(new SearchCriteria(searchCriteriaDataModel, filterAnalyzer));
             }
             return results;
         }

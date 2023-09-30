@@ -1,4 +1,6 @@
-﻿using SeatsAeroLibrary.Services;
+﻿using SeatsAeroLibrary.Models.Entities;
+using SeatsAeroLibrary.Services;
+using SeatsAeroLibrary.Services.FlightFactories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +15,20 @@ namespace SeatsAeroLibrary.Models
         public IFilterAnalyzer FilterAnalyzer { get; set; }
 
 
-        public FilterAggregate(List<IFlightFilterFactory> filterFactories, IFilterAnalyzer filterAnalyzer) 
+        public FilterAggregate(IFilterAnalyzer filterAnalyzer, bool runAnalyzer = true)
+        {
+            this.FilterAnalyzer = filterAnalyzer;
+            if (filterAnalyzer == null)
+            {
+                this.FilterAnalyzer = new FilterAnalyzer();
+            }
+            if (runAnalyzer)
+            {
+                FilterAnalyzer.AnalyzeFilters(this);
+            }
+        }
+
+        public FilterAggregate(List<IFlightFilterFactory> filterFactories, IFilterAnalyzer filterAnalyzer) : this(filterAnalyzer, runAnalyzer:false)
         { 
             this.Filters = new List<IFlightFilter>();
 
@@ -25,7 +40,12 @@ namespace SeatsAeroLibrary.Models
                 }
             }
 
-            this.FilterAnalyzer = filterAnalyzer;
+            FilterAnalyzer.AnalyzeFilters(this);
+        }
+
+        public FilterAggregate(List<IFlightFilter> filters, IFilterAnalyzer filterAnalyzer) : this(filterAnalyzer, runAnalyzer: false)
+        {
+            this.Filters = filters;
             FilterAnalyzer.AnalyzeFilters(this);
         }
 
@@ -54,7 +74,7 @@ namespace SeatsAeroLibrary.Models
                 filterAnalyzer = new FilterAnalyzer();
             }
 
-            FilterAggregate filterAggregate = new FilterAggregate(null, filterAnalyzer);
+            FilterAggregate filterAggregate = new FilterAggregate(filterAnalyzer);
             return filterAggregate;
         }
 
@@ -62,7 +82,7 @@ namespace SeatsAeroLibrary.Models
         {
             if (filterAggregate == null)
             {
-                return new FilterAggregate(null, filterAnalyzer);
+                return new FilterAggregate(filterAnalyzer);
             }
             return filterAggregate;
         }

@@ -14,6 +14,9 @@ namespace SeatsAeroLibrary.Services.FlightFactories
     {
         public string Sources { get; set; }
 
+
+        public SourceFilterFactory() { }
+        
         public SourceFilterFactory(string sources)
         {
             Sources = sources;

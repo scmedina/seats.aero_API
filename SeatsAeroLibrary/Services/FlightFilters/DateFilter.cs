@@ -44,15 +44,14 @@ namespace SeatsAeroLibrary.Services.FlightFilters
 
         public static DateTime? GetDateVal(List<IFlightFilter> filters, out DateFilter dateFilter, bool isEndDate, DateTime? defaultVal = null)
         {
-            dateFilter = null;
-            if (filters == null || filters.Count == 0)
+            List<DateFilter> dateFilters = new List<DateFilter>();
+            if (FlightFiltersHelpers.GetFilters<DateFilter>(filters, ref dateFilters, df => df.IsEndDate == isEndDate))
             {
-                return defaultVal;
+                dateFilter = dateFilters[0];
+                return dateFilters[0].Date;
             }
-
-            dateFilter = filters.OfType<DateFilter>().FirstOrDefault(df => df.IsEndDate == isEndDate);
-            DateTime? result = dateFilter?.Date ?? defaultVal;
-            return result;
+            dateFilter = null;
+            return defaultVal;
         }
 
 

@@ -17,7 +17,10 @@ namespace SeatsAeroLibrary.Services.FlightFactories
         private int? _maxPoints;
         private bool _nonZero = false;
 
-        public MaxMileageCostFilterFactory(bool nonZero = false)
+        public MaxMileageCostFilterFactory() : this(false)
+        { }
+
+        public MaxMileageCostFilterFactory(bool nonZero)
         {
             _nonZero = nonZero;
         }

@@ -15,7 +15,11 @@ namespace SeatsAeroLibrary.Services.FlightFactories
     {
         private int _minimumSeatsAvailable;
 
-        public SeatAvailabilityFilterFactory(int minimumSeatsAvailable = 0)
+        public SeatAvailabilityFilterFactory() : this(0)
+        {
+        }
+
+        public SeatAvailabilityFilterFactory(int minimumSeatsAvailable)
         {
             _minimumSeatsAvailable = minimumSeatsAvailable;
         }

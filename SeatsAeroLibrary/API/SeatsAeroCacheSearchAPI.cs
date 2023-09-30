@@ -30,6 +30,8 @@ namespace SeatsAeroLibrary.API
             Guard.AgainstNull(endDate, nameof(endDate));
             Guard.AgainstInvalidDateRange(startDate,(DateTime)endDate, nameof(startDate),nameof(endDate));
 
+
+
             this.QueryParams.Add("origin_airport", originAirports);
             this.QueryParams.Add("destination_airport", destinationAirports);
             this.QueryParams.Add("start_date", startDate.ToString("yyyy-MM-dd"));

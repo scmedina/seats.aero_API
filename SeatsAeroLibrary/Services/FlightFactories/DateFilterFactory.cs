@@ -45,5 +45,12 @@ namespace SeatsAeroLibrary.Services.FlightFactories
 
             return filters;
         }
+
+        public static List< IFlightFilter> GetFilters(SearchCriteria searchCriteria)
+        {
+            IFlightFilterFactory factory= new DateFilterFactory();
+            return factory.CreateFilters(searchCriteria);
+        }
+
     }
 }
