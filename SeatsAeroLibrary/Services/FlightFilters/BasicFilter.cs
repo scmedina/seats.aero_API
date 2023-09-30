@@ -11,7 +11,7 @@ namespace SeatsAeroLibrary.Services.FlightFilters
 {
     public abstract class BasicFilter : IFlightFilter
     {
-        List<Flight> IFlightFilter.Filter(List<Flight> flights)
+        public List<Flight> Filter(List<Flight> flights)
         {
             return flights.Where(flight => FilterFlight(flight)).ToList();
         }

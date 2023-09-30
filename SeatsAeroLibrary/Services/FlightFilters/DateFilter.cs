@@ -23,13 +23,22 @@ namespace SeatsAeroLibrary.Services.FlightFilters
 
         protected override bool FilterFlight(Flight flight)
         {
-            if (IsEndDate)
+            return IsValidDate(flight.Date);
+        }
+
+        protected bool IsValidDate(DateTime? date)
+        {
+            if (date == null)
             {
-                return flight.Date <= Date;
+                return false;
+            }
+            else if (IsEndDate)
+            {
+                return (DateTime)date <= Date;
             }
             else
             {
-                return flight.Date >= Date;
+                return (DateTime)date >= Date;
             }
         }
 
@@ -52,6 +61,5 @@ namespace SeatsAeroLibrary.Services.FlightFilters
             DateFilter dateFilter = null;
             return GetDateVal(filters, out dateFilter, isEndDate, defaultVal);
         }
-
     }
 }

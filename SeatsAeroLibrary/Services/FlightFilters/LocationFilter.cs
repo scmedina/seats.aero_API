@@ -20,9 +20,13 @@ namespace SeatsAeroLibrary.Services.FlightFilters
         }
         protected override bool FilterFlight(Flight flight)
         {
-            if (Locations is null || Locations.Count == 0) return true;
-
             Location flightLocation = IsDestination ? flight.Route.Destination : flight.Route.Origin;
+
+            return IsValidLocation(flightLocation);
+        }
+        private bool IsValidLocation(Location flightLocation)
+        {
+            if (Locations is null || Locations.Count == 0) return true;
 
             foreach (LocationByType location in Locations)
             {

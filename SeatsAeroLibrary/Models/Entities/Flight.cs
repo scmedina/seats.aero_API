@@ -69,6 +69,7 @@ namespace SeatsAeroLibrary.Models
             return sb.ToString();
         }
 
+        public Flight() { }
         public Flight(AvailabilityDataModel availability, SeatType seatType)
         {
             Route = new Route(availability.Route);

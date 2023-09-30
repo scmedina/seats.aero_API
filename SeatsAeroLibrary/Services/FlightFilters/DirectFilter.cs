@@ -20,11 +20,20 @@ namespace SeatsAeroLibrary.Services.FlightFilters
 
         protected override bool FilterFlight(Flight flight)
         {
+            return IsValidDirect(flight.Direct);
+        }
+
+        private bool IsValidDirect(bool? direct)
+        {
             if (_direct is null)
             {
                 return true;
             }
-            return flight.Direct == (bool)_direct;
+            else if (direct is null)
+            {
+                return false;
+            }
+            return ((bool)direct == (bool)_direct);
         }
     }
 }
