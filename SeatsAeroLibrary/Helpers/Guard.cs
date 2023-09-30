@@ -23,7 +23,14 @@ namespace SeatsAeroLibrary.Helpers
         {
             if (Enum.TryParse(argument,out program) == false)
             {
-                throw new ArgumentException($"{argumentName} is not a valid MileageProgram source.");
+                throw new ArgumentException($"{argumentName} is not a valid MileageProgram source: {argument}");
+            }
+        }
+        public static void AgainstInvalidSeatType(string argument, string argumentName, out SeatType seatType)
+        {
+            if (Enum.TryParse(argument, out seatType) == false)
+            {
+                throw new ArgumentException($"{argumentName} is not a valid SeatType: {argument}");
             }
         }
 

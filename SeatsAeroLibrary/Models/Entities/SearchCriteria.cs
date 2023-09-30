@@ -25,6 +25,11 @@ namespace SeatsAeroLibrary.Models.Entities
         public List<SeatType> SeatTypesList { get; set; }
         public string Sources { get; set; }
 
+        public override string ToString()
+        {
+            return $"{OriginAirports} > {DestinationAirports} ({StartDate} - {EndDate})";
+        }
+
         public SearchCriteria(SearchCriteriaDataModel searchCriteriaDataModel) 
         {
             this.OriginAirports = searchCriteriaDataModel.OriginAirports ?? "";
@@ -43,15 +48,22 @@ namespace SeatsAeroLibrary.Models.Entities
             foreach (string seatTypeString in seatTypesArray)
             {
                 SeatType thisSeatTypeEnum = SeatType.None;
-                if (Enum.TryParse(seatTypeString.Trim(), out thisSeatTypeEnum))
-                {
-                    seatTypesEnum = (seatTypesEnum | thisSeatTypeEnum);
-                }
+                Guard.AgainstInvalidSeatType(seatTypeString, nameof(seatTypeString), out thisSeatTypeEnum);
+                seatTypesEnum = (seatTypesEnum | thisSeatTypeEnum);
             }
 
             EnumHelper enumHelper = new EnumHelper();
             SeatTypesList = enumHelper.GetBitFlagList(seatTypesEnum);
         }
 
+        public static List<SearchCriteria> GetSearchCriteria(List<SearchCriteriaDataModel> searchCriteria)
+        {
+            List<SearchCriteria> results = new List<SearchCriteria>();
+            foreach (SearchCriteriaDataModel searchCriteriaDataModel in searchCriteria)
+            {
+                results.Add(new SearchCriteria(searchCriteriaDataModel));
+            }
+            return results;
+        }
     }
 }

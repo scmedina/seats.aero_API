@@ -11,14 +11,26 @@ namespace SeatsAeroLibrary.Models
     public enum SeatType
     {
         None = 0,
+        /// <summary>
+        /// Y, Economy
+        /// </summary>
         [Description("Y")]
-        YEconomy = 1,
+        Economy = 1,
+        /// <summary>
+        /// W, Premium Economy
+        /// </summary>
         [Description("W")]
-        WPremiumEconomy  = 2,
+        PremiumEconomy  = 2,
+        /// <summary>
+        /// J, Business
+        /// </summary>
         [Description("J")]
-        JBusiness = 4,
+        Business = 4,
+        /// <summary>
+        /// F, FirstClass
+        /// </summary>
         [Description("F")]
-        FFirstClass = 8,
+        First = 8,
         Any = 15
     }
 }

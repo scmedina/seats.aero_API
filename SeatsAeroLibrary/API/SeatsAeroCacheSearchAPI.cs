@@ -14,11 +14,14 @@ using static SeatsAeroLibrary.API.SeatsAeroAvailabilityAPI;
 
 namespace SeatsAeroLibrary.API
 {
-    public class SeatsAeroCacheSearchAPI : SeatsAeroAPI<AvailabilityResultDataModel>
+    public class SeatsAeroCacheSearchAPI : SeatsAeroAPI<AvailabilityResultDataModel, List<Flight>>
     {
+        public FilterAggregate FilterAggregate { get; set; }
         public SeatsAeroCacheSearchAPI(string originAirports, string destinationAirports,FilterAggregate filterAggregate) : base("partnerapi/search", new string[] { "origin_airport", "destination_airport" }, null)
         {
             Guard.AgainstNull(filterAggregate, nameof(filterAggregate));
+
+            this.FilterAggregate = filterAggregate;
 
             this.QueryParams = new Dictionary<string, string>();
 
@@ -32,6 +35,11 @@ namespace SeatsAeroLibrary.API
             this.QueryParams.Add("start_date", startDate.ToString("yyyy-MM-dd"));
             this.QueryParams.Add("end_date", ((DateTime)endDate).ToString("yyyy-MM-dd"));
             this.QueryParams.Add("take", "1000");
+        }
+
+        protected override List<Flight> GetU(AvailabilityResultDataModel? data)
+        {
+            return Flight.GetFilteredFlights(FilterAggregate, data?.data);
         }
     }
 }

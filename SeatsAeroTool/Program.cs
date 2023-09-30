@@ -41,7 +41,7 @@ namespace SeatsAeroTool
             seatsAeroInfo = new SeatsAeroHelper();
 
             List <IFlightFilterFactory> filterFactories = new List<IFlightFilterFactory>();
-            SeatType seatTypes = SeatType.FFirstClass | SeatType.JBusiness;
+            SeatType seatTypes = SeatType.First | SeatType.Business;
             filterFactories.Add(new SeatAvailabilityFilterFactory(4));
             filterFactories.Add(new DirectFilterFactory(true));
             filterFactories.Add(new MaxMileageCostFilterFactory(100000, true));

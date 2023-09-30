@@ -83,19 +83,19 @@ namespace SeatsAeroLibrary.Models
 
             switch (seatType)
             {
-                case SeatType.YEconomy:
+                case SeatType.Economy:
                     SetClassInfo(availability.YAvailable, availability.YMileageCost, availability.YRemainingSeats,
                         availability.YAirlines, availability.YDirect);
                     break;
-                case SeatType.WPremiumEconomy:
+                case SeatType.PremiumEconomy:
                     SetClassInfo(availability.WAvailable, availability.WMileageCost, availability.WRemainingSeats,
                         availability.WAirlines, availability.WDirect);
                     break;
-                case SeatType.JBusiness:
+                case SeatType.Business:
                     SetClassInfo(availability.JAvailable, availability.JMileageCost, availability.JRemainingSeats,
                         availability.JAirlines, availability.JDirect);
                     break;
-                case SeatType.FFirstClass:
+                case SeatType.First:
                     SetClassInfo(availability.FAvailable, availability.FMileageCost, availability.FRemainingSeats,
                         availability.FAirlines, availability.FDirect);
                     break;
@@ -119,10 +119,10 @@ namespace SeatsAeroLibrary.Models
         public static List<Flight> GetFlights(AvailabilityDataModel availability)
         {
             List<Flight> results = new List<Flight>();
-            results.Add(new Flight(availability, SeatType.YEconomy));
-            results.Add(new Flight(availability, SeatType.WPremiumEconomy));
-            results.Add(new Flight(availability, SeatType.JBusiness));
-            results.Add(new Flight(availability, SeatType.FFirstClass));
+            results.Add(new Flight(availability, SeatType.Economy));
+            results.Add(new Flight(availability, SeatType.PremiumEconomy));
+            results.Add(new Flight(availability, SeatType.Business));
+            results.Add(new Flight(availability, SeatType.First));
             return results;
         }
 
@@ -134,6 +134,15 @@ namespace SeatsAeroLibrary.Models
                 flights.AddRange(Flight.GetFlights(availability));
             }
             return flights;
+        }
+        public static List<Flight> GetFilteredFlights(FilterAggregate filterAggregate, List<AvailabilityDataModel>? availableData)
+        {
+            if (availableData != null)
+            {
+                return new List<Flight>();
+            }
+            List<Flight> flights = Flight.GetFlights(availableData);
+            return filterAggregate.Filter(flights);
         }
 
         public bool Equals(Route? other)
@@ -173,5 +182,6 @@ namespace SeatsAeroLibrary.Models
             if (MiscHelper.IfNotComparable((int)this.Source, (int)other.Source, out i) == false) return i;
             return 0;
         }
+
     }
 }

@@ -41,7 +41,7 @@ namespace SeatsAeroTests
             List<AvailabilityDataModel> data = GetAvailabilities();
 
             List<IFlightFilterFactory> filterFactories = new List<IFlightFilterFactory>();
-            SeatType seatTypes = SeatType.FFirstClass | SeatType.WPremiumEconomy | SeatType.JBusiness;
+            SeatType seatTypes = SeatType.First | SeatType.PremiumEconomy | SeatType.Business;
             filterFactories.Add(new SeatAvailabilityFilterFactory(1));
             filterFactories.Add(new DirectFilterFactory(true));
             filterFactories.Add(new MaxMileageCostFilterFactory(100000, true));
@@ -74,7 +74,7 @@ namespace SeatsAeroTests
             List<List<IFlightFilterFactory>> allFilterFactories = new List<List<IFlightFilterFactory>>();
             List<IFlightFilterFactory> filterFactories1 = new List<IFlightFilterFactory>();
             allFilterFactories.Add(filterFactories1);
-            SeatType seatTypes = SeatType.FFirstClass | SeatType.JBusiness | SeatType.WPremiumEconomy;
+            SeatType seatTypes = SeatType.First | SeatType.Business | SeatType.PremiumEconomy;
             filterFactories1.Add(new SeatAvailabilityFilterFactory(2));
             filterFactories1.Add(new DirectFilterFactory(true));
             filterFactories1.Add(new MaxMileageCostFilterFactory(100000, true));
@@ -102,7 +102,7 @@ namespace SeatsAeroTests
             List <List<IFlightFilterFactory>> allFilterFactories = new List<List<IFlightFilterFactory>>();
             List<IFlightFilterFactory> filterFactories1 = new List<IFlightFilterFactory>();
             allFilterFactories.Add(filterFactories1);
-            SeatType seatTypes = SeatType.FFirstClass | SeatType.JBusiness | SeatType.WPremiumEconomy;
+            SeatType seatTypes = SeatType.First | SeatType.Business | SeatType.PremiumEconomy;
             filterFactories1.Add(new SeatAvailabilityFilterFactory( 2));
             filterFactories1.Add(new DirectFilterFactory(true));
             filterFactories1.Add(new MaxMileageCostFilterFactory(100000, true));

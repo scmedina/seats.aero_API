@@ -14,14 +14,13 @@ using Autofac;
 
 namespace SeatsAeroLibrary.API
 {
-    public abstract class SeatsAeroAPI<T> where T : class
+    public abstract class SeatsAeroAPI<T, U> where T : class where U : class
     {
 
         private const string _baseUrl = "https://seats.aero";
         public virtual string[] RequiredParams { get; set; }
         public virtual Dictionary<string,string> QueryParams { get; set; }
         public virtual string EndPoint { get; set; }
-
 
         protected IConfigSettings _configSettings { get; set; }
 
@@ -41,12 +40,15 @@ namespace SeatsAeroLibrary.API
             QueryParams = queryParams;
         }
 
-        public async Task<T> QueryResults()
+        public async Task<U> QueryResults()
         {
             string json = await MakeApiRequestAsync();
-            T result = JsonSerializer.Deserialize<T>(json);
+            T data = JsonSerializer.Deserialize<T>(json);
+            U result = GetU(data);
             return result;
         }
+
+        protected abstract U GetU(T? data);
 
         protected async Task<string> MakeApiRequestAsync()
         {
