@@ -44,7 +44,7 @@ namespace SeatsAeroLibrary.API
         public async Task<T> QueryResults()
         {
             string json = await MakeApiRequestAsync();
-            var result =  JsonSerializer.Deserialize<T>(json);
+            T result = JsonSerializer.Deserialize<T>(json);
             return result;
         }
 

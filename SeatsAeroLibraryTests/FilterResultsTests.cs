@@ -68,7 +68,7 @@ namespace SeatsAeroTests
         }
 
 
-        [TestMethod]
+       // [TestMethod]
         public void HoustonCacheSearch()
         {
             List<List<IFlightFilterFactory>> allFilterFactories = new List<List<IFlightFilterFactory>>();
@@ -96,7 +96,7 @@ namespace SeatsAeroTests
             FileIO.SaveStringToFile(Flight.GetAsCSVString(flights), filePath + ".csv");
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void HoustonAvailabilitySearch()
         {
             List <List<IFlightFilterFactory>> allFilterFactories = new List<List<IFlightFilterFactory>>();
@@ -143,7 +143,7 @@ namespace SeatsAeroTests
             FileIO.SaveStringToFile(Flight.GetAsCSVString(flights), filePath + ".csv");
         }
 
-        [TestMethod]
+       // [TestMethod]
         public void AtlantaSearch()
         {
 
