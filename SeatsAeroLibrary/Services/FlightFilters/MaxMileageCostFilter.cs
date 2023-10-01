@@ -12,6 +12,11 @@ namespace SeatsAeroLibrary.Services.FlightFilters
         private int? _maxPoints;
         private bool _nonZero;
 
+        public override string ToString()
+        {
+            return this.GetType().Name + ": " + _maxPoints.ToString();
+        }
+
         public MaxMileageCostFilter( int? maxPoints = null, bool nonZero = false) : base()
         {
             _maxPoints = maxPoints;

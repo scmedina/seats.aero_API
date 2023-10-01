@@ -13,6 +13,16 @@ namespace SeatsAeroLibrary.Services.FlightFilters
         public List<LocationByType> Locations { get; set; }
         public bool IsDestination { get; set; }
 
+        public override string ToString()
+        {
+            string locations = this.GetType().Name +  ": ";
+            foreach (LocationByType location in Locations)
+            {
+                locations += location.Name + ", ";
+            }
+            return locations;
+        }
+
         public LocationFilter(List<LocationByType> locations, bool isDestination)
         {
             Locations = locations;

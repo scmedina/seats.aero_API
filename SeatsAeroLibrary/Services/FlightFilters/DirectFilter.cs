@@ -13,6 +13,11 @@ namespace SeatsAeroLibrary.Services.FlightFilters
     {
         private bool? _direct;
 
+        public override string ToString()
+        {
+            return this.GetType().Name + ": " + _direct.ToString();
+        }
+
         public DirectFilter(bool? direct = null) : base()
         {
             _direct = direct;

@@ -12,6 +12,11 @@ namespace SeatsAeroLibrary.Services.FlightFilters
     {
         public List<MileageProgram> Programs { get; set; }
 
+        public override string ToString()
+        {
+            return this.GetType().Name;
+        }
+
         public SourceFilter(string sources)
         {
             if (string.IsNullOrEmpty(sources)) { return; }

@@ -14,6 +14,11 @@ namespace SeatsAeroLibrary.Services.FlightFilters
     {
         private int _minimumSeatsAvailable;
 
+        public override string ToString()
+        {
+            return this.GetType().Name + ": "+ _minimumSeatsAvailable.ToString();
+        }
+
         public SeatAvailabilityFilter(int minimumSeatsAvailable = 0) 
         {
             _minimumSeatsAvailable = minimumSeatsAvailable;

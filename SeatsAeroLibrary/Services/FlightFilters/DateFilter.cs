@@ -15,6 +15,12 @@ namespace SeatsAeroLibrary.Services.FlightFilters
         public DateTime Date { get; set; }
         public bool IsEndDate { get; set; }
 
+        public override string ToString()
+        {
+            string myDateString = Date.ToString("dd/MM/yyyy");
+            return this.GetType().Name + ": " + (IsEndDate ? "> " + myDateString : myDateString + " >");
+        }
+
         public DateFilter(DateTime date, bool isEndDate = false)
         {
             Date = date;

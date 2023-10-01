@@ -14,6 +14,11 @@ namespace SeatsAeroLibrary.Services.FlightFilters
         private SeatType _seatTypes;
         private List<SeatType> _seatTypesList;
 
+        public override string ToString()
+        {
+            return this.GetType().Name + ": " + _seatTypes.ToString();
+        }
+
         public SeatTypeFilter(SeatType seatTypes)
         {
             _seatTypes = seatTypes;

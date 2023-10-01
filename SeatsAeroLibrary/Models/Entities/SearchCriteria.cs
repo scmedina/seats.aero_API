@@ -2,7 +2,6 @@
 using SeatsAeroLibrary.Models.DataModels;
 using SeatsAeroLibrary.Services;
 using SeatsAeroLibrary.Services.FlightFactories;
-using SeatsAeroLibrary.Services.FlightFilters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,16 +45,16 @@ namespace SeatsAeroLibrary.Models.Entities
             this.Sources = searchCriteriaDataModel.Sources ?? "";
 
             string[] seatTypesArray = searchCriteriaDataModel.SeatTypes.Split(',');
-            SeatType seatTypesEnum = SeatType.None;
+            SeatTypeEnum = SeatType.None;
             foreach (string seatTypeString in seatTypesArray)
             {
                 SeatType thisSeatTypeEnum = SeatType.None;
                 Guard.AgainstInvalidSeatType(seatTypeString, nameof(seatTypeString), out thisSeatTypeEnum);
-                seatTypesEnum = (seatTypesEnum | thisSeatTypeEnum);
+                SeatTypeEnum = (SeatTypeEnum | thisSeatTypeEnum);
             }
 
             EnumHelper enumHelper = new EnumHelper();
-            SeatTypesList = enumHelper.GetBitFlagList(seatTypesEnum);
+            SeatTypesList = enumHelper.GetBitFlagList(SeatTypeEnum);
 
             FilterAggregate = BuildFilter(filterAnalyzer);
         }
@@ -63,12 +62,12 @@ namespace SeatsAeroLibrary.Models.Entities
         protected virtual FilterAggregate BuildFilter(IFilterAnalyzer filterAnalyzer = null)
         {
             List<IFlightFilter> filters = new List<IFlightFilter>();
+            filters.AddRange(FlightFilterFactoryHelpers.GetFilters<LocationFilterFactory>(this));
             filters.AddRange(FlightFilterFactoryHelpers.GetFilters<DateFilterFactory>(this));
             filters.AddRange(FlightFilterFactoryHelpers.GetFilters<DirectFilterFactory>(this));
-            filters.AddRange(FlightFilterFactoryHelpers.GetFilters<LocationFilterFactory>(this));
+            filters.AddRange(FlightFilterFactoryHelpers.GetFilters<SeatTypeFilterFactory>(this));
             filters.AddRange(FlightFilterFactoryHelpers.GetFilters<MaxMileageCostFilterFactory>(this));
             filters.AddRange(FlightFilterFactoryHelpers.GetFilters<SeatAvailabilityFilterFactory>(this));
-
 
             FilterAggregate filterAggregate = new FilterAggregate(filters, filterAnalyzer);
             return filterAggregate;

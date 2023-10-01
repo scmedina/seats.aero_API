@@ -20,7 +20,7 @@ namespace SeatsAeroLibrary.Services.FlightFilters
 
             results = filters.OfType<T>().Where(predicate).ToList();
             
-            return results != null && results.Count == 0;
+            return results != null && results.Count != 0;
         }
 
     }
