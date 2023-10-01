@@ -161,49 +161,45 @@ namespace SeatsAeroLibrary
 
 
 
-        public async Task<List<Flight>> LoadSearch(string originAirports, string destinationAirports, bool forceMostRecent = false,
+        public async Task<List<Flight>> LoadSearch(bool forceMostRecent = false,
             FilterAggregate filterAggregate = null, IFilterAnalyzer filterAnalyzer = null)
         {
-            _logger.Info($"Loading availability of: {originAirports} > {destinationAirports}");
-
             filterAggregate = FilterAggregate.CheckNullAggregate(filterAggregate, filterAnalyzer);
 
             List<Flight> results = new List<Flight>();
 
-            Task<List<AvailabilityDataModel>> task = LoadCacheSearchSingle(originAirports, destinationAirports, forceMostRecent, filterAggregate);
+            Task<List<AvailabilityDataModel>> task = LoadCacheSearchSingle(forceMostRecent, filterAggregate);
             task.Wait();
             AddFilteredFlights(filterAggregate, results, task.Result);
 
             return results;
         }
-        public async Task<List<AvailabilityDataModel>> LoadCacheSearchSingle(string originAirports, string destinationAirports, bool forceMostRecent = false,
+        public async Task<List<AvailabilityDataModel>> LoadCacheSearchSingle(bool forceMostRecent = false,
             FilterAggregate filterAggregate = null, IFilterAnalyzer filterAnalyzer = null)
         {
-            Guard.AgainstNullOrEmptyResultString(originAirports, nameof(originAirports));
-            Guard.AgainstNullOrEmptyResultString(destinationAirports, nameof(destinationAirports));
-
             filterAggregate = FilterAggregate.CheckNullAggregate(filterAggregate, filterAnalyzer);
 
             string json = ""; bool createFile = false;
             AvailabilitySnapshot fileSnapshot = new AvailabilitySnapshot();
 
-            List<AvailabilityDataModel> availabilities = null;
-            if (forceMostRecent == true || fileSnapshot.TryFindValidSnapshot($"{originAirports}_{destinationAirports}", ref json) == false)
-            {
-                _logger.Info($"Querying Availability API Result: {originAirports} > {destinationAirports}");
+            SeatsAeroCacheSearchAPI apiCall = new SeatsAeroCacheSearchAPI(filterAggregate);
 
-                SeatsAeroCacheSearchAPI apiCall = new SeatsAeroCacheSearchAPI(originAirports, destinationAirports, filterAggregate);
+            List<AvailabilityDataModel> availabilities = null;
+            if (forceMostRecent == true || fileSnapshot.TryFindValidSnapshot($"{apiCall.OriginAirports}_{apiCall.DestinationAirports}", ref json) == false)
+            {
+                _logger.Info($"Querying Availability API Result: {apiCall.OriginAirports} > {apiCall.DestinationAirports}");
+
                 List<Flight> result = await apiCall.QueryResults();
                 createFile = true;
                 //fileSnapshot.SaveSnapshot(mileageProgram, json);
             }
 
-            _logger.Info($"Availability API Result Completed: {originAirports} > {destinationAirports}");
+            _logger.Info($"Availability API Result Completed: {apiCall.OriginAirports} > {apiCall.DestinationAirports}");
 
             // Added to save the file in formatted JSON.
             if (createFile = true)
             {
-                string fileName = fileSnapshot.GetFileNameByTypeAndDate($"{originAirports}_{destinationAirports}", DateTime.Now);
+                string fileName = fileSnapshot.GetFileNameByTypeAndDate($"{apiCall.OriginAirports}_{apiCall.DestinationAirports}", DateTime.Now);
                 fileSnapshot.SaveSnapshot(availabilities, fileName);
             }
 

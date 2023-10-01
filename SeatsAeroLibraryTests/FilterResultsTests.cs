@@ -75,7 +75,8 @@ namespace SeatsAeroTests
             List<IFlightFilterFactory> filterFactories1 = new List<IFlightFilterFactory>();
             allFilterFactories.Add(filterFactories1);
             SeatType seatTypes = SeatType.First | SeatType.Business | SeatType.PremiumEconomy;
-            filterFactories1.Add(new LocationFilterFactory());
+            filterFactories1.Add(new LocationFilterFactory("IAH,HOU", isDestination:false));
+            filterFactories1.Add(new LocationFilterFactory("FRA,LHR,CDG,AMS,MUC,HNL", isDestination: true));
             filterFactories1.Add(new SeatAvailabilityFilterFactory(2));
             filterFactories1.Add(new DirectFilterFactory(true));
             filterFactories1.Add(new MaxMileageCostFilterFactory(100000, true));
@@ -83,7 +84,7 @@ namespace SeatsAeroTests
 
             SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper();
             DateTime timer = DateTime.Now;
-            Task<List<Flight>> task = seatsAeroInfo.LoadSearch("IAH,HOU", "FRA,LHR,CDG,AMS,MUC,HNL", filterAggregate: filterAggregate);
+            Task<List<Flight>> task = seatsAeroInfo.LoadSearch(filterAggregate: filterAggregate);
             task.Wait();
             List<Flight> flights = task.Result;
 

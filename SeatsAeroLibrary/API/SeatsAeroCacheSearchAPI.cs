@@ -18,7 +18,10 @@ namespace SeatsAeroLibrary.API
     public class SeatsAeroCacheSearchAPI : SeatsAeroAPI<AvailabilityResultDataModel, List<Flight>>
     {
         public FilterAggregate FilterAggregate { get; set; }
-        public SeatsAeroCacheSearchAPI(string originAirports, string destinationAirports,FilterAggregate filterAggregate) : base("partnerapi/search", new string[] { "origin_airport", "destination_airport" }, null)
+        public string OriginAirports { get; set; }
+        public string DestinationAirports { get; set; }
+
+        public SeatsAeroCacheSearchAPI(FilterAggregate filterAggregate) : base("partnerapi/search", new string[] { "origin_airport", "destination_airport" }, null)
         {
             Guard.AgainstNull(filterAggregate, nameof(filterAggregate));
 
@@ -34,16 +37,14 @@ namespace SeatsAeroLibrary.API
 
             List<LocationFilter> originLocations = new List<LocationFilter>();
             Guard.AgainstFailure(FlightFiltersHelpers.GetFilters<LocationFilter>(filterAggregate.Filters, ref originLocations, df => df.IsDestination = false), "Origin flights");
+            OriginAirports = string.Join(", ", originLocations.SelectMany(filter => filter.Locations).Select(location => location.Name));
 
             List<LocationFilter> destinationLocations = new List<LocationFilter>();
             Guard.AgainstFailure(FlightFiltersHelpers.GetFilters<LocationFilter>(filterAggregate.Filters, ref originLocations, df => df.IsDestination = true), "Origin flights");
+            DestinationAirports = string.Join(", ", destinationLocations.SelectMany(filter => filter.Locations).Select(location => location.Name));
 
-            // TODO: get variables into a string and remove these as parameters.  Repeat for Availabilty API
-
-            throw new NotImplementedException();
-
-            this.QueryParams.Add("origin_airport", originAirports);
-            this.QueryParams.Add("destination_airport", destinationAirports);
+            this.QueryParams.Add("origin_airport", OriginAirports);
+            this.QueryParams.Add("destination_airport", DestinationAirports);
             this.QueryParams.Add("start_date", startDate.ToString("yyyy-MM-dd"));
             this.QueryParams.Add("end_date", ((DateTime)endDate).ToString("yyyy-MM-dd"));
             this.QueryParams.Add("take", "1000");
