@@ -137,7 +137,7 @@ namespace SeatsAeroLibrary.Models
         }
         public static List<Flight> GetFilteredFlights(FilterAggregate filterAggregate, List<AvailabilityDataModel>? availableData)
         {
-            if (availableData != null)
+            if (availableData == null)
             {
                 return new List<Flight>();
             }

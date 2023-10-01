@@ -14,6 +14,8 @@ if (System.IO.File.Exists(filePath) == false)
 
 TripSearchRepository repository = new TripSearchRepository(filePath);
 IEnumerable<TripSearchDataModel> searchData = repository.GetAll();
-List<TripSearch> search = TripSearch.GetTripSearches(searchData);
+List<TripSearch> trips = TripSearch.GetTripSearches(searchData);
+
+TripSearch.GetAllFlightsFromCachedSearches(trips);
 
 Console.WriteLine();

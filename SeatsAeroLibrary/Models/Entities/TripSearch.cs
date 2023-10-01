@@ -1,4 +1,5 @@
-﻿using SeatsAeroLibrary.Models.DataModels;
+﻿using SeatsAeroLibrary.Helpers;
+using SeatsAeroLibrary.Models.DataModels;
 using SeatsAeroLibrary.Services;
 using System;
 using System.Collections.Generic;
@@ -37,9 +38,30 @@ namespace SeatsAeroLibrary.Models.Entities
             result.ID = search.ID;
             result.Name = search.Name;
             result.Contact = search.Contact;
-            result.SearchCriteria = Entities.SearchCriteria.GetSearchCriteria(search.SearchCriteria, filterAnalyzer);
             result.FilterAnalyzer = filterAnalyzer;
+            result.SearchCriteria = Entities.SearchCriteria.GetSearchCriteria(search.SearchCriteria, filterAnalyzer);
+
             return result;
         }
+
+        public static void GetAllFlightsFromCachedSearches(List<TripSearch> trips)
+        {
+            foreach (TripSearch trip in trips)
+            {
+                trip.GetAllFlightsFromCachedSearch();
+            }
+
+        }
+        public void GetAllFlightsFromCachedSearch()
+        {
+            List<Flight> flights = new List<Flight>();
+            foreach (SearchCriteria searchCriteria in this.SearchCriteria)
+            {
+                flights.AddRange(searchCriteria.GetFlightsFromCachedSearchSync());
+            }
+            string filePath = $@"{Environment.GetEnvironmentVariable("Temp")}\\{this.Name}_{DateTime.Now:yyyyMMdd}_{DateTime.Now:HHmmss}";
+            FileIO.SaveStringToFile(Flight.GetAsCSVString(flights), filePath + ".csv");
+        }
+
     }
 }

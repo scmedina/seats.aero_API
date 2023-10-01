@@ -1,4 +1,6 @@
-﻿using SeatsAeroLibrary.Helpers;
+﻿using Autofac;
+using SeatsAeroLibrary.API;
+using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Models.DataModels;
 using SeatsAeroLibrary.Services;
 using SeatsAeroLibrary.Services.FlightFactories;
@@ -12,6 +14,7 @@ namespace SeatsAeroLibrary.Models.Entities
 {
     public class SearchCriteria
     {
+        private static ILogger _logger;
         public FilterAggregate FilterAggregate { get; set; }
         public string OriginAirports { get; set; }
         public string DestinationAirports { get; set; }
@@ -31,7 +34,15 @@ namespace SeatsAeroLibrary.Models.Entities
             return $"{OriginAirports} > {DestinationAirports} ({StartDate} - {EndDate})";
         }
 
-        public SearchCriteria(SearchCriteriaDataModel searchCriteriaDataModel, IFilterAnalyzer filterAnalyzer = null) 
+        public SearchCriteria()
+        {
+            using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
+            {
+                _logger = scope.Resolve<ILogger>();
+            }
+        }
+
+        public SearchCriteria(SearchCriteriaDataModel searchCriteriaDataModel, IFilterAnalyzer filterAnalyzer = null) : this()
         {
             this.OriginAirports = searchCriteriaDataModel.OriginAirports ?? "";
             this.DestinationAirports = searchCriteriaDataModel.DestinationAirports ?? "";
@@ -81,6 +92,26 @@ namespace SeatsAeroLibrary.Models.Entities
                 results.Add(new SearchCriteria(searchCriteriaDataModel, filterAnalyzer));
             }
             return results;
+        }
+
+        public async Task<List<Flight>> GetFlightsFromCachedSearch()
+        {
+            SeatsAeroCacheSearchAPI apiCall = new SeatsAeroCacheSearchAPI(this.FilterAggregate);
+
+            _logger.Info($"Querying Availability API Result: {apiCall.OriginAirports} > {apiCall.DestinationAirports}");
+
+            List<Flight> results = await apiCall.QueryResults();
+
+            _logger.Info($"Availability API Result Completed: {apiCall.OriginAirports} > {apiCall.DestinationAirports}");
+
+            return results;
+        }
+
+        internal IEnumerable<Flight> GetFlightsFromCachedSearchSync()
+        {
+            Task<List<Flight>> task = GetFlightsFromCachedSearch();
+            task.Wait();
+            return task.Result; 
         }
     }
 }

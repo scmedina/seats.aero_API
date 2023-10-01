@@ -36,11 +36,11 @@ namespace SeatsAeroLibrary.API
 
 
             List<LocationFilter> originLocations = new List<LocationFilter>();
-            Guard.AgainstFailure(FlightFiltersHelpers.GetFilters<LocationFilter>(filterAggregate.Filters, ref originLocations, df => df.IsDestination = false), "Origin flights");
+            Guard.AgainstFailure(FlightFiltersHelpers.GetFilters<LocationFilter>(filterAggregate.Filters, ref originLocations, df => df.IsDestination == false), "Origin flights");
             OriginAirports = string.Join(", ", originLocations.SelectMany(filter => filter.Locations).Select(location => location.Name));
 
             List<LocationFilter> destinationLocations = new List<LocationFilter>();
-            Guard.AgainstFailure(FlightFiltersHelpers.GetFilters<LocationFilter>(filterAggregate.Filters, ref originLocations, df => df.IsDestination = true), "Origin flights");
+            Guard.AgainstFailure(FlightFiltersHelpers.GetFilters<LocationFilter>(filterAggregate.Filters, ref destinationLocations, df => df.IsDestination == true), "Destination flights");
             DestinationAirports = string.Join(", ", destinationLocations.SelectMany(filter => filter.Locations).Select(location => location.Name));
 
             this.QueryParams.Add("origin_airport", OriginAirports);
@@ -54,5 +54,6 @@ namespace SeatsAeroLibrary.API
         {
             return Flight.GetFilteredFlights(FilterAggregate, data?.data);
         }
+
     }
 }
