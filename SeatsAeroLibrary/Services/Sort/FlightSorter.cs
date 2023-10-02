@@ -1,4 +1,5 @@
-﻿using SeatsAeroLibrary.Models;
+﻿using SeatsAeroLibrary.Helpers;
+using SeatsAeroLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,15 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Services.Sort
 {
-    public class FlightSorter : BasicSorter<Flight, FlightSortFields>
+    public class FlightSorter : BasicSorter<Flight>
     {
-        protected override object GetFieldValue(FlightSortFields field, Flight flight)
+        public override List<Enum> GetFieldsList(string sortFields)
+        {
+            EnumHelper enumHelper = new EnumHelper();
+            return (List<Enum>)enumHelper.GetEnumList<FlightSortFields>(sortFields).Select(val => (Enum) val).ToList();
+        }
+
+        protected override object GetFieldValue(Enum field, Flight flight)
         {
             switch (field)
             {
@@ -21,5 +28,6 @@ namespace SeatsAeroLibrary.Services.Sort
                     throw new ArgumentException("Invalid sort field.");
             }
         }
+
     }
 }

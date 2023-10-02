@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Services.Sort
 {
-    public class SortCriteria<T> where T : Enum
+    public class SortCriteria
     {
-        public T Field { get; set; }
+        public Enum Field { get; set; }
         public SortDirection Direction { get; set; }
 
-        public SortCriteria(T field, SortDirection direction)
+        public SortCriteria(Enum field, SortDirection direction)
         {
             Field = field;
             Direction = direction;

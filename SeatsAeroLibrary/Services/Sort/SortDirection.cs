@@ -8,7 +8,7 @@ namespace SeatsAeroLibrary.Services.Sort
 {
     public enum SortDirection
     {
-        Ascending,
-        Descending
+        Asc,
+        Desc
     }
 }

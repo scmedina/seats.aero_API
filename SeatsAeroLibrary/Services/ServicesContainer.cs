@@ -31,7 +31,7 @@ namespace SeatsAeroLibrary.Services
                 .SingleInstance();
 
             builder.RegisterType<FlightSorter>()
-                .As <ISorter<Flight, FlightSortFields>>()
+                .As(typeof(ISorter<Flight>))
                 .SingleInstance();
 #else
             builder.RegisterType<Logger>()

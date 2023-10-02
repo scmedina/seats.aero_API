@@ -90,7 +90,7 @@ namespace SeatsAeroLibrary.Models.Entities
             {
                 return;
             }
-            BasicSorter.SortTs(flights,Sort, SortDirection);
+            flights = (List<Flight>)BasicSorter<Flight>.SortTs(flights, Sort, SortDirection).ToList();
             string filePath = $@"{_configSettings.OutputDirectory}\\{this.Name}_{DateTime.Now:yyyyMMdd}_{DateTime.Now:HHmmss}";
             FileIO.SaveStringToFile(Flight.GetAsCSVString(flights), filePath + ".csv");
         }

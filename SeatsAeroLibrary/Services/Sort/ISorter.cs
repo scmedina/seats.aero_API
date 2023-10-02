@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Services.Sort
 {
-    public interface ISorter<T, U> where T : class where U : Enum
+    public interface ISorter<T> where T : class 
     {
-        public IEnumerable<T> SortTs(IEnumerable<T> objects, List<SortCriteria<U>> sortCriteria);
+        List<Enum> GetFieldsList(string sortFields);
+        public IEnumerable<T> SortTs(IEnumerable<T> objects, List<SortCriteria> sortCriteria);
     }
 }

@@ -4,6 +4,7 @@ using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Models.DataModels;
 using SeatsAeroLibrary.Services;
 using SeatsAeroLibrary.Services.FlightFactories;
+using SeatsAeroLibrary.Services.Sort;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,8 @@ namespace SeatsAeroLibrary.Models.Entities
         public SeatType SeatTypeEnum { get; set; }
         public List<SeatType> SeatTypesList { get; set; }
         public string Sources { get; set; }
+        public string Sort { get; set; }
+        public string SortDirection { get; set; }
 
         public override string ToString()
         {
@@ -54,6 +57,8 @@ namespace SeatsAeroLibrary.Models.Entities
             this.MinimumSeats = searchCriteriaDataModel.MinimumSeats ?? 0;
             this.Exclude = searchCriteriaDataModel.Exclude ?? false;
             this.Sources = searchCriteriaDataModel.Sources ?? "";
+            this.Sort = searchCriteriaDataModel.Sort ?? "";
+            this.SortDirection = searchCriteriaDataModel.SortDirection ?? "";
 
             string[] seatTypesArray = searchCriteriaDataModel.SeatTypes.Split(',');
             SeatTypeEnum = SeatType.None;
@@ -111,6 +116,9 @@ namespace SeatsAeroLibrary.Models.Entities
             results = results.OrderBy(flight => flight.MileageCost).ToList();
 
             _logger.Info($"Availability API Result Completed: {apiCall.OriginAirports} > {apiCall.DestinationAirports}");
+
+
+            results = (List<Flight>)BasicSorter<Flight>.SortTs(results, Sort, SortDirection).ToList();
 
             return results;
         }
