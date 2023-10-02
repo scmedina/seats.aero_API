@@ -15,7 +15,7 @@ using static SeatsAeroLibrary.API.SeatsAeroAvailabilityAPI;
 
 namespace SeatsAeroLibrary.API
 {
-    public class SeatsAeroCacheSearchAPI : SeatsAeroAPI<AvailabilityResultDataModel, List<Flight>>
+    public class SeatsAeroCacheSearchAPI : SeatsAeroCounterAP<AvailabilityResultDataModel, Flight>
     {
         public FilterAggregate FilterAggregate { get; set; }
         public string OriginAirports { get; set; }
@@ -51,11 +51,21 @@ namespace SeatsAeroLibrary.API
             this.QueryParams.Add("end_date", ((DateTime)endDate).ToString("yyyy-MM-dd"));
             this.QueryParams.Add("take", "1000");
         }
+                
 
         protected override List<Flight> GetU(AvailabilityResultDataModel? data)
         {
             return Flight.GetFilteredFlights(FilterAggregate, data?.data);
         }
 
+        protected override bool ContinueCounter(APIResult<AvailabilityResultDataModel, List<Flight>> apiResult)
+        {
+            return (apiResult?.TData?.hasMore ?? false);
+        }
+
+        protected override string GetMoreURL(APIResult<AvailabilityResultDataModel, List<Flight>> apiResult)
+        {
+            return apiResult?.TData?.moreURL;
+        }
     }
 }
