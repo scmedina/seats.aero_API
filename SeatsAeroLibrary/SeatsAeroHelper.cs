@@ -14,6 +14,8 @@ using System.ComponentModel;
 using System.Collections.Specialized;
 using SeatsAeroLibrary.API;
 using SeatsAeroLibrary.API.Models;
+using System.Diagnostics;
+using SeatsAeroLibrary.Services.FlightFilters;
 
 namespace SeatsAeroLibrary
 {
@@ -122,37 +124,24 @@ namespace SeatsAeroLibrary
             }
         }
 
-        public async Task<List<AvailabilityDataModel>> LoadAvailabilitySingle(MileageProgram mileageProgram, bool forceMostRecent = false, 
+        public async Task<List<AvailabilityDataModel>> LoadAvailabilitySingle(MileageProgram thisProgram, bool forceMostRecent = false, 
             FilterAggregate filterAggregate = null, IFilterAnalyzer filterAnalyzer = null)
         {
-            Guard.AgainstMultipleSources(mileageProgram, nameof(mileageProgram));
 
             filterAggregate = FilterAggregate.CheckNullAggregate(filterAggregate, filterAnalyzer);
+
+            List<Services.FlightFilters.SourceFilter> sourceFilters = new List<Services.FlightFilters.SourceFilter>();
+            FlightFiltersHelpers.GetFilters<Services.FlightFilters.SourceFilter>(filterAggregate.Filters, ref sourceFilters, df => true);
+            filterAggregate.Filters.RemoveAll(fl => sourceFilters.Contains(fl));
+            filterAggregate.Filters.Add(new Services.FlightFilters.SourceFilter(thisProgram));
 
             string json = ""; bool createFile = false;
             AvailabilitySnapshot fileSnapshot = new AvailabilitySnapshot();
 
             List<AvailabilityDataModel> availabilities = null;
-            if (forceMostRecent == true ||  fileSnapshot.TryFindValidSnapshot(mileageProgram, ref json) == false)
-            {
-                _logger.Info($"Querying Availability API Result: {mileageProgram}");
 
-                SeatsAeroAvailabilityAPI apiCall = new SeatsAeroAvailabilityAPI(mileageProgram,filterAggregate);
-                List<Flight> result = await apiCall.QueryResults();
-                createFile = true;
-                //fileSnapshot.SaveSnapshot(mileageProgram, json);
-            }
-
-            _logger.Info($"Availability API Result Completed: {mileageProgram}");
-
-
-
-            // Added to save the file in formatted JSON.
-            if (createFile = true)
-            {
-                string fileName = fileSnapshot.GetFileNameBySourceAndDate(mileageProgram, DateTime.Now);
-                fileSnapshot.SaveSnapshot(availabilities, fileName);
-            }
+            SeatsAeroAvailabilityAPI apiCall = new SeatsAeroAvailabilityAPI(filterAggregate);
+            List<Flight> result = await apiCall.QueryResults();
 
             return availabilities;
         }
@@ -212,6 +201,7 @@ namespace SeatsAeroLibrary
             EnumHelper enumHelper = new EnumHelper();
             AvailabilitySnapshot fileSnapshot = new AvailabilitySnapshot();
             List<MileageProgram> programs = enumHelper.GetBitFlagList(mileageProgram);
+            Services.FlightFilters.SourceFilter sourceFilter = null;
             foreach (MileageProgram thisProgram in programs)
             {
                 List<AvailabilityDataModel> availabilities = await LoadAvailabilitySingle(thisProgram, forceMostRecent);

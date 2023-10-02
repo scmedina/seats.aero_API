@@ -10,7 +10,8 @@ namespace SeatsAeroLibrary.Services.FlightFilters
 {
     public class SourceFilter : BasicFilter
     {
-        public List<MileageProgram> Programs { get; set; }
+        public List<MileageProgram> Programs { get; set; } = new List<MileageProgram>();
+        public MileageProgram SourcesEnum { get; set; } = MileageProgram.None;
 
         public override string ToString()
         {
@@ -26,12 +27,21 @@ namespace SeatsAeroLibrary.Services.FlightFilters
             {
                 MileageProgram program = MileageProgram.None;
                 Guard.AgainstInvalidSource(source, nameof(source), out program);
+                SourcesEnum = SourcesEnum | program;
                 Programs.Add(program);
             }
         }
 
+        public SourceFilter(MileageProgram thisProgram)
+        {
+            SourcesEnum = thisProgram;
+            EnumHelper helper = new EnumHelper();
+            Programs = helper.GetBitFlagList(thisProgram);
+        }
+
         protected override bool FilterFlight(Flight flight)
         {
+            if (Programs == null && Programs.Count == 0) { return true; }
             return Programs.Contains(flight.Source);
         }
     }

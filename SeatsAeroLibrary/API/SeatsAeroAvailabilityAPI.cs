@@ -17,21 +17,27 @@ namespace SeatsAeroLibrary.API
     public class SeatsAeroAvailabilityAPI : SeatsAeroCounterAP<AvailabilityResultDataModel, Flight>
     {
         public FilterAggregate FilterAggregate { get; set; }
+        public MileageProgram Sources { get; set; }
 
-        public SeatsAeroAvailabilityAPI(MileageProgram mileageProgram, FilterAggregate filterAggregate) : base("partnerapi/availability", new string[] { "source" }, null)
+        public SeatsAeroAvailabilityAPI(FilterAggregate filterAggregate) : base("partnerapi/availability", new string[] { "source" }, null)
         {
-            Guard.AgainstMultipleSources(mileageProgram, nameof(mileageProgram));
             Guard.AgainstNull(filterAggregate, nameof(filterAggregate));
 
             this.FilterAggregate = filterAggregate;
             this.QueryParams = new Dictionary<string, string>();
-            this.QueryParams.Add("source", mileageProgram.ToString());
 
             DateTime startDate = (DateTime)DateFilter.GetDateVal(filterAggregate.Filters, isEndDate: false, DateTime.Today);
             DateTime? endDate = (DateTime)DateFilter.GetDateVal(filterAggregate.Filters, isEndDate: true);
             Guard.AgainstNull(endDate, nameof(endDate));
             Guard.AgainstInvalidDateRange(startDate,(DateTime)endDate, nameof(startDate),nameof(endDate));
 
+            List<SourceFilter> sourceFilters = new List<SourceFilter>();
+            Guard.AgainstFailure(FlightFiltersHelpers.GetFilters<SourceFilter>(filterAggregate.Filters, ref sourceFilters, df => true), "Source flights");
+            Guard.AgainstNullOrEmptyList(sourceFilters, nameof(sourceFilters));
+            Sources = sourceFilters[0].SourcesEnum;
+            Guard.AgainstMultipleSources(Sources, nameof(Sources));
+
+            this.QueryParams.Add("source", Sources.ToString());
             this.QueryParams.Add("start_date", startDate.ToString("yyyy-MM-dd"));
             this.QueryParams.Add("end_date", ((DateTime)endDate).ToString("yyyy-MM-dd"));
             this.QueryParams.Add("take", "1000");

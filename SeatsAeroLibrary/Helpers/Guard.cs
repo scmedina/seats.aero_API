@@ -17,6 +17,10 @@ namespace SeatsAeroLibrary.Helpers
             {
                 throw new SingleMileageProgramRequiredException(program.ToString());
             }
+            else if (program == MileageProgram.None)
+            {
+                throw new ArgumentException($"{argumentName} cannot be None.");
+            }
         }
 
         public static void AgainstInvalidSource(string argument, string argumentName, out MileageProgram program)

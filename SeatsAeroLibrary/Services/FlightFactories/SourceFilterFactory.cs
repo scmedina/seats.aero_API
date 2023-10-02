@@ -1,4 +1,5 @@
-﻿using SeatsAeroLibrary.Models.DataModels;
+﻿using SeatsAeroLibrary.Models;
+using SeatsAeroLibrary.Models.DataModels;
 using SeatsAeroLibrary.Models.Entities;
 using SeatsAeroLibrary.Services;
 using SeatsAeroLibrary.Services.FlightFilters;
@@ -13,7 +14,6 @@ namespace SeatsAeroLibrary.Services.FlightFactories
     public class SourceFilterFactory : IFlightFilterFactory
     {
         public string Sources { get; set; }
-
 
         public SourceFilterFactory() { }
         

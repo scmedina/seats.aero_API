@@ -79,6 +79,7 @@ namespace SeatsAeroLibrary.Models.Entities
             filters.AddRange(FlightFilterFactoryHelpers.GetFilters<SeatTypeFilterFactory>(this));
             filters.AddRange(FlightFilterFactoryHelpers.GetFilters<MaxMileageCostFilterFactory>(this));
             filters.AddRange(FlightFilterFactoryHelpers.GetFilters<SeatAvailabilityFilterFactory>(this));
+            filters.AddRange(FlightFilterFactoryHelpers.GetFilters<SourceFilterFactory>(this));
 
             FilterAggregate filterAggregate = new FilterAggregate(filters, filterAnalyzer);
             return filterAggregate;
