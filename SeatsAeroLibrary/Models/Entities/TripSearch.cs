@@ -1,4 +1,5 @@
-﻿using SeatsAeroLibrary.Helpers;
+﻿using Autofac;
+using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Models.DataModels;
 using SeatsAeroLibrary.Services;
 using System;
@@ -18,9 +19,21 @@ namespace SeatsAeroLibrary.Models.Entities
         public List<SearchCriteria> SearchCriteria { get; set; } 
         public IFilterAnalyzer FilterAnalyzer { get; set; }
 
+        protected IConfigSettings _configSettings { get; set; }
+
         public override string ToString()
         {
             return $"{Name} ({Contact})";
+        }
+
+        public TripSearch()
+        {
+
+            using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
+            {
+                _configSettings = scope.Resolve<IConfigSettings>();
+            }
+            _configSettings.Load();
         }
 
         public static List<TripSearch> GetTripSearches(IEnumerable<TripSearchDataModel> searches, IFilterAnalyzer filterAnalyzer = null)
@@ -72,7 +85,7 @@ namespace SeatsAeroLibrary.Models.Entities
             {
                 return;
             }
-            string filePath = $@"{Environment.GetEnvironmentVariable("Temp")}\\{this.Name}_{DateTime.Now:yyyyMMdd}_{DateTime.Now:HHmmss}";
+            string filePath = $@"{_configSettings.OutputDirectory}\\{this.Name}_{DateTime.Now:yyyyMMdd}_{DateTime.Now:HHmmss}";
             FileIO.SaveStringToFile(Flight.GetAsCSVString(flights), filePath + ".csv");
         }
 

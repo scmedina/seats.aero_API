@@ -11,6 +11,7 @@ namespace SeatsAeroLibrary.Services
     public interface IConfigSettings
     {
         public string APIKey { get; set; }
+        public string OutputDirectory { get; set; }
         public void Load();
     }
 }

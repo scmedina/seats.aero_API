@@ -13,6 +13,8 @@ namespace SeatsAeroLibrary.Services
     {
 
         public string APIKey { get; set; }
+        public string OutputDirectory { get; set; }
+
         private bool _isLoaded  = false;
 
         public void Load()
@@ -32,7 +34,13 @@ namespace SeatsAeroLibrary.Services
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
 
             APIKey = (string)builder.Configuration.GetValue(typeof(string), "ApiKey");
+            OutputDirectory = (string)builder.Configuration.GetValue(typeof(string), "OutputDirectory");
 
+            if (String.IsNullOrEmpty(OutputDirectory))
+            {
+                OutputDirectory = Environment.GetEnvironmentVariable("Temp");
+            }
+            
             Guard.AgainstNullOrEmptyResultString(APIKey, nameof(APIKey));
             _isLoaded = true;
         }

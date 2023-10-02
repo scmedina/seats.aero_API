@@ -13,6 +13,7 @@ namespace SeatsAeroLibrary.Models
     public class Flight : IEquatable<Route>, IEquatable<Flight>, IComparable<Flight>
     {
         public Route Route { get; set; }
+        public string RouteID { get; set; }
         public string RouteString
         {
             get { return Route.ToString(); }
@@ -50,12 +51,12 @@ namespace SeatsAeroLibrary.Models
 
         public override string ToString()
         {
-            return $"{Route.Origin}, {Route.Destination}, {SeatType}, {DateString}, {Date.DayOfWeek}, {RemainingSeats}, {Direct}, {MileageCost}, {MileageCostUSD.ToString("C")}, \"{Airlines.Replace(",",";")}\", {Source}";
+            return $"{RouteID}, {Route.Origin}, {Route.Destination}, {SeatType}, {DateString}, {Date.DayOfWeek}, {RemainingSeats}, {Direct}, {MileageCost}, {MileageCostUSD.ToString("C")}, \"{Airlines.Replace(",",";")}\", {Source}";
         }
 
         public static string GetHeaderString()
         {
-            return $"Origin, Destination, Seat Type, Date, Day Of Week, Remaining Seats, Direct, Mileage Cost, Cost Equivalent $, Airlines, Source";
+            return $"ID, Origin, Destination, Seat Type, Date, Day Of Week, Remaining Seats, Direct, Mileage Cost, Cost Equivalent $, Airlines, Source";
         }
 
         public static string GetAsCSVString (List<Flight> flights)
@@ -73,6 +74,7 @@ namespace SeatsAeroLibrary.Models
         public Flight(AvailabilityDataModel availability, SeatType seatType)
         {
             Route = new Route(availability.Route);
+            RouteID = availability.RouteID;
             Date = availability.ParsedDate;
             AvailabilityTrips = availability.AvailabilityTrips;
             SeatType = seatType;
