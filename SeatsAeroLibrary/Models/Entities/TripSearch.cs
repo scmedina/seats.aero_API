@@ -14,7 +14,8 @@ namespace SeatsAeroLibrary.Models.Entities
         public int ID { get; set; }
         public string Name { get; set; }
         public string Contact { get; set; }
-        public List<SearchCriteria> SearchCriteria { get; set; }
+        public bool Exclude { get; set; }
+        public List<SearchCriteria> SearchCriteria { get; set; } 
         public IFilterAnalyzer FilterAnalyzer { get; set; }
 
         public override string ToString()
@@ -39,7 +40,15 @@ namespace SeatsAeroLibrary.Models.Entities
             result.Name = search.Name;
             result.Contact = search.Contact;
             result.FilterAnalyzer = filterAnalyzer;
-            result.SearchCriteria = Entities.SearchCriteria.GetSearchCriteria(search.SearchCriteria, filterAnalyzer);
+            result.Exclude = search.Exclude ?? false;
+            if (result.Exclude == false)
+            {
+                result.SearchCriteria = Entities.SearchCriteria.GetSearchCriteria(search.SearchCriteria, filterAnalyzer);
+            }
+            else
+            {
+                result.SearchCriteria = new List<SearchCriteria>();
+            }
 
             return result;
         }
@@ -58,6 +67,10 @@ namespace SeatsAeroLibrary.Models.Entities
             foreach (SearchCriteria searchCriteria in this.SearchCriteria)
             {
                 flights.AddRange(searchCriteria.GetFlightsFromCachedSearchSync());
+            }
+            if (flights.Count == 0)
+            {
+                return;
             }
             string filePath = $@"{Environment.GetEnvironmentVariable("Temp")}\\{this.Name}_{DateTime.Now:yyyyMMdd}_{DateTime.Now:HHmmss}";
             FileIO.SaveStringToFile(Flight.GetAsCSVString(flights), filePath + ".csv");

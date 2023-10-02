@@ -98,6 +98,12 @@ namespace SeatsAeroLibrary.Models.Entities
         {
             SeatsAeroCacheSearchAPI apiCall = new SeatsAeroCacheSearchAPI(this.FilterAggregate);
 
+            if (Exclude)
+            {
+                _logger.Info($"Following search criteria is flagged as exclude: {apiCall.OriginAirports} > {apiCall.DestinationAirports}");
+                return new List<Flight>();
+            }
+
             _logger.Info($"Querying Availability API Result: {apiCall.OriginAirports} > {apiCall.DestinationAirports}");
 
             List<Flight> results = await apiCall.QueryResults();
