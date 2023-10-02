@@ -64,12 +64,12 @@ namespace SeatsAeroLibrary
             CheckFilterFactories(filterFactories);
 
             List<Flight> results = new List<Flight>();
-            List<Flight> flights = Flight.GetFlights(availableData);
 
             foreach (List<IFlightFilterFactory> theseFilterFactories in filterFactories)
             {
                 FilterAggregate filterAggregate = new FilterAggregate(theseFilterFactories, new FilterAnalyzer());
-                results.AddRange(filterAggregate.Filter(flights));
+                List<Flight> flights = Flight.GetFilteredFlights(filterAggregate,availableData);
+                results.AddRange(flights);
             }
 
             return results;
@@ -117,9 +117,8 @@ namespace SeatsAeroLibrary
         {
             if (availableData != null)
             {
-                List<Flight> flights = Flight.GetFlights(availableData);
-                List<Flight> filteredFlights = filterAggregate.Filter(flights);
-                results.AddRange(filteredFlights);
+                List<Flight> flights = Flight.GetFilteredFlights(filterAggregate, availableData);
+                results.AddRange(flights);
             }
         }
 

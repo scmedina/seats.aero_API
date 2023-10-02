@@ -21,6 +21,7 @@ namespace SeatsAeroLibrary.API
         public virtual string[] RequiredParams { get; set; }
         public virtual Dictionary<string,string> QueryParams { get; set; }
         public virtual string EndPoint { get; set; }
+        public virtual bool HasCounter { get; set; } = false;
 
         protected IConfigSettings _configSettings { get; set; }
 
@@ -52,21 +53,28 @@ namespace SeatsAeroLibrary.API
 
         protected async Task<string> MakeApiRequestAsync()
         {
+
+            Guard.AgainstNull(_configSettings, nameof(_configSettings));
+            Guard.AgainstNullOrEmptyResultString(_configSettings.APIKey, nameof(_configSettings.APIKey));
+            Guard.AgainstMissingDictionaryKeys(QueryParams, RequiredParams, nameof(QueryParams), nameof(RequiredParams));
+
+            // Build the request URL
+            var requestUrl = $"{_baseUrl}/{EndPoint}";
+
+            if (QueryParams != null && QueryParams.Count > 0)
+            {
+                var queryString = string.Join("&", QueryParams.Select(kv => $"{kv.Key}={kv.Value}"));
+                requestUrl += $"?{queryString}";
+            }
+
+            return await MakeAPIRequestAsync(requestUrl);
+        }
+
+        private async Task<string> MakeAPIRequestAsync(string requestUrl)
+        {
+            Guard.AgainstNullOrEmptyResultString(requestUrl, nameof(requestUrl));
             try
             {
-                Guard.AgainstNull(_configSettings, nameof(_configSettings));
-                Guard.AgainstNullOrEmptyResultString(_configSettings.APIKey, nameof(_configSettings.APIKey));
-                Guard.AgainstMissingDictionaryKeys(QueryParams, RequiredParams, nameof(QueryParams), nameof(RequiredParams));
-
-                // Build the request URL
-                var requestUrl = $"{_baseUrl}/{EndPoint}";
-
-                if (QueryParams != null && QueryParams.Count > 0)
-                {
-                    var queryString = string.Join("&", QueryParams.Select(kv => $"{kv.Key}={kv.Value}"));
-                    requestUrl += $"?{queryString}";
-                }
-
                 // Send a GET request to the API
                 var options = new RestClientOptions(requestUrl);
                 var client = new RestClient(options);
@@ -94,6 +102,5 @@ namespace SeatsAeroLibrary.API
                 return default; // Change the return type to a nullable type if needed
             }
         }
-
     }
 }

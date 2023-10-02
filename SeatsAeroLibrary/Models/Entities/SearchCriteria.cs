@@ -101,6 +101,7 @@ namespace SeatsAeroLibrary.Models.Entities
             _logger.Info($"Querying Availability API Result: {apiCall.OriginAirports} > {apiCall.DestinationAirports}");
 
             List<Flight> results = await apiCall.QueryResults();
+            results = results.OrderBy(flight => flight.MileageCost).ToList();
 
             _logger.Info($"Availability API Result Completed: {apiCall.OriginAirports} > {apiCall.DestinationAirports}");
 

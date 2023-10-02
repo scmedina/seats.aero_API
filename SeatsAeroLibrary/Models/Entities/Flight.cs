@@ -116,33 +116,29 @@ namespace SeatsAeroLibrary.Models
             Direct = direct ?? false;
         }
 
-        public static List<Flight> GetFlights(AvailabilityDataModel availability)
+        public static List<Flight> GetFlights(FilterAggregate filterAggregate, AvailabilityDataModel availability)
         {
             List<Flight> results = new List<Flight>();
             results.Add(new Flight(availability, SeatType.Economy));
             results.Add(new Flight(availability, SeatType.PremiumEconomy));
             results.Add(new Flight(availability, SeatType.Business));
             results.Add(new Flight(availability, SeatType.First));
-            return results;
+            return filterAggregate.Filter(results);
         }
 
-        public static List<Flight> GetFlights(List<AvailabilityDataModel> availableData)
-        {
-            List<Flight> flights = new List<Flight>();
-            foreach (var availability in availableData)
-            {
-                flights.AddRange(Flight.GetFlights(availability));
-            }
-            return flights;
-        }
         public static List<Flight> GetFilteredFlights(FilterAggregate filterAggregate, List<AvailabilityDataModel>? availableData)
         {
             if (availableData == null)
             {
                 return new List<Flight>();
             }
-            List<Flight> flights = Flight.GetFlights(availableData);
-            return filterAggregate.Filter(flights);
+
+            List<Flight> flights = new List<Flight>();
+            foreach (var availability in availableData)
+            {
+                flights.AddRange(Flight.GetFlights(filterAggregate, availability));
+            }
+            return flights;
         }
 
         public bool Equals(Route? other)

@@ -25,6 +25,8 @@ namespace SeatsAeroLibrary.API
         {
             Guard.AgainstNull(filterAggregate, nameof(filterAggregate));
 
+            HasCounter = true;
+
             this.FilterAggregate = filterAggregate;
 
             this.QueryParams = new Dictionary<string, string>();
