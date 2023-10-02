@@ -14,7 +14,7 @@ using static SeatsAeroLibrary.API.SeatsAeroAvailabilityAPI;
 
 namespace SeatsAeroLibrary.API
 {
-    public class SeatsAeroAvailabilityAPI : SeatsAeroAPI< AvailabilityResultDataModel, List<Flight>>
+    public class SeatsAeroAvailabilityAPI : SeatsAeroCounterAP<AvailabilityResultDataModel, Flight>
     {
         public FilterAggregate FilterAggregate { get; set; }
 
@@ -40,6 +40,16 @@ namespace SeatsAeroLibrary.API
         protected override List<Flight> GetU(AvailabilityResultDataModel? data)
         {
             return Flight.GetFilteredFlights(FilterAggregate, data?.data);
+        }
+
+        protected override bool ContinueCounter(APIResult<AvailabilityResultDataModel, List<Flight>> apiResult)
+        {
+            return (apiResult?.TData?.hasMore ?? false);
+        }
+
+        protected override string GetMoreURL(APIResult<AvailabilityResultDataModel, List<Flight>> apiResult)
+        {
+            return apiResult?.TData?.moreURL;
         }
     }
 }
