@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
+using SeatsAeroLibrary.Models;
+using SeatsAeroLibrary.Services.Sort;
 
 namespace SeatsAeroLibrary.Services
 {
@@ -26,6 +28,10 @@ namespace SeatsAeroLibrary.Services
 
             builder.RegisterType<ConfigSettings>()
                 .As<IConfigSettings>()
+                .SingleInstance();
+
+            builder.RegisterType<FlightSorter>()
+                .As <ISorter<Flight, FlightSortFields>>()
                 .SingleInstance();
 #else
             builder.RegisterType<Logger>()

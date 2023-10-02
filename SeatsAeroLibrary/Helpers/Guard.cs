@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Markup;
 using SeatsAeroLibrary.Models;
+using SeatsAeroLibrary.Services.Sort;
 
 namespace SeatsAeroLibrary.Helpers
 {
@@ -115,6 +116,17 @@ namespace SeatsAeroLibrary.Helpers
             { 
                 throw new ArgumentException($"{argumentName} is a failure.");
             }
-        }   
+        }
+
+        internal static void AgainstInvalidListCount<T,U>(List<T> list1, string list1Name, List<U> list2, string list2Name)
+        {
+            Guard.AgainstNullOrEmptyList(list1, list1Name);
+            Guard.AgainstNullOrEmptyList(list2, list2Name);
+
+            if (list1.Count != list2.Count)
+            {
+                throw new ArgumentException($"{list1Name} and {list2Name} must have the same number of elements.");
+            }
+        }
     }
 }

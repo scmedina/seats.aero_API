@@ -13,6 +13,27 @@ namespace SeatsAeroLibrary.Helpers
             return GetBitFlagList<T>().Where(value => values.HasFlag(value)).ToList();
         }
 
+        public List<T> GetEnumList<T>(string valuesString) where T : Enum
+        {
+            return GetEnumList(valuesString, ParseEnum<T>);
+        }
+        public List<T> GetEnumList<T>(string valuesString, Func<string,T> parseEnumFunc) where T : Enum
+        {
+            List<T> result = new List<T>();
+            string[] valuesArray = valuesString.Split(',');
+            foreach (string valueString in valuesArray)
+            {
+                result.Add(parseEnumFunc(valueString));
+            }
+            return result;
+        }
+
+        public static T ParseEnum<T>(string valueString) where T : Enum
+        {
+            return (T)Enum.Parse(typeof(T), valueString);
+        }
+
+
         public List<T> GetBitFlagList<T>() where T : Enum
         {
             Guard.AgainstNonFlagEnumType(typeof(T), nameof(T));

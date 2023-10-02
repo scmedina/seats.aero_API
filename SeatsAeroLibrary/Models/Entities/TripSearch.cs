@@ -2,6 +2,7 @@
 using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Models.DataModels;
 using SeatsAeroLibrary.Services;
+using SeatsAeroLibrary.Services.Sort;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,8 @@ namespace SeatsAeroLibrary.Models.Entities
         public string Name { get; set; }
         public string Contact { get; set; }
         public bool Exclude { get; set; }
+        public string Sort { get; set; }
+        public string SortDirection { get; set; }
         public List<SearchCriteria> SearchCriteria { get; set; } 
         public IFilterAnalyzer FilterAnalyzer { get; set; }
 
@@ -54,6 +57,8 @@ namespace SeatsAeroLibrary.Models.Entities
             result.Contact = search.Contact;
             result.FilterAnalyzer = filterAnalyzer;
             result.Exclude = search.Exclude ?? false;
+            result.Sort = search.Sort;
+            result.SortDirection = search.SortDirection;
             if (result.Exclude == false)
             {
                 result.SearchCriteria = Entities.SearchCriteria.GetSearchCriteria(search.SearchCriteria, filterAnalyzer);
@@ -85,6 +90,7 @@ namespace SeatsAeroLibrary.Models.Entities
             {
                 return;
             }
+            BasicSorter.SortTs(flights,Sort, SortDirection);
             string filePath = $@"{_configSettings.OutputDirectory}\\{this.Name}_{DateTime.Now:yyyyMMdd}_{DateTime.Now:HHmmss}";
             FileIO.SaveStringToFile(Flight.GetAsCSVString(flights), filePath + ".csv");
         }
