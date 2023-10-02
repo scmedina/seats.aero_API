@@ -41,7 +41,7 @@ namespace SeatsAeroLibrary.Services.FlightFilters
 
         protected override bool FilterFlight(Flight flight)
         {
-            if (Programs == null && Programs.Count == 0) { return true; }
+            if (Programs == null || Programs.Count == 0) { return true; }
             return Programs.Contains(flight.Source);
         }
     }

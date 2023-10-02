@@ -62,6 +62,10 @@ namespace SeatsAeroLibrary.Models
             foreach (IFlightFilter filter in Filters)
             {
                 results = filter.Filter(results);
+                if (results.Count == 0)
+                {
+                    return results;
+                }
             }
 
             return results;
