@@ -12,19 +12,19 @@ namespace SeatsAeroLibrary.Services.Stats
     {
         public Dictionary<string, int> APICallsCount { get; set; } = new Dictionary<string, int>();
         public int TotalAPICalls { get; set; }
+        private string _currentKey = "";
 
-
-        public void AddAPICall(string searchName)
+        public void SetCurrentAPICall(string searchName)
         {
-            APICallsCount.Add(searchName, 0);
+            _currentKey = searchName;
+            if (!APICallsCount.ContainsKey(searchName))
+            {
+                APICallsCount.Add(searchName, 0);
+            }
         }
         public void IncrementAPICall()
         {
-            // Get the last key-value pair using LINQ
-            var lastEntry = APICallsCount.Last();
-
-            // Increment the value associated with the last key
-            APICallsCount[lastEntry.Key]++;
+            APICallsCount[_currentKey]++;
 
             TotalAPICalls++;
         }

@@ -10,7 +10,7 @@ namespace SeatsAeroLibrary.Services.Stats
     {
         Dictionary<string, int> APICallsCount { get; set; }
         int TotalAPICalls { get; set; }
-        public void AddAPICall(string searchName);
+        public void SetCurrentAPICall(string searchName);
         public void IncrementAPICall();
     }
 }

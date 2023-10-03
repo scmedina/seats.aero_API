@@ -62,7 +62,6 @@ namespace SeatsAeroLibrary.Models.Entities
             result.SortDirection = search.SortDirection;
             if (result.Exclude == false)
             {
-                StatisticsHelper.GetStatistics().AddAPICall(result.Name);
                 result.SearchCriteria = Entities.SearchCriteria.GetSearchCriteria(search.SearchCriteria, filterAnalyzer);
             }
             else
@@ -72,20 +71,12 @@ namespace SeatsAeroLibrary.Models.Entities
 
             return result;
         }
-
-        public static void GetAllFlightsFromCachedSearches(List<TripSearch> trips)
-        {
-            foreach (TripSearch trip in trips)
-            {
-                trip.GetAllFlightsFromCachedSearch();
-            }
-
-        }
         public void GetAllFlightsFromCachedSearch()
         {
             List<Flight> flights = new List<Flight>();
             foreach (SearchCriteria searchCriteria in this.SearchCriteria)
             {
+                StatisticsHelper.GetStatistics().SetCurrentAPICall(Name);
                 flights.AddRange(searchCriteria.GetFlightsFromCachedSearchSync());
             }
             if (flights.Count == 0)
@@ -95,6 +86,15 @@ namespace SeatsAeroLibrary.Models.Entities
             flights = (List<Flight>)BasicSorter<Flight>.SortTs(flights, Sort, SortDirection).ToList();
             string filePath = $@"{_configSettings.OutputDirectory}\\{this.Name}_{DateTime.Now:yyyyMMdd}_{DateTime.Now:HHmmss}";
             FileIO.SaveStringToFile(Flight.GetAsCSVString(flights), filePath + ".csv");
+        }
+
+        public static void GetAllFlightsFromCachedSearches(List<TripSearch> trips)
+        {
+            foreach (TripSearch trip in trips)
+            {
+                trip.GetAllFlightsFromCachedSearch();
+            }
+
         }
 
     }
