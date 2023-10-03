@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SeatsAeroLibrary.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,52 +8,56 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Repositories
 {
-    public abstract class JsonFileRepository<T> : IRepository<T>
+    public abstract class JsonFileRepository<T,U> : IRepository<T,U>
     {
         protected readonly string filePath;
-        protected readonly List<T> entities;
+        protected readonly Dictionary<U,T> entities;
 
-        public JsonFileRepository(string filePath)
+        public JsonFileRepository(string  filePath)
         {
             this.filePath = filePath;
-            entities = LoadDataFromFile();
+            List<T> elements =  LoadDataFromFile();
+            entities = elements.ToDictionary(e => GetEntityId(e));
         }
 
         public IEnumerable<T> GetAll()
         {
-            return entities;
+            return entities.Values;
         }
 
-        public T GetById(int id)
+        public T GetById(U id)
         {
-            return entities.FirstOrDefault(e => GetEntityId(e) == id);
+            if (entities.ContainsKey(id))
+            {
+                return entities[id];
+            }
+            return default;
         }
 
-        public void Add(T entity)
+        public virtual void Add(T entity)
         {
-            int newId = GenerateNewId();
+            U newId = GenerateNewId();
             SetEntityId(entity, newId);
-            entities.Add(entity);
+            entities.Add(GetEntityId(entity), entity);
             SaveDataToFile();
         }
 
-        public void Update(T entity)
+        public virtual void Update(T entity)
         {
-            int entityId = GetEntityId(entity);
-            int index = entities.FindIndex(e => GetEntityId(e) == entityId);
-            if (index != -1)
+            U entityId = GetEntityId(entity);
+
+            if (entities.ContainsKey(entityId))
             {
-                entities[index] = entity;
+                entities[entityId] = entity;
                 SaveDataToFile();
             }
         }
 
-        public void Delete(int id)
+        public void Delete(U id)
         {
-            int index = entities.FindIndex(e => GetEntityId(e) == id);
-            if (index != -1)
+            if (entities.ContainsKey(id))
             {
-                entities.RemoveAt(index);
+                entities.Remove(id);
                 SaveDataToFile();
             }
         }
@@ -74,12 +79,11 @@ namespace SeatsAeroLibrary.Repositories
             return new List<T>();
         }
 
-        private void SaveDataToFile()
+        protected virtual void SaveDataToFile()
         {
             try
             {
-                string jsonData = JsonSerializer.Serialize(entities);
-                File.WriteAllText(filePath, jsonData);
+                FileIO.ExportJsonFile(GetValueList(), filePath);
             }
             catch (Exception ex)
             {
@@ -87,9 +91,15 @@ namespace SeatsAeroLibrary.Repositories
             }
         }
 
+        protected virtual List<T> GetValueList()
+        {
+            return entities.Values.ToList();
+        }
+
         // You should implement these methods in your model-specific code
-        protected abstract int GetEntityId(T entity);
-        protected abstract void SetEntityId(T entity, int id);
-        protected abstract int GenerateNewId();
+        protected abstract bool CompareIDs(U id1, U id2);
+        protected abstract U GetEntityId(T entity);
+        protected abstract void SetEntityId(T entity, U id);
+        protected abstract U GenerateNewId();
     }
 }

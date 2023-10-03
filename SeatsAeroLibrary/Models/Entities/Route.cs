@@ -16,6 +16,7 @@ namespace SeatsAeroLibrary.Models.Entities
         public int Distance { get; set; }
         public MileageProgram Source { get; set; }
 
+        public Route() { }
         public Route(RouteDataModel routeDataModel) 
         { 
             Origin = new Location(routeDataModel.OriginAirport, routeDataModel.OriginRegion);

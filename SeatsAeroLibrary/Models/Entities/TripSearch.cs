@@ -24,6 +24,7 @@ namespace SeatsAeroLibrary.Models.Entities
         public IFilterAnalyzer FilterAnalyzer { get; set; }
 
         protected IConfigSettings _configSettings { get; set; }
+        protected IFlightRecordService _flightRecordService { get; set; }
 
         public override string ToString()
         {
@@ -36,6 +37,7 @@ namespace SeatsAeroLibrary.Models.Entities
             using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
             {
                 _configSettings = scope.Resolve<IConfigSettings>();
+                _flightRecordService = scope.Resolve<IFlightRecordService>();
             }
             _configSettings.Load();
         }
@@ -84,6 +86,7 @@ namespace SeatsAeroLibrary.Models.Entities
                 return;
             }
             flights = (List<Flight>)BasicSorter<Flight>.SortTs(flights, Sort, SortDirection).ToList();
+            _flightRecordService.AddRecords(flights);
             string filePath = $@"{_configSettings.OutputDirectory}\\{this.Name}_{DateTime.Now:yyyyMMdd}_{DateTime.Now:HHmmss}";
             FileIO.SaveStringToFile(Flight.GetAsCSVString(flights), filePath + ".csv");
         }

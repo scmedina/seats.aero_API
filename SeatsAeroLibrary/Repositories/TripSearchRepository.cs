@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Repositories
 {
-    public class TripSearchRepository : JsonFileRepository<TripSearchDataModel>
+    public class TripSearchRepository : JsonFileRepository<TripSearchDataModel, int>
     {
         private int currentID;
         public TripSearchRepository(string filePath) : base(filePath)
         {
-            currentID = this.entities.Select(entity => GetEntityId(entity)).Max();
+            currentID = this.entities.Select(entity => entity.Key).Max();
         }
         protected void UniqueIdGenerator(int startId = 1)
         {
@@ -33,6 +33,11 @@ namespace SeatsAeroLibrary.Repositories
         protected override void SetEntityId(TripSearchDataModel entity, int id)
         {
             entity.ID = id;
+        }
+
+        protected override bool CompareIDs(int id1, int id2)
+        {
+            return (id1 == id2);
         }
     }
 }

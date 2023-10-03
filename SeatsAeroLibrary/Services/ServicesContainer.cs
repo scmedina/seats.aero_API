@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Autofac;
 using SeatsAeroLibrary.Models;
+using SeatsAeroLibrary.Profiles;
+using SeatsAeroLibrary.Repositories;
 using SeatsAeroLibrary.Services.Sort;
 using SeatsAeroLibrary.Services.Stats;
 
@@ -33,6 +35,23 @@ namespace SeatsAeroLibrary.Services
 
             builder.RegisterType<FlightSorter>()
                 .As(typeof(ISorter<Flight>))
+                .SingleInstance();
+
+            builder.RegisterType<FlightRecordService>()
+                .As<IFlightRecordService>()
+                .SingleInstance();
+
+            builder.RegisterType<FlightRecordDataModelMapper>()
+                .AsSelf();
+
+            builder.RegisterType<FlightRecordMapper>()
+                .AsSelf();
+
+            builder.RegisterType<FlightRecordIDMapper>()
+                .AsSelf();
+
+            builder.RegisterType<FlightRecordRepository>()
+                .As<IFlightRecordRepository>()
                 .SingleInstance();
 
             builder.RegisterType<Statistics>()

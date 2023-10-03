@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Repositories
 {
-    public interface IRepository<T>
+    public interface IRepository<T,U>
     {
         IEnumerable<T> GetAll();
-        T GetById(int id);
+        T GetById(U id);
         void Add(T entity);
         void Update(T entity);
-        void Delete(int id);
+        void Delete(U id);
     }
 }
