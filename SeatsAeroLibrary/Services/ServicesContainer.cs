@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Autofac;
 using SeatsAeroLibrary.Models;
 using SeatsAeroLibrary.Services.Sort;
+using SeatsAeroLibrary.Services.Stats;
 
 namespace SeatsAeroLibrary.Services
 {
@@ -32,6 +33,10 @@ namespace SeatsAeroLibrary.Services
 
             builder.RegisterType<FlightSorter>()
                 .As(typeof(ISorter<Flight>))
+                .SingleInstance();
+
+            builder.RegisterType<Statistics>()
+                .As<IStatistics>()
                 .SingleInstance();
 #else
             builder.RegisterType<Logger>()

@@ -50,7 +50,7 @@ namespace SeatsAeroLibrary.Models
         public void SaveSnapshot<T>(List<T> results, string fileName)
         {
             string filePath = SnapshotFileDirectory + fileName;
-            FileIO.ExportJsonFile(results, filePath);
+            FileIO.ExportJsonListFile(results, filePath);
         }
 
         public List<AvailabilityDataModel> LoadAvailabilityByFile(string filePath)

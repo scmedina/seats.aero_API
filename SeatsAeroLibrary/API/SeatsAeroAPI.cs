@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Text.Json;
 using SeatsAeroLibrary.Services;
 using Autofac;
+using SeatsAeroLibrary.Services.Stats;
 
 namespace SeatsAeroLibrary.API
 {
@@ -97,6 +98,7 @@ namespace SeatsAeroLibrary.API
                 var request = new RestRequest("");
                 request.AddHeader("accept", "application/json");
                 request.AddHeader("Partner-Authorization", _configSettings.APIKey);
+                StatisticsHelper.GetStatistics().IncrementAPICall();
                 var response = await client.GetAsync(request);
 
                 if (response.IsSuccessStatusCode)

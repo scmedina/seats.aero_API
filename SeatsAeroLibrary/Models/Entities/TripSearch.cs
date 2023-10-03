@@ -3,6 +3,7 @@ using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Models.DataModels;
 using SeatsAeroLibrary.Services;
 using SeatsAeroLibrary.Services.Sort;
+using SeatsAeroLibrary.Services.Stats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,6 +62,7 @@ namespace SeatsAeroLibrary.Models.Entities
             result.SortDirection = search.SortDirection;
             if (result.Exclude == false)
             {
+                StatisticsHelper.GetStatistics().AddAPICall(result.Name);
                 result.SearchCriteria = Entities.SearchCriteria.GetSearchCriteria(search.SearchCriteria, filterAnalyzer);
             }
             else
