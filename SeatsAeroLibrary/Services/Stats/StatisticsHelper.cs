@@ -44,7 +44,7 @@ namespace SeatsAeroLibrary.Services.Stats
                 statistics = scope.Resolve<IStatistics>();
             }
             configSettings.Load();
-            string filePath = $@"{configSettings.OutputDirectory}\\Statistics_{DateTime.Now:yyyyMMdd}_{DateTime.Now:HHmmss}";
+            string filePath = $@"{configSettings.OutputDirectory}\\Statistics_{DateTime.Now:yyyyMMdd}_{DateTime.Now:HHmmss}.json";
             FileIO.ExportJsonFile(statistics, filePath);
         }
     }
