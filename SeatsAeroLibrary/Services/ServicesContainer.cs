@@ -8,7 +8,6 @@ using SeatsAeroLibrary.Models;
 using SeatsAeroLibrary.Profiles;
 using SeatsAeroLibrary.Repositories;
 using SeatsAeroLibrary.Services.Sort;
-using SeatsAeroLibrary.Services.Stats;
 
 namespace SeatsAeroLibrary.Services
 {
@@ -54,8 +53,8 @@ namespace SeatsAeroLibrary.Services
                 .As<IFlightRecordRepository>()
                 .SingleInstance();
 
-            builder.RegisterType<Statistics>()
-                .As<IStatistics>()
+            builder.RegisterType<StatisticsRepository>()
+                .As<IStatisticsRepository>()
                 .SingleInstance();
 #else
             builder.RegisterType<Logger>()
@@ -100,6 +99,16 @@ namespace SeatsAeroLibrary.Services
 
             ServicesContainer thisContainer = new ServicesContainer();
             return thisContainer.BuildContainerInstance();
+        }
+
+
+        public static T GetT<T>()
+        {
+            using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
+            {
+                return scope.Resolve<T>();
+            }
+            return default;
         }
     }
 }

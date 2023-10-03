@@ -1,9 +1,9 @@
 ﻿using Autofac;
 using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Models.DataModels;
+using SeatsAeroLibrary.Repositories;
 using SeatsAeroLibrary.Services;
 using SeatsAeroLibrary.Services.Sort;
-using SeatsAeroLibrary.Services.Stats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,7 +78,7 @@ namespace SeatsAeroLibrary.Models.Entities
             List<Flight> flights = new List<Flight>();
             foreach (SearchCriteria searchCriteria in this.SearchCriteria)
             {
-                StatisticsHelper.GetStatistics().SetCurrentAPICall(Name);
+                ServicesContainer.GetT<IStatisticsRepository>().SetCurrentAPICall(Name);
                 flights.AddRange(searchCriteria.GetFlightsFromCachedSearchSync());
             }
             if (flights.Count == 0)

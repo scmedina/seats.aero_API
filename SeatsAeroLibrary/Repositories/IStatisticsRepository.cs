@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeatsAeroLibrary.Services.Stats
+namespace SeatsAeroLibrary.Repositories
 {
-    public interface IStatistics
+    public interface IStatisticsRepository
     {
         Dictionary<string, int> APICallsCount { get; set; }
         int TotalAPICalls { get; set; }

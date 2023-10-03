@@ -3,7 +3,6 @@
 using SeatsAeroLibrary.Models.DataModels;
 using SeatsAeroLibrary.Models.Entities;
 using SeatsAeroLibrary.Repositories;
-using SeatsAeroLibrary.Services.Stats;
 
 string filePath = args[0];
 if (System.IO.File.Exists(filePath) == false)
@@ -18,6 +17,5 @@ IEnumerable<TripSearchDataModel> searchData = repository.GetAll();
 List<TripSearch> trips = TripSearch.GetTripSearches(searchData);
 
 TripSearch.GetAllFlightsFromCachedSearches(trips);
-StatisticsHelper.ExportStatistics();
 
 Environment.Exit(0);

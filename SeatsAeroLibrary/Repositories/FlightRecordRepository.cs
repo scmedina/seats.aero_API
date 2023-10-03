@@ -1,5 +1,4 @@
 ﻿using SeatsAeroLibrary.Models.DataModels;
-using SeatsAeroLibrary.Services.Stats;
 using SeatsAeroLibrary.Services;
 using System;
 using System.Collections;
