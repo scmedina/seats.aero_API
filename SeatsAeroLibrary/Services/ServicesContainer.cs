@@ -47,14 +47,7 @@ namespace SeatsAeroLibrary.Services
             builder.RegisterType<FlightRecordMapper>()
                 .AsSelf();
 
-            builder.RegisterType<FlightRecordIDMapper>()
-                .AsSelf();
-
-            builder.RegisterType<FlightRecordRepository>()
-                .As<IFlightRecordRepository>()
-                .SingleInstance();
-
-            builder.RegisterType<CompactFlightRecordRepository>()
+            builder.RegisterType<AggregateFlightRecordRepository>()
                 .As<IFlightRecordRepository>()
                 .SingleInstance();
 

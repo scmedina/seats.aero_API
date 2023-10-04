@@ -1,5 +1,4 @@
 ﻿using SeatsAeroLibrary.Models.DataModels;
-using SeatsAeroLibrary.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,34 +7,39 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
-using SeatsAeroLibrary.Models.Entities;
 using SeatsAeroLibrary.Profiles;
 using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Models;
+using SeatsAeroLibrary.Services.FlightRecordID;
+using System.Diagnostics.Eventing.Reader;
 
 namespace SeatsAeroLibrary.Repositories
 {
-    public class FlightRecordRepository : JsonFileRepository<FlightRecordDataModel, Guid>, IFlightRecordRepository
+    public abstract class GenericFlightRecordRepository<T> : JsonFileRepository<FlightRecordDataModel, Guid>, IFlightRecordRepository where T: IFlightRecordID, new()
     {
-        public readonly Dictionary<FlightRecordUniqueID, FlightRecordDataModel> uniqueEntities = new Dictionary<FlightRecordUniqueID, FlightRecordDataModel>();
+        public readonly Dictionary<T, KeyValuePair<Guid, FlightRecordDataModel>> uniqueEntities = new Dictionary<T, KeyValuePair<Guid, FlightRecordDataModel>>();
 
-        private readonly FlightRecordIDMapper _flightRecordIDMapper;
-        public FlightRecordRepository() : base()
+        public GenericFlightRecordRepository() : base()
         {
-            using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
+            BuildUniqueDictionary();
+        }
+
+        private void BuildUniqueDictionary()
+        {
+            uniqueEntities.Clear();
+            for (int i = entities.Count-1; i >= 0; i--)
             {
-                _flightRecordIDMapper = scope.Resolve<FlightRecordIDMapper>();
+                var entity = entities.ElementAt(i);
+                T id = GetT(entity.Value);
+                if (uniqueEntities.ContainsKey(id))
+                {
+                    entities.Remove(entity.Key);
+                }
+                else
+                {
+                    uniqueEntities.Add(id, entity);
+                }
             }
-        }
-
-        protected override string GetDefaultFilePath()
-        {
-            return $@"{_configSettings.OutputDirectory}\\Flight_Record_Lows.json";
-        }
-
-        protected override void SaveDataToFile()
-        {
-            base.SaveDataToFile();
         }
 
         protected override bool CompareIDs(Guid id1, Guid id2)
@@ -67,9 +71,10 @@ namespace SeatsAeroLibrary.Repositories
             }
             else
             {
-                uniqueEntities.Add(_flightRecordIDMapper.Map(entity), entity);
-                base.Add(entity);
-            }            
+                base.AddElement(entity);
+                uniqueEntities.Add(GetT(entity), entities.Last());
+                SaveDataToFile();
+            }
         }
 
         public override void Update(FlightRecordDataModel entity)
@@ -91,10 +96,10 @@ namespace SeatsAeroLibrary.Repositories
 
         protected bool MatchExists(FlightRecordDataModel entity, ref FlightRecordDataModel outEntity)
         {
-            FlightRecordUniqueID id = _flightRecordIDMapper.Map(entity);
+            T id = GetT(entity);
             if (uniqueEntities.ContainsKey(id))
             {
-                outEntity = uniqueEntities[id];
+                outEntity = uniqueEntities[id].Value;
                 return true;
             }
             return false;
@@ -102,20 +107,24 @@ namespace SeatsAeroLibrary.Repositories
 
         protected override List<FlightRecordDataModel> GetValueList()
         {
-            List < FlightRecordDataModel > results =  base.GetValueList();
-            results = results
-                .OrderBy(x => x.OriginRegion)
-                .ThenBy(x => x.OriginAirport)
-                .ThenBy(x => x.DestinationRegion)
-                .ThenBy(x => x.DestinationAirport)
-                .ThenBy(x => x.Direct)
-                .ThenBy(x => x.SeatType)
-                .ThenBy(x => x.MileageCost)
-                .ThenBy(x => x.Source)
-                .ThenBy(x => x.Airline)
-                .ThenBy(x => x.Date)
+            if (entities.Count != uniqueEntities.Count)
+            { 
+                throw new Exception("entities and uniqueEntities are out of sync"); 
+            }
+            else if (entities.Count <= 1)
+            {
+                return entities.Values.ToList();
+            }
+           return uniqueEntities.OrderBy(kvp => kvp.Key)
+                .Select(kvp => kvp.Value.Value)
                 .ToList();
-            return results;
+        }
+
+        protected virtual T GetT(FlightRecordDataModel entity)
+        {
+            T id = new T();
+            id.Map(entity);
+            return id;
         }
 
     }

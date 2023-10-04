@@ -39,11 +39,11 @@ namespace SeatsAeroLibrary.Services
                 AddRecord(flight);
             }
         }
-        public List<FlightRecord> GetAll()
-        {
-            _logger.Info("Getting all flight records");
-            var records = _flightRecordRepository.GetAll();
-            return _flightRecordDataModelMapper.Map(records.ToList()).ToList();
-        }
+        //public List<FlightRecord> GetAll()
+        //{
+        //    _logger.Info("Getting all flight records");
+        //    var records = _flightRecordRepository.GetAll();
+        //    return _flightRecordDataModelMapper.Map(records.ToList()).ToList();
+        //}
     }
 }

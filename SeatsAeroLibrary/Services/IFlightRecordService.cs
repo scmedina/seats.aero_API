@@ -14,6 +14,6 @@ namespace SeatsAeroLibrary.Services
     {
         public void AddRecord(Flight flight);
         public void AddRecords(List<Flight> flights);
-        public List<FlightRecord> GetAll();
+        //public List<FlightRecord> GetAll();
     }
 }

@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeatsAeroLibrary.Repositories
+namespace SeatsAeroLibrary.Services.FlightRecordID
 {
-    public interface IFlightRecordRepository
+    public interface IFlightRecordID : IComparable
     {
-        void Add(FlightRecordDataModel entity);
+        public void Map(FlightRecordDataModel flightRecordDataModel);
     }
 }

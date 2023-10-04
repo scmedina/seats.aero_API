@@ -3,6 +3,7 @@ using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Services;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -54,10 +55,15 @@ namespace SeatsAeroLibrary.Repositories
 
         public virtual void Add(T entity)
         {
+            AddElement(entity);
+            SaveDataToFile();
+        }
+
+        protected virtual void AddElement(T entity)
+        {
             U newId = GenerateNewId();
             SetEntityId(entity, newId);
             entities.Add(GetEntityId(entity), entity);
-            SaveDataToFile();
         }
 
         public virtual void Update(T entity)
