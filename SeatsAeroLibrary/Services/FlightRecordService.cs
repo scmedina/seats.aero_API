@@ -14,14 +14,12 @@ namespace SeatsAeroLibrary.Services
     public class FlightRecordService : IFlightRecordService
     {
         private readonly IFlightRecordRepository _flightRecordRepository;
-        private readonly FlightRecordDataModelMapper _flightRecordDataModelMapper;
         private readonly FlightRecordMapper _flightRecordMapper;
         private readonly ILogger _logger;
 
-        public FlightRecordService(IFlightRecordRepository flightRecordRepository, FlightRecordDataModelMapper flightRecordDataModelMapper, FlightRecordMapper flightRecordMapper, ILogger logger)
+        public FlightRecordService(IFlightRecordRepository flightRecordRepository, FlightRecordMapper flightRecordMapper, ILogger logger)
         {
             _flightRecordRepository = flightRecordRepository;
-            _flightRecordDataModelMapper = flightRecordDataModelMapper;
             _flightRecordMapper = flightRecordMapper;
             _logger = logger;
         }

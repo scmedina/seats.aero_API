@@ -13,6 +13,7 @@ if (System.IO.File.Exists(filePath) == false)
 }
 
 TripSearchRepository repository = new TripSearchRepository();
+
 IEnumerable<TripSearchDataModel> searchData = repository.GetAll();
 List<TripSearch> trips = TripSearch.GetTripSearches(searchData);
 

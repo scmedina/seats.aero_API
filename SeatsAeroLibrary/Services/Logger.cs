@@ -1,8 +1,12 @@
-﻿using System;
+﻿using NLog.Config;
+using NLog.Targets;
+using NLog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging.EventLog;
 
 namespace SeatsAeroLibrary.Services
 {
@@ -10,9 +14,23 @@ namespace SeatsAeroLibrary.Services
     {
         private NLog.Logger _logger;
 
-        public Logger(NLog.Logger logger)
+        public Logger(NLog.Logger logger, IConfigSettings configSettings)
         {
             _logger = logger;
+            SetLogSettings(configSettings);
+        }
+
+        public virtual void SetLogSettings(IConfigSettings configSettings)
+        {
+            var config = new LoggingConfiguration();
+            var fileTarget = new FileTarget("fileTarget")
+            {
+                FileName = Path.Combine(configSettings.OutputDirectory, "logs/seats.aero_log_${shortdate}.log"),
+                Layout = "${longdate} ${level:uppercase=true} - ${message}"
+            };
+
+            config.AddRule(LogLevel.Info, LogLevel.Fatal, fileTarget);
+            LogManager.Configuration = config;
         }
 
         public void Info(string message)

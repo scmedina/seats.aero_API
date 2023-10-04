@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Core;
+using NLog;
 using SeatsAeroLibrary.Models;
 using SeatsAeroLibrary.Profiles;
 using SeatsAeroLibrary.Repositories;
@@ -23,11 +24,6 @@ namespace SeatsAeroLibrary.Services
         {
             var builder = new ContainerBuilder();
 
-#if (DEBUG) 
-            // If in debug mode, log to console instead of file
-            builder.RegisterType<DebuggerLogger>()
-                .As<ILogger>()
-                .SingleInstance();
 
             builder.RegisterType<ConfigSettings>()
                 .As<IConfigSettings>()
@@ -54,13 +50,20 @@ namespace SeatsAeroLibrary.Services
             builder.RegisterType<StatisticsRepository>()
                 .As<IStatisticsRepository>()
                 .SingleInstance();
-#else
+
+
+//#if (DEBUG)
+//            // If in debug mode, log to console instead of file
+//            builder.RegisterType<DebuggerLogger>()
+//                .As<ILogger>()
+//                .SingleInstance();
+//#else
             builder.RegisterType<Logger>()
                 .As<ILogger>()
-                .WithParameter(new TypedParameter(typeof(NLog.Logger), 
-                                GSSNLOG.Logger.get_CurrentLogger(nameof(CSharpMVP))))
+                .WithParameter(new TypedParameter(typeof(NLog.Logger),
+                                LogManager.GetCurrentClassLogger()))
                 .SingleInstance();
-#endif
+//#endif
 
             //builder.RegisterType<Messenger>()
             //    .As<IMessenger>()

@@ -26,6 +26,7 @@ namespace SeatsAeroLibrary.Models.Entities
         protected IConfigSettings _configSettings { get; set; }
         protected IFlightRecordService _flightRecordService { get; set; }
         protected IStatisticsRepository _statisticsRepository { get; set; }
+        protected ILogger _logger { get; set; }
 
         public override string ToString()
         {
@@ -40,7 +41,9 @@ namespace SeatsAeroLibrary.Models.Entities
                 _configSettings = scope.Resolve<IConfigSettings>();
                 _flightRecordService = scope.Resolve<IFlightRecordService>();
                 _statisticsRepository = scope.Resolve<IStatisticsRepository>();
+                _logger = scope.Resolve<ILogger>();
             }
+            _logger.Info("TripSearch constructor");
             _configSettings.Load();
         }
 

@@ -33,8 +33,20 @@ namespace SeatsAeroLibrary.Repositories
             {
                 this._filePath = filePath;
             }
-            List<T> elements = LoadDataFromFile();
-            entities = elements.ToDictionary(e => GetEntityId(e));
+            entities = BuildDictionary(LoadDataFromFile());
+        }
+
+        protected virtual Dictionary<U,T> BuildDictionary(List<T> elements)
+        {
+            Dictionary<U, T> results = new Dictionary<U, T>();
+            foreach (var element in elements)
+            {
+                if (!results.ContainsKey(GetEntityId(element)))
+                {
+                    results.Add(GetEntityId(element), element);
+                }
+            }
+            return results;
         }
 
         protected abstract string GetDefaultFilePath();
