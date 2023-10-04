@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Repositories
 {
-    public class FlightRecordShortRepository : GenericFlightRecordRepository<FlightRecordShortID>
+    public class FlightRecordByDayOfWeekRepository : GenericFlightRecordRepository<FlightRecordByDayOfWeekID>
     {
-        public FlightRecordShortRepository() : base()
+        public FlightRecordByDayOfWeekRepository() : base()
         {
         }
 

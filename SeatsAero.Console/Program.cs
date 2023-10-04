@@ -32,8 +32,9 @@ using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
 IEnumerable<TripSearchDataModel> searchData = repository.GetAll();
 List<TripSearch> trips = tripSearchService.GetTripSearches(searchData);
 
-flightRecordService.AddRepositoryType<FlightRecordShortRepository>();
-flightRecordService.AddRepositoryType<FlightRecordLongRepository>();
+flightRecordService.AddRepositoryType<FlightRecordByDayOfWeekRepository>();
+flightRecordService.AddRepositoryType<FlightRecordByDateRepository>();
+flightRecordService.AddRepositoryType<FlightRecordBySeatTypeRepository>();
 
 tripSearchService.GetAllFlightsFromCachedSearches(trips);
 

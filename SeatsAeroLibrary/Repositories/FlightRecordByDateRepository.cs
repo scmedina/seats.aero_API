@@ -15,9 +15,9 @@ using SeatsAeroLibrary.Services;
 
 namespace SeatsAeroLibrary.Repositories
 {
-    public class FlightRecordLongRepository : GenericFlightRecordRepository<FlightRecordLongID>
+    public class FlightRecordByDateRepository : GenericFlightRecordRepository<FlightRecordByDateID>
     {
-        public FlightRecordLongRepository() : base()
+        public FlightRecordByDateRepository() : base()
         {
         }
 

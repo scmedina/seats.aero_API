@@ -9,14 +9,12 @@ using System.Threading.Tasks;
 namespace SeatsAeroLibrary.Services.FlightRecordID
 {
 
-    public class FlightRecordLongID :  IFlightRecordID
+    public class FlightRecordBySeatTypeID : IFlightRecordID
     {
         public string OriginAirport { get; set; }
         public string DestinationAirport { get; set; }
         public string SeatType { get; set; }
-        public string DayOfWeek { get; set; }
         public bool Direct { get; set; }
-        public string Airline { get; set; }
 
         public override int GetHashCode()
         {
@@ -24,9 +22,7 @@ namespace SeatsAeroLibrary.Services.FlightRecordID
             hash = hash * 23 + (OriginAirport?.GetHashCode() ?? 0);
             hash = hash * 23 + (DestinationAirport?.GetHashCode() ?? 0);
             hash = hash * 23 + (SeatType?.GetHashCode() ?? 0);
-            hash = hash * 23 + (DayOfWeek?.GetHashCode() ?? 0);
             hash = hash * 23 + Direct.GetHashCode();
-            hash = hash * 23 + (Airline?.GetHashCode() ?? 0);
             return hash;
         }
 
@@ -37,16 +33,14 @@ namespace SeatsAeroLibrary.Services.FlightRecordID
                 return false;
             }
 
-            FlightRecordLongID other = (FlightRecordLongID)obj;
+            FlightRecordBySeatTypeID other = (FlightRecordBySeatTypeID)obj;
             return OriginAirport == other.OriginAirport &&
                 DestinationAirport == other.DestinationAirport &&
                 SeatType == other.SeatType &&
-                DayOfWeek == other.DayOfWeek &&
-                Direct == other.Direct &&
-                Airline == other.Airline;
+                Direct == other.Direct;
         }
 
-        public int CompareToID(FlightRecordLongID? other)
+        public int CompareToID(FlightRecordBySeatTypeID? other)
         {
             if (other == null)
             {
@@ -68,10 +62,6 @@ namespace SeatsAeroLibrary.Services.FlightRecordID
             {
                 return SeatType.CompareTo(other.SeatType);
             }
-            else if (Airline.CompareTo(other.Airline) != 0)
-            {
-                return Airline.CompareTo(other.Airline);
-            }
             else
             {
                 return 0;
@@ -81,14 +71,14 @@ namespace SeatsAeroLibrary.Services.FlightRecordID
 
         public int CompareTo(object? obj)
         {
-            FlightRecordLongID id = obj as FlightRecordLongID;
+            FlightRecordBySeatTypeID? id = obj as FlightRecordBySeatTypeID;
             if (id != null)
             {
                 return CompareToID(id);
             }
             else
             {
-                throw new ArgumentException("Object is not a FlightRecordLongID");
+                throw new ArgumentException($"Object is not a {this.GetType().Name}");
             }
         }
 
