@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Autofac;
 using SeatsAeroLibrary.Models.Entities;
 using SeatsAeroLibrary.Profiles;
+using SeatsAeroLibrary.Helpers;
+using SeatsAeroLibrary.Models;
 
 namespace SeatsAeroLibrary.Repositories
 {
@@ -18,7 +20,7 @@ namespace SeatsAeroLibrary.Repositories
         public readonly Dictionary<FlightRecordUniqueID, FlightRecordDataModel> uniqueEntities = new Dictionary<FlightRecordUniqueID, FlightRecordDataModel>();
 
         private readonly FlightRecordIDMapper _flightRecordIDMapper;
-        public FlightRecordRepository() : base(GetFilePath())
+        public FlightRecordRepository() : base()
         {
             using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
             {
@@ -26,16 +28,14 @@ namespace SeatsAeroLibrary.Repositories
             }
         }
 
-        private static string GetFilePath()
+        protected override string GetDefaultFilePath()
         {
-            IConfigSettings configSettings = null;
-            using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
-            {
-                configSettings = scope.Resolve<IConfigSettings>();
-            }
-            configSettings.Load();
-            string filePath = $@"{configSettings.OutputDirectory}\\Flight_Record_Lows.json";
-            return filePath;
+            return $@"{_configSettings.OutputDirectory}\\Flight_Record_Lows.json";
+        }
+
+        protected override void SaveDataToFile()
+        {
+            base.SaveDataToFile();
         }
 
         protected override bool CompareIDs(Guid id1, Guid id2)
@@ -117,5 +117,6 @@ namespace SeatsAeroLibrary.Repositories
                 .ToList();
             return results;
         }
+
     }
 }

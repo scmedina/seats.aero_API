@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
+using Autofac.Core;
 using SeatsAeroLibrary.Models;
 using SeatsAeroLibrary.Profiles;
 using SeatsAeroLibrary.Repositories;
@@ -50,6 +51,10 @@ namespace SeatsAeroLibrary.Services
                 .AsSelf();
 
             builder.RegisterType<FlightRecordRepository>()
+                .As<IFlightRecordRepository>()
+                .SingleInstance();
+
+            builder.RegisterType<CompactFlightRecordRepository>()
                 .As<IFlightRecordRepository>()
                 .SingleInstance();
 
@@ -102,13 +107,5 @@ namespace SeatsAeroLibrary.Services
         }
 
 
-        public static T GetT<T>()
-        {
-            using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
-            {
-                return scope.Resolve<T>();
-            }
-            return default;
-        }
     }
 }

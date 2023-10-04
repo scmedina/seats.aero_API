@@ -1,4 +1,6 @@
-﻿using SeatsAeroLibrary.Helpers;
+﻿using Autofac;
+using SeatsAeroLibrary.Helpers;
+using SeatsAeroLibrary.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,15 +12,31 @@ namespace SeatsAeroLibrary.Repositories
 {
     public abstract class JsonFileRepository<T,U> : IRepository<T,U>
     {
-        protected readonly string filePath;
+        protected readonly string _filePath;
         protected readonly Dictionary<U,T> entities;
+        protected readonly IConfigSettings _configSettings = null;
 
-        public JsonFileRepository(string  filePath)
+        public JsonFileRepository() : this(null) { }
+        public JsonFileRepository(string filePath)
         {
-            this.filePath = filePath;
-            List<T> elements =  LoadDataFromFile();
+            using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
+            {
+                _configSettings = scope.Resolve<IConfigSettings>();
+            }
+            _configSettings.Load();
+            if (String.IsNullOrWhiteSpace(filePath))
+            {
+                this._filePath = GetDefaultFilePath();
+            }
+            else
+            {
+                this._filePath = filePath;
+            }
+            List<T> elements = LoadDataFromFile();
             entities = elements.ToDictionary(e => GetEntityId(e));
         }
+
+        protected abstract string GetDefaultFilePath();
 
         public IEnumerable<T> GetAll()
         {
@@ -66,9 +84,9 @@ namespace SeatsAeroLibrary.Repositories
         {
             try
             {
-                if (File.Exists(filePath))
+                if (File.Exists(_filePath))
                 {
-                    string jsonData = File.ReadAllText(filePath);
+                    string jsonData = File.ReadAllText(_filePath);
                     return JsonSerializer.Deserialize<List<T>>(jsonData);
                 }
             }
@@ -83,7 +101,7 @@ namespace SeatsAeroLibrary.Repositories
         {
             try
             {
-                FileIO.ExportJsonFile(GetValueList(), filePath);
+                FileIO.ExportJsonFile(GetValueList(), _filePath);
             }
             catch (Exception ex)
             {

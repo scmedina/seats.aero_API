@@ -11,7 +11,7 @@ using System.Net.Http;
 using System.Text.Json;
 using SeatsAeroLibrary.Services;
 using Autofac;
-using SeatsAeroLibrary.Services.Stats;
+using SeatsAeroLibrary.Repositories;
 
 namespace SeatsAeroLibrary.API
 {
@@ -25,12 +25,14 @@ namespace SeatsAeroLibrary.API
         public virtual bool HasCounter { get; set; } = false;
 
         protected IConfigSettings _configSettings { get; set; }
+        protected IStatisticsRepository _statisticsRepository { get; set; }
 
         public SeatsAeroAPI()
         {
             using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
             {
                 _configSettings = scope.Resolve<IConfigSettings>();
+                _statisticsRepository = scope.Resolve<IStatisticsRepository>();
             }
             _configSettings.Load();
         }
@@ -98,7 +100,7 @@ namespace SeatsAeroLibrary.API
                 var request = new RestRequest("");
                 request.AddHeader("accept", "application/json");
                 request.AddHeader("Partner-Authorization", _configSettings.APIKey);
-                StatisticsHelper.GetStatistics().IncrementAPICall();
+                _statisticsRepository.IncrementAPICall();
                 var response = await client.GetAsync(request);
 
                 if (response.IsSuccessStatusCode)

@@ -2,6 +2,7 @@
 using SeatsAeroLibrary.Models.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,11 +11,20 @@ namespace SeatsAeroLibrary.Repositories
 {
     public class TripSearchRepository : JsonFileRepository<TripSearchDataModel, int>
     {
-        private int currentID;
+        private int currentID = 0;
+        public TripSearchRepository() : base()
+        {
+            if (entities.Count > 0)
+            {
+                currentID = this.entities.Select(entity => entity.Key).Max();
+            }
+        }
+
         public TripSearchRepository(string filePath) : base(filePath)
         {
             currentID = this.entities.Select(entity => entity.Key).Max();
         }
+
         protected void UniqueIdGenerator(int startId = 1)
         {
             currentID = startId;
@@ -38,6 +48,11 @@ namespace SeatsAeroLibrary.Repositories
         protected override bool CompareIDs(int id1, int id2)
         {
             return (id1 == id2);
+        }
+
+        protected override string GetDefaultFilePath()
+        {
+            return $@"{_configSettings.OutputDirectory}\\SeatsAeroSearches.json";
         }
     }
 }

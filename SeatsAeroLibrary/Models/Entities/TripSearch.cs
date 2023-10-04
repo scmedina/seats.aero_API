@@ -25,6 +25,7 @@ namespace SeatsAeroLibrary.Models.Entities
 
         protected IConfigSettings _configSettings { get; set; }
         protected IFlightRecordService _flightRecordService { get; set; }
+        protected IStatisticsRepository _statisticsRepository { get; set; }
 
         public override string ToString()
         {
@@ -38,6 +39,7 @@ namespace SeatsAeroLibrary.Models.Entities
             {
                 _configSettings = scope.Resolve<IConfigSettings>();
                 _flightRecordService = scope.Resolve<IFlightRecordService>();
+                _statisticsRepository = scope.Resolve<IStatisticsRepository>();
             }
             _configSettings.Load();
         }
@@ -78,7 +80,7 @@ namespace SeatsAeroLibrary.Models.Entities
             List<Flight> flights = new List<Flight>();
             foreach (SearchCriteria searchCriteria in this.SearchCriteria)
             {
-                ServicesContainer.GetT<IStatisticsRepository>().SetCurrentAPICall(Name);
+                _statisticsRepository.SetCurrentAPICall(Name);
                 flights.AddRange(searchCriteria.GetFlightsFromCachedSearchSync());
             }
             if (flights.Count == 0)
