@@ -16,13 +16,13 @@ using SeatsAeroLibrary.Services.API.Factories;
 //}
 
 
-IConfigSettings configSettings; ILogger logger; TripSearchRepository repository;
+IConfigSettings configSettings; ILogger logger; ITripSearchRepository repository;
 ITripSearchService tripSearchService; IAPIWithFiltersFactory aPIWithFiltersFactory;
 using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
 {
     configSettings = scope.Resolve<IConfigSettings>();
     logger = scope.Resolve<ILogger>();
-    repository = scope.Resolve<TripSearchRepository>();
+    repository = scope.Resolve<ITripSearchRepository>();
     tripSearchService = scope.Resolve<ITripSearchService>();
     aPIWithFiltersFactory = scope.Resolve<IAPIWithFiltersFactory>();
 }

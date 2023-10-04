@@ -10,9 +10,12 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Repositories
 {
-    public class TripSearchRepository : JsonFileRepository<TripSearchDataModel, int>
+    public class TripSearchRepository : JsonFileRepository<TripSearchDataModel, int>, ITripSearchRepository
     {
         private int currentID = 0;
+
+        public TripSearchRepository(IConfigSettings configSettings) : this(null, configSettings) { }
+
         public TripSearchRepository(string filePath, IConfigSettings configSettings) : base(filePath,configSettings)
         {
             if (entities.Count > 0)

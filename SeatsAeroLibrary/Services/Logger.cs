@@ -22,6 +22,7 @@ namespace SeatsAeroLibrary.Services
 
         public virtual void SetLogSettings(IConfigSettings configSettings)
         {
+            configSettings.Load();
             var config = new LoggingConfiguration();
             var fileTarget = new FileTarget("fileTarget")
             {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Services.API.Factories
 {
-    public abstract class BaseAPIFactory 
+    public class BaseAPIFactory: IAPIFactory
     {
         protected IConfigSettings _configSettings { get; set; }
         protected IStatisticsRepository _statisticsRepository { get; set; }
