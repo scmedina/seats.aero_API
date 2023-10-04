@@ -18,6 +18,7 @@ using SeatsAeroLibrary.Services.API.Factories;
 
 IConfigSettings configSettings; ILogger logger; ITripSearchRepository repository;
 ITripSearchService tripSearchService; IAPIWithFiltersFactory aPIWithFiltersFactory;
+IFlightRecordService flightRecordService;
 using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
 {
     configSettings = scope.Resolve<IConfigSettings>();
@@ -25,10 +26,14 @@ using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
     repository = scope.Resolve<ITripSearchRepository>();
     tripSearchService = scope.Resolve<ITripSearchService>();
     aPIWithFiltersFactory = scope.Resolve<IAPIWithFiltersFactory>();
+    flightRecordService = scope.Resolve<IFlightRecordService>();
 }
 
 IEnumerable<TripSearchDataModel> searchData = repository.GetAll();
 List<TripSearch> trips = tripSearchService.GetTripSearches(searchData);
+
+flightRecordService.AddRepositoryType<FlightRecordShortRepository>();
+flightRecordService.AddRepositoryType<FlightRecordLongRepository>();
 
 tripSearchService.GetAllFlightsFromCachedSearches(trips);
 

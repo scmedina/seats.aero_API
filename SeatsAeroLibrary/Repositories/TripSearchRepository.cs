@@ -14,10 +14,14 @@ namespace SeatsAeroLibrary.Repositories
     {
         private int currentID = 0;
 
-        public TripSearchRepository(IConfigSettings configSettings) : this(null, configSettings) { }
-
-        public TripSearchRepository(string filePath, IConfigSettings configSettings) : base(filePath,configSettings)
+        public TripSearchRepository(IConfigSettings configSettings) : base() 
         {
+            Initialize(configSettings);
+        }
+
+        public override void Initialize(IConfigSettings configSettings)
+        {
+            base.Initialize(configSettings);
             if (entities.Count > 0)
             {
                 currentID = this.entities.Select(entity => entity.Key).Max();

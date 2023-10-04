@@ -20,8 +20,13 @@ namespace SeatsAeroLibrary.Repositories
     {
         public readonly Dictionary<T, KeyValuePair<Guid, FlightRecordDataModel>> uniqueEntities = new Dictionary<T, KeyValuePair<Guid, FlightRecordDataModel>>();
 
-        public GenericFlightRecordRepository(IConfigSettings configSettings) : base(null, configSettings)
+        public GenericFlightRecordRepository() : base()
         {
+        }
+
+        public override void Initialize(IConfigSettings configSettings)
+        {
+            base.Initialize(configSettings);
             BuildUniqueDictionary();
         }
 

@@ -13,15 +13,21 @@ namespace SeatsAeroLibrary.Repositories
 {
     public abstract class JsonFileRepository<T,U> : IRepository<T,U>
     {
-        protected readonly string _filePath;
-        protected readonly Dictionary<U,T> entities;
-        protected readonly IConfigSettings _configSettings = null;
+        protected  string _filePath;
+        protected  Dictionary<U,T> entities;
+        protected IConfigSettings _configSettings = null;
 
-        public JsonFileRepository(IConfigSettings configSettings) : this(null,configSettings) { }
-        public JsonFileRepository(string filePath, IConfigSettings configSettings)
+        public JsonFileRepository() { }
+
+        public virtual void Initialize(IConfigSettings configSettings)
         {
             _configSettings = configSettings;
             _configSettings.Load();
+            LoadFilePath(GetDefaultFilePath());
+        }
+
+        public void LoadFilePath(string filePath)
+        {
             if (String.IsNullOrWhiteSpace(filePath))
             {
                 this._filePath = GetDefaultFilePath();

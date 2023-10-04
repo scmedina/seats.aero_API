@@ -17,7 +17,7 @@ namespace SeatsAeroLibrary.Repositories
 {
     public class FlightRecordLongRepository : GenericFlightRecordRepository<FlightRecordLongID>
     {
-        public FlightRecordLongRepository(IConfigSettings configSettings) : base(configSettings)
+        public FlightRecordLongRepository() : base()
         {
         }
 

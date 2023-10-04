@@ -10,7 +10,7 @@ namespace SeatsAeroLibrary.Repositories
 {
     public class FlightRecordShortRepository : GenericFlightRecordRepository<FlightRecordShortID>
     {
-        public FlightRecordShortRepository(IConfigSettings configSettings) : base(configSettings)
+        public FlightRecordShortRepository() : base()
         {
         }
 
