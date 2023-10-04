@@ -11,11 +11,16 @@ using SeatsAeroLibrary.Profiles;
 using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Models;
 using SeatsAeroLibrary.Services.FlightRecordID;
+using SeatsAeroLibrary.Services;
 
 namespace SeatsAeroLibrary.Repositories
 {
     public class FlightRecordLongRepository : GenericFlightRecordRepository<FlightRecordLongID>
     {
+        public FlightRecordLongRepository(IConfigSettings configSettings) : base(configSettings)
+        {
+        }
+
         protected override string GetDefaultFilePath()
         {
             return $@"{_configSettings.OutputDirectory}\\Flight_Record_Lows.json";

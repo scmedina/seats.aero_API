@@ -9,6 +9,7 @@ using NLog;
 using SeatsAeroLibrary.Models;
 using SeatsAeroLibrary.Profiles;
 using SeatsAeroLibrary.Repositories;
+using SeatsAeroLibrary.Services.API.Factories;
 using SeatsAeroLibrary.Services.Sort;
 
 namespace SeatsAeroLibrary.Services
@@ -51,13 +52,32 @@ namespace SeatsAeroLibrary.Services
                 .As<IStatisticsRepository>()
                 .SingleInstance();
 
+            builder.RegisterType<TripSearchRepository>()
+                .As<ITripSearchRepository>()
+                .SingleInstance();
 
-//#if (DEBUG)
-//            // If in debug mode, log to console instead of file
-//            builder.RegisterType<DebuggerLogger>()
-//                .As<ILogger>()
-//                .SingleInstance();
-//#else
+            builder.RegisterType<TripSearchService>()
+                .As<ITripSearchService>()
+                .SingleInstance();
+
+            builder.RegisterType<SearchCriteriaService>()
+                .As<ISearchCriteriaService>()
+                .SingleInstance();
+
+            builder.RegisterType<APIWithFiltersFactory>()
+                .As<IAPIWithFiltersFactory>()
+                .SingleInstance();
+
+            builder.RegisterType<BaseAPIFactory>()
+                .As<IAPIFactory>()
+                .SingleInstance();
+
+            //#if (DEBUG)
+            //            // If in debug mode, log to console instead of file
+            //            builder.RegisterType<DebuggerLogger>()
+            //                .As<ILogger>()
+            //                .SingleInstance();
+            //#else
             builder.RegisterType<Logger>()
                 .As<ILogger>()
                 .WithParameter(new TypedParameter(typeof(NLog.Logger),

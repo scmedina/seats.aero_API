@@ -11,6 +11,7 @@ using SeatsAeroLibrary.Profiles;
 using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Models;
 using SeatsAeroLibrary.Services.FlightRecordID;
+using SeatsAeroLibrary.Services;
 
 namespace SeatsAeroLibrary.Repositories
 {
@@ -18,10 +19,10 @@ namespace SeatsAeroLibrary.Repositories
     {
         private readonly List<IFlightRecordRepository> _flightRecordRepositories = new List<IFlightRecordRepository>();
 
-        public AggregateFlightRecordRepository()
+        public AggregateFlightRecordRepository(IConfigSettings configSettings)
         {
-            _flightRecordRepositories.Add(new FlightRecordShortRepository());
-            _flightRecordRepositories.Add(new FlightRecordLongRepository());
+            _flightRecordRepositories.Add(new FlightRecordShortRepository(configSettings));
+            _flightRecordRepositories.Add(new FlightRecordLongRepository(configSettings));
         }
 
         public void Add(FlightRecordDataModel entity)

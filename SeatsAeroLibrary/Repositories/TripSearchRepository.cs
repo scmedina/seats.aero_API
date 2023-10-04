@@ -1,5 +1,6 @@
 ﻿using SeatsAeroLibrary.Models.DataModels;
 using SeatsAeroLibrary.Models.Entities;
+using SeatsAeroLibrary.Services;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,17 +13,12 @@ namespace SeatsAeroLibrary.Repositories
     public class TripSearchRepository : JsonFileRepository<TripSearchDataModel, int>
     {
         private int currentID = 0;
-        public TripSearchRepository() : base()
+        public TripSearchRepository(string filePath, IConfigSettings configSettings) : base(filePath,configSettings)
         {
             if (entities.Count > 0)
             {
                 currentID = this.entities.Select(entity => entity.Key).Max();
             }
-        }
-
-        public TripSearchRepository(string filePath) : base(filePath)
-        {
-            currentID = this.entities.Select(entity => entity.Key).Max();
         }
 
         protected void UniqueIdGenerator(int startId = 1)

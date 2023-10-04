@@ -33,50 +33,34 @@ namespace SeatsAeroLibrary.Models.Entities
             return $"{Name} ({Contact})";
         }
 
-        public TripSearch()
+        public TripSearch(IConfigSettings configSettings, IFlightRecordService flightRecordService, IStatisticsRepository statisticsRepository, ILogger logger)
         {
-
-            using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
-            {
-                _configSettings = scope.Resolve<IConfigSettings>();
-                _flightRecordService = scope.Resolve<IFlightRecordService>();
-                _statisticsRepository = scope.Resolve<IStatisticsRepository>();
-                _logger = scope.Resolve<ILogger>();
-            }
+            _configSettings = configSettings;
+            _flightRecordService = flightRecordService;
+            _statisticsRepository = statisticsRepository;
+            _logger = logger;
             _logger.Info("TripSearch constructor");
             _configSettings.Load();
         }
 
-        public static List<TripSearch> GetTripSearches(IEnumerable<TripSearchDataModel> searches, IFilterAnalyzer filterAnalyzer = null)
-        {
-            List<TripSearch> result = new List<TripSearch>();
-            foreach (TripSearchDataModel search in searches)
-            {
-                result.Add(GetTripSearch(search));
-            }
-            return result;
-        }
 
-        private static TripSearch GetTripSearch(TripSearchDataModel search, IFilterAnalyzer filterAnalyzer = null)
+        public void GetTripSearch(ISearchCriteriaService searchCriteriaService, TripSearchDataModel search, IFilterAnalyzer filterAnalyzer = null)
         {
-            TripSearch result = new TripSearch();
-            result.ID = search.ID;
-            result.Name = search.Name;
-            result.Contact = search.Contact;
-            result.FilterAnalyzer = filterAnalyzer;
-            result.Exclude = search.Exclude ?? false;
-            result.Sort = search.Sort;
-            result.SortDirection = search.SortDirection;
-            if (result.Exclude == false)
+            ID = search.ID;
+            Name = search.Name;
+            Contact = search.Contact;
+            FilterAnalyzer = filterAnalyzer;
+            Exclude = search.Exclude ?? false;
+            Sort = search.Sort;
+            SortDirection = search.SortDirection;
+            if (Exclude == false)
             {
-                result.SearchCriteria = Entities.SearchCriteria.GetSearchCriteria(search.SearchCriteria, filterAnalyzer);
+                SearchCriteria = searchCriteriaService.GetSearchCriteria(search.SearchCriteria, filterAnalyzer);
             }
             else
             {
-                result.SearchCriteria = new List<SearchCriteria>();
+                SearchCriteria = new List<SearchCriteria>();
             }
-
-            return result;
         }
         public void GetAllFlightsFromCachedSearch()
         {
@@ -94,15 +78,6 @@ namespace SeatsAeroLibrary.Models.Entities
             _flightRecordService.AddRecords(flights);
             string filePath = $@"{_configSettings.OutputDirectory}\\{this.Name}_{DateTime.Now:yyyyMMdd}_{DateTime.Now:HHmmss}";
             FileIO.SaveStringToFile(Flight.GetAsCSVString(flights), filePath + ".csv");
-        }
-
-        public static void GetAllFlightsFromCachedSearches(List<TripSearch> trips)
-        {
-            foreach (TripSearch trip in trips)
-            {
-                trip.GetAllFlightsFromCachedSearch();
-            }
-
         }
 
     }

@@ -12,6 +12,8 @@ using System.Text.Json;
 using SeatsAeroLibrary.Services;
 using Autofac;
 using SeatsAeroLibrary.API.Models;
+using SeatsAeroLibrary.Repositories;
+using SeatsAeroLibrary.Services.API.APICall;
 
 namespace SeatsAeroLibrary.API
 {
@@ -19,7 +21,7 @@ namespace SeatsAeroLibrary.API
     {
         protected abstract override List<U> GetU(T? data);
 
-        public SeatsAeroCounterAP(string endPoint, string[] requiredParams, Dictionary<string, string> queryParams = null) : base(endPoint,requiredParams, null) { }
+        public SeatsAeroCounterAP(string endPoint, string[] requiredParams, Dictionary<string, string> queryParams = null) : base(endPoint,requiredParams, queryParams) { }
 
         public override async Task<List<U>> QueryResults()
         {

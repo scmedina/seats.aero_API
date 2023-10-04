@@ -15,6 +15,8 @@ using System.Text.Json;
 using SeatsAeroLibrary.API.Models;
 using System.Collections.Generic;
 using SeatsAeroLibrary.Services.FlightFactories;
+using SeatsAeroLibrary.Repositories;
+using SeatsAeroLibrary.Services.API.Factories;
 
 namespace SeatsAeroTests
 {
@@ -23,6 +25,9 @@ namespace SeatsAeroTests
     {
         private static ILogger _logger;
         private static IMessenger _messenger;
+        private static IConfigSettings _configSettings;
+        private static IStatisticsRepository _statisticsRepository;
+        private static IAPIWithFiltersFactory _aPIWithFiltersFactory;
 
         static FilterResultsTests()
         {
@@ -31,6 +36,9 @@ namespace SeatsAeroTests
             {
                 _logger = scope.Resolve<ILogger>();
                 _messenger = scope.Resolve<IMessenger>();
+                _configSettings = scope.Resolve<IConfigSettings>();
+                _statisticsRepository = scope.Resolve<IStatisticsRepository>();
+                _aPIWithFiltersFactory = scope.Resolve<IAPIWithFiltersFactory>();
             }
 
         }
@@ -53,7 +61,7 @@ namespace SeatsAeroTests
                 isDestination: false
                 ));
 
-            SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper();
+            SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper(_logger, _configSettings,_messenger, _statisticsRepository, _aPIWithFiltersFactory);
 
             List<Flight> flights = seatsAeroInfo.FilterAvailability(data, new List<List<IFlightFilterFactory>> { filterFactories });
         }
@@ -82,7 +90,7 @@ namespace SeatsAeroTests
             filterFactories1.Add(new MaxMileageCostFilterFactory(100000, true));
             FilterAggregate filterAggregate = new FilterAggregate(filterFactories1, new FilterAnalyzer());
 
-            SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper();
+            SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper(_logger, _configSettings, _messenger, _statisticsRepository, _aPIWithFiltersFactory);
             DateTime timer = DateTime.Now;
             Task<List<Flight>> task = seatsAeroInfo.LoadSearch(filterAggregate: filterAggregate);
             task.Wait();
@@ -132,7 +140,7 @@ namespace SeatsAeroTests
                     new LocationByType("HNL")},
                 isDestination: true));
 
-            SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper();
+            SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper(_logger, _configSettings, _messenger, _statisticsRepository, _aPIWithFiltersFactory);
             DateTime timer = DateTime.Now;
             List<Flight> flights = seatsAeroInfo.LoadAvailabilityAndFilterSync(MileageProgram.united, false, allFilterFactories);
 
@@ -166,7 +174,7 @@ namespace SeatsAeroTests
                 isDestination: true);
             filterFactories1.Add(destination);
 
-            SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper();
+            SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper(_logger, _configSettings, _messenger, _statisticsRepository, _aPIWithFiltersFactory);
             List<Flight> flights = seatsAeroInfo.LoadAvailabilityAndFilterSync(MileageProgram.all, false, allFilterFactories);
 
             string filePath = $@"{Environment.GetEnvironmentVariable("Temp")}\\seats_aero_flights_[dateStamp]_[timeStamp]";
@@ -179,8 +187,7 @@ namespace SeatsAeroTests
         //[TestMethod]
         public void SaveRandomTestData()
         {
-            SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper();
-            seatsAeroInfo = new SeatsAeroHelper();
+            SeatsAeroHelper seatsAeroInfo = new SeatsAeroHelper(_logger, _configSettings, _messenger, _statisticsRepository, _aPIWithFiltersFactory);
 
             Task thisTask = seatsAeroInfo.SaveRandomAvailabilityData(MileageProgram.eurobonus, false,100);
             thisTask.Wait();

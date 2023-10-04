@@ -12,6 +12,7 @@ using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Models;
 using SeatsAeroLibrary.Services.FlightRecordID;
 using System.Diagnostics.Eventing.Reader;
+using SeatsAeroLibrary.Services;
 
 namespace SeatsAeroLibrary.Repositories
 {
@@ -19,7 +20,7 @@ namespace SeatsAeroLibrary.Repositories
     {
         public readonly Dictionary<T, KeyValuePair<Guid, FlightRecordDataModel>> uniqueEntities = new Dictionary<T, KeyValuePair<Guid, FlightRecordDataModel>>();
 
-        public GenericFlightRecordRepository() : base()
+        public GenericFlightRecordRepository(IConfigSettings configSettings) : base(null, configSettings)
         {
             BuildUniqueDictionary();
         }

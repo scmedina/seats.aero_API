@@ -2,7 +2,9 @@
 using SeatsAeroLibrary.API;
 using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Models.DataModels;
+using SeatsAeroLibrary.Repositories;
 using SeatsAeroLibrary.Services;
+using SeatsAeroLibrary.Services.API.Factories;
 using SeatsAeroLibrary.Services.FlightFactories;
 using SeatsAeroLibrary.Services.Sort;
 using System;
@@ -15,7 +17,6 @@ namespace SeatsAeroLibrary.Models.Entities
 {
     public class SearchCriteria
     {
-        private static ILogger _logger;
         public FilterAggregate FilterAggregate { get; set; }
         public string OriginAirports { get; set; }
         public string DestinationAirports { get; set; }
@@ -32,20 +33,23 @@ namespace SeatsAeroLibrary.Models.Entities
         public string Sort { get; set; }
         public string SortDirection { get; set; }
 
+        protected ILogger _logger { get; set; }
+
+        protected IAPIWithFiltersFactory _aPIWithFiltersFactory;
+
         public override string ToString()
         {
             return $"{OriginAirports} > {DestinationAirports} ({StartDate} - {EndDate})";
         }
 
-        public SearchCriteria()
+        public SearchCriteria(ILogger logger, IAPIWithFiltersFactory aPIWithFiltersFactory)
         {
-            using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
-            {
-                _logger = scope.Resolve<ILogger>();
-            }
+            _logger = logger;
+            _aPIWithFiltersFactory = aPIWithFiltersFactory;
+            _logger.Info("SearchCriteria constructor");
         }
 
-        public SearchCriteria(SearchCriteriaDataModel searchCriteriaDataModel, IFilterAnalyzer filterAnalyzer = null) : this()
+        public SearchCriteria( ILogger logger,SearchCriteriaDataModel searchCriteriaDataModel, IAPIWithFiltersFactory aPIWithFiltersFactory, IFilterAnalyzer filterAnalyzer = null) : this(logger, aPIWithFiltersFactory)
         {
             this.OriginAirports = searchCriteriaDataModel.OriginAirports ?? "";
             this.DestinationAirports = searchCriteriaDataModel.DestinationAirports ?? "";
@@ -90,19 +94,9 @@ namespace SeatsAeroLibrary.Models.Entities
             return filterAggregate;
         }
 
-        public static List<SearchCriteria> GetSearchCriteria(List<SearchCriteriaDataModel> searchCriteria, IFilterAnalyzer filterAnalyzer = null)
-        {
-            List<SearchCriteria> results = new List<SearchCriteria>();
-            foreach (SearchCriteriaDataModel searchCriteriaDataModel in searchCriteria)
-            {
-                results.Add(new SearchCriteria(searchCriteriaDataModel, filterAnalyzer));
-            }
-            return results;
-        }
-
         public async Task<List<Flight>> GetFlightsFromCachedSearch()
         {
-            SeatsAeroCacheSearchAPI apiCall = new SeatsAeroCacheSearchAPI(this.FilterAggregate);
+            SeatsAeroCacheSearchAPI apiCall = _aPIWithFiltersFactory.CreateAPI<SeatsAeroCacheSearchAPI>(this.FilterAggregate);
 
             if (Exclude)
             {
@@ -123,7 +117,7 @@ namespace SeatsAeroLibrary.Models.Entities
             return results;
         }
 
-        internal IEnumerable<Flight> GetFlightsFromCachedSearchSync()
+        public IEnumerable<Flight> GetFlightsFromCachedSearchSync()
         {
             Task<List<Flight>> task = GetFlightsFromCachedSearch();
             task.Wait();

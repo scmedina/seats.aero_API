@@ -12,25 +12,30 @@ using Autofac;
 using System.Net;
 using System.ComponentModel;
 using System.Collections.Specialized;
-using SeatsAeroLibrary.API;
 using SeatsAeroLibrary.API.Models;
 using System.Diagnostics;
 using SeatsAeroLibrary.Services.FlightFilters;
+using SeatsAeroLibrary.Repositories;
+using SeatsAeroLibrary.API;
+using SeatsAeroLibrary.Services.API.Factories;
 
 namespace SeatsAeroLibrary
 {
     public class SeatsAeroHelper
     {
         private static ILogger _logger;
+        private static IConfigSettings _configSettings;
         private static IMessenger _messenger;
+        private static IStatisticsRepository _statisticsRepository;
+        private static IAPIWithFiltersFactory _aPIWithFiltersFactory;
 
-        public SeatsAeroHelper ()
+        public SeatsAeroHelper (ILogger logger, IConfigSettings configSettings, IMessenger messenger, IStatisticsRepository statisticsRepository, IAPIWithFiltersFactory aPIWithFiltersFactory)
         {
-            using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
-            {
-                _logger = scope.Resolve<ILogger>();
-                _messenger = scope.Resolve<IMessenger>();
-            }
+            _logger = logger;
+            _configSettings = configSettings;
+            _messenger = messenger;
+            _statisticsRepository = statisticsRepository;
+            _aPIWithFiltersFactory = aPIWithFiltersFactory;
         }
 
         public List<Flight> LoadAvailabilityAndFilterSync(MileageProgram mileageProgram, bool forceMostRecent = false,
@@ -140,7 +145,7 @@ namespace SeatsAeroLibrary
 
             List<AvailabilityDataModel> availabilities = null;
 
-            SeatsAeroAvailabilityAPI apiCall = new SeatsAeroAvailabilityAPI(filterAggregate);
+            SeatsAeroAvailabilityAPI apiCall = _aPIWithFiltersFactory.CreateAPI<SeatsAeroAvailabilityAPI>(filterAggregate);
             List<Flight> result = await apiCall.QueryResults();
 
             return availabilities;
@@ -170,7 +175,7 @@ namespace SeatsAeroLibrary
             string json = ""; bool createFile = false;
             AvailabilitySnapshot fileSnapshot = new AvailabilitySnapshot();
 
-            SeatsAeroCacheSearchAPI apiCall = new SeatsAeroCacheSearchAPI(filterAggregate);
+            SeatsAeroCacheSearchAPI apiCall = _aPIWithFiltersFactory.CreateAPI<SeatsAeroCacheSearchAPI>(filterAggregate);
 
             List<AvailabilityDataModel> availabilities = null;
             if (forceMostRecent == true || fileSnapshot.TryFindValidSnapshot($"{apiCall.OriginAirports}_{apiCall.DestinationAirports}", ref json) == false)

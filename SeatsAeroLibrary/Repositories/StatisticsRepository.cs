@@ -19,12 +19,9 @@ namespace SeatsAeroLibrary.Repositories
         protected string _filePath = "";
         protected IConfigSettings _configSettings { get; set; }
 
-        public StatisticsRepository()
+        public StatisticsRepository(IConfigSettings configSettings)
         {
-            using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
-            {
-                _configSettings = scope.Resolve<IConfigSettings>();
-            }
+            _configSettings = configSettings;
             _configSettings.Load();
             _filePath = $@"{_configSettings.OutputDirectory}\\Statistics_{DateTime.Now:yyyyMMdd}_{DateTime.Now:HHmmss}.json";
         }

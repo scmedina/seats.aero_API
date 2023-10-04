@@ -17,13 +17,10 @@ namespace SeatsAeroLibrary.Repositories
         protected readonly Dictionary<U,T> entities;
         protected readonly IConfigSettings _configSettings = null;
 
-        public JsonFileRepository() : this(null) { }
-        public JsonFileRepository(string filePath)
+        public JsonFileRepository(IConfigSettings configSettings) : this(null,configSettings) { }
+        public JsonFileRepository(string filePath, IConfigSettings configSettings)
         {
-            using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
-            {
-                _configSettings = scope.Resolve<IConfigSettings>();
-            }
+            _configSettings = configSettings;
             _configSettings.Load();
             if (String.IsNullOrWhiteSpace(filePath))
             {

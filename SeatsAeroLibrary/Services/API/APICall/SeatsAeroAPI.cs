@@ -12,10 +12,11 @@ using System.Text.Json;
 using SeatsAeroLibrary.Services;
 using Autofac;
 using SeatsAeroLibrary.Repositories;
+using SeatsAeroLibrary.Services.API.APICall;
 
 namespace SeatsAeroLibrary.API
 {
-    public abstract class SeatsAeroAPI<T, U> where T : class where U : class
+    public abstract class SeatsAeroAPI<T, U>: IAPI where T : class where U : class
     {
 
         private const string _baseUrl = "https://seats.aero";
@@ -26,22 +27,28 @@ namespace SeatsAeroLibrary.API
 
         protected IConfigSettings _configSettings { get; set; }
         protected IStatisticsRepository _statisticsRepository { get; set; }
+        protected ILogger _logger { get; set; }
 
-        public SeatsAeroAPI()
+        public SeatsAeroAPI() { }
+
+        public SeatsAeroAPI(string endPoint, string[] requiredParams, Dictionary<string, string> queryParams) : this()
         {
-            using (var scope = ServicesContainer.BuildContainer().BeginLifetimeScope())
-            {
-                _configSettings = scope.Resolve<IConfigSettings>();
-                _statisticsRepository = scope.Resolve<IStatisticsRepository>();
-            }
-            _configSettings.Load();
+            SetParams(endPoint, requiredParams, queryParams);
         }
-
-        public SeatsAeroAPI(string endPoint, string[] requiredParams, Dictionary<string, string> queryParams = null)  : this()
+        public void SetParams(string endPoint, string[] requiredParams, Dictionary<string, string> queryParams) 
         {
             EndPoint = endPoint;
             RequiredParams = requiredParams;
             QueryParams = queryParams;
+        }
+
+        public virtual void Initialize(IConfigSettings configSettings, IStatisticsRepository statisticsRepository, ILogger logger)
+        {
+            _configSettings = configSettings;
+            _statisticsRepository = statisticsRepository;
+            _logger = logger;
+            _logger.Info("SearchCriteria constructor");
+            _configSettings.Load();
         }
 
         public virtual async Task<U> QueryResults()
