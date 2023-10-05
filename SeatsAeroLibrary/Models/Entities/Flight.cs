@@ -51,7 +51,7 @@ namespace SeatsAeroLibrary.Models
 
         public override string ToString()
         {
-            return $"{ID}, {Route.Origin}, {Route.Destination}, {SeatType}, {DateString}, {Date.DayOfWeek}, {RemainingSeats}, {Direct}, {MileageCost}, {MileageCostUSD.ToString("C")}, \"{Airlines.Replace(",",";")}\", {Source}";
+            return $"{ID}, {Route.Origin}, {Route.Destination}, {SeatType}, {DateString??""}, {Date.DayOfWeek}, {RemainingSeats}, {Direct}, {MileageCost}, {MileageCostUSD.ToString("C")}, \"{Airlines??"".Replace(",",";")}\", {Source}";
         }
 
         public static string GetHeaderString()

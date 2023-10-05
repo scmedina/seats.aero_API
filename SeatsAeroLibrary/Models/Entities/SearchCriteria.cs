@@ -64,8 +64,12 @@ namespace SeatsAeroLibrary.Models.Entities
             this.Sort = searchCriteriaDataModel.Sort ?? "";
             this.SortDirection = searchCriteriaDataModel.SortDirection ?? "";
 
-            string[] seatTypesArray = searchCriteriaDataModel.SeatTypes.Split(',');
-            SeatTypeEnum = SeatType.None;
+            string[] seatTypesArray = { };
+            if (searchCriteriaDataModel.SeatTypes != null)
+            { 
+                searchCriteriaDataModel.SeatTypes.Split(','); 
+            }
+            SeatTypeEnum = SeatType.Any;
             foreach (string seatTypeString in seatTypesArray)
             {
                 SeatType thisSeatTypeEnum = SeatType.None;

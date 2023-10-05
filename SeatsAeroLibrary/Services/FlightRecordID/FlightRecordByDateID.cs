@@ -1,4 +1,5 @@
-﻿using SeatsAeroLibrary.Models.DataModels;
+﻿using SeatsAeroLibrary.Helpers;
+using SeatsAeroLibrary.Models.DataModels;
 using SeatsAeroLibrary.Profiles;
 using System;
 using System.Collections.Generic;
@@ -68,9 +69,9 @@ namespace SeatsAeroLibrary.Services.FlightRecordID
             {
                 return SeatType.CompareTo(other.SeatType);
             }
-            else if (Airline.CompareTo(other.Airline) != 0)
+            else if (TypeHelper.NullComparable(Airline, other?.Airline ?? null)  != 0)
             {
-                return Airline.CompareTo(other.Airline);
+                return TypeHelper.NullComparable(Airline, other?.Airline ?? null);
             }
             else
             {
