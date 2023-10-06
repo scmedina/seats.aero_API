@@ -39,5 +39,48 @@ namespace SeatsAeroLibrary.Helpers
                 return left.CompareTo(right);
             }
         }
+
+        public static T GetById<T,U>(Dictionary<U,T> entities, U id)
+        {
+            if (entities.ContainsKey(id))
+            {
+                return entities[id];
+            }
+            return default;
+        }
+        public static bool UpdateByID<T, U>(Dictionary<U, T> entities, U id, T entity)
+        {
+            if (entities.ContainsKey(id))
+            {
+                entities[id] = entity;
+                return true;
+            }
+            return false;
+        }
+        public static bool DeleteByID<T, U>(Dictionary<U, T> entities, U id)
+        {
+            if (entities.ContainsKey(id))
+            {
+                entities.Remove(id);
+                return true;
+            }
+            return false;
+        }
+
+        protected void BuildDictionary<T, U>(Dictionary<U, T> entities, List<T> elements,
+            Func<T, U> getKey)
+        {
+            if (entities == null)
+            {
+                entities = new Dictionary<U, T>();
+            }
+            foreach (var element in elements)
+            {
+                if (entities.ContainsKey(getKey(element)))
+                {
+                    entities.Add(getKey(element), element);
+                }
+            }
+        }
     }
 }

@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Repositories
 {
-    public interface IRepository<T,U>
+    public interface IRepository<T,U>: IRepository, IKey<U,T>
     {
-        public void Initialize(IConfigSettings configSettings);
         IEnumerable<T> GetAll();
-        T GetById(U id);
         void Add(T entity);
         void Update(T entity);
         void Delete(U id);
+    }
+    public interface IRepository
+    {
+        public void Initialize(IConfigSettings configSettings);
     }
 }

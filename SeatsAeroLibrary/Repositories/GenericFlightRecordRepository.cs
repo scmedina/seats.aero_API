@@ -58,7 +58,7 @@ namespace SeatsAeroLibrary.Repositories
             return Guid.NewGuid();
         }
 
-        protected override Guid GetEntityId(FlightRecordDataModel entity)
+        public override Guid GetID(FlightRecordDataModel entity)
         {
             return entity.Id;
         }

@@ -9,101 +9,134 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Repositories
 {
-    public abstract class FileRepository<T, U> : IRepository<T, U>
+    public abstract class FileRepository<T, U> : IFileRepositoryTyped<T, U>
     {
-        protected string _filePath;
-        protected Dictionary<U, T> entities;
-        protected IConfigSettings _configSettings = null;
+        public Dictionary<U, T> Entities { get; set; } = new Dictionary<U, T>();
+        public IConfigSettings ConfigSettings { get; set; }
+        public IFileRepositoryService FileRepositoryService { get; set; }
+        string FilePath { get; set; }
+        string IFileRepository.FilePath { get => ); set => throw new NotImplementedException(); }
 
         public FileRepository() { }
 
-        public virtual void Initialize(IConfigSettings configSettings)
+
+        public void Initialize(IConfigSettings configSettings)
         {
-            _configSettings = configSettings;
-            _configSettings.Load();
-            LoadFilePath();
+            ConfigSettings = configSettings;
+            ConfigSettings.Load();
+            LoadFromFile();
         }
 
-        public void LoadFilePath()
+        public void LoadFromFile()
         {
-            this._filePath = GetDefaultFilePath();
-            entities = BuildDictionary(LoadDataFromFile());
+            string filePath = GetFilePath();
+            if (File.Exists(filePath))
+            {
+                string data = File.ReadAllText(filePath);
+                List<T> elements = LoadDataFromString(data);
+                BuildDictionary(elements);
+            }
         }
-
-        protected virtual Dictionary<U, T> BuildDictionary(List<T> elements)
+        protected void  BuildDictionary(List<T> elements)
         {
-            Dictionary<U, T> results = new Dictionary<U, T>();
+            if (Entities == null)
+            {
+                Entities = new Dictionary<U, T>();
+            }
             foreach (var element in elements)
             {
-                if (!results.ContainsKey(GetEntityId(element)))
+                if (ElementExists(element))
                 {
-                    results.Add(GetEntityId(element), element);
+                    UpdateElementInDictionary(element);
                 }
             }
-            return results;
         }
 
-        protected abstract string GetDefaultFilePath();
-
-        public IEnumerable<T> GetAll()
+        public void SetFilePath(string filePath)
         {
-            return entities.Values;
+            this.FilePath = FilePath;
         }
 
-        public T GetById(U id)
+        public string GetFilePath()
         {
-            if (entities.ContainsKey(id))
+            if (string.IsNullOrWhiteSpace(FilePath))
             {
-                return entities[id];
+                return GetDefaultFilePath();
             }
-            return default;
+            return FilePath;
         }
 
-        public virtual void Add(T entity)
+        public void SaveToFile()
         {
-            AddElement(entity);
-            SaveDataToFile();
+            string filePath = GetFilePath();
+            string text = GetDataAsString(GetAll().ToList());
+            File.WriteAllText(filePath, text);
         }
 
-        protected virtual void AddElement(T entity)
+        public virtual IEnumerable<T> GetAll()
         {
-            U newId = GenerateNewId();
-            SetEntityId(entity, newId);
-            entities.Add(GetEntityId(entity), entity);
+            return GetValueList();
         }
-
-        public virtual void Update(T entity)
+        public virtual List<T> GetValueList()
         {
-            U entityId = GetEntityId(entity);
-
-            if (entities.ContainsKey(entityId))
+            return Entities.Values.ToList();
+        }
+        public void Add(T entity)
+        {
+            if (ElementExists(entity))
             {
-                entities[entityId] = entity;
-                SaveDataToFile();
+                Update(entity);
+            }
+            else
+            {
+                AddElementToDictionary(entity);
+                SaveToFile();
+            }
+        }
+        public void Update(T entity)
+        {
+            if (ElementExists(entity))
+            {
+                UpdateElementInDictionary(entity);
+                SaveToFile();
             }
         }
 
         public void Delete(U id)
         {
-            if (entities.ContainsKey(id))
+            if (Entities.ContainsKey(id))
             {
-                entities.Remove(id);
-                SaveDataToFile();
+                RemoveElementFromDictionary(id);
+                SaveToFile();
             }
         }
 
-        protected abstract List<T> LoadDataFromFile();
 
-        protected abstract void SaveDataToFile(); 
-        protected virtual List<T> GetValueList()
+        public abstract void SetID(T element, U ID);
+        public abstract U GetNewID();
+        public abstract bool ElementExists(T element);
+        public abstract string GetDataAsString(List<T> data);
+        public abstract List<T> LoadDataFromString(string data);
+        public abstract void AddElementToDictionary(T element);
+        public abstract void UpdateElementInDictionary(T element);
+        public abstract void RemoveElementFromDictionary(U id);
+        protected abstract string GetDefaultFilePath();
+
+        string IFileRepository.GetDefaultFilePath()
         {
-            return entities.Values.ToList();
+            ;
         }
 
-        // You should implement these methods in your model-specific code
-        protected abstract bool CompareIDs(U id1, U id2);
-        protected abstract U GetEntityId(T entity);
-        protected abstract void SetEntityId(T entity, U id);
-        protected abstract U GenerateNewId();
+        public abstract U GetKey(T item);
+
+        public virtual T GetByKey(U key)
+        {
+            return TypeHelper.GetById(Entities, key);
+        }
+
+        public virtual bool KeyExists(U key)
+        {
+            return Entities.ContainsKey(key);
+        }
     }
 }

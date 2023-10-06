@@ -18,16 +18,24 @@ namespace SeatsAeroLibrary.Services
         private readonly ILogger _logger;
         private readonly List<IFlightRecordRepository> _flightRecordRepositories = new List<IFlightRecordRepository>();
         private readonly IConfigSettings _configSettings;
-        public FlightRecordService(FlightRecordMapper flightRecordMapper, ILogger logger, IConfigSettings configSettings)
+        private readonly IFileRepositoryService _fileRepositoryService;
+        public FlightRecordService(FlightRecordMapper flightRecordMapper, 
+            ILogger logger, IConfigSettings configSettings, IFileRepositoryService fileRepositoryService)
         {
             _flightRecordMapper = flightRecordMapper;
             _logger = logger;
             _configSettings = configSettings;
+            _fileRepositoryService = fileRepositoryService;
         }
 
         public void AddRepositoryType<TRepo>() where TRepo : IFlightRecordRepository, new()
         {
             TRepo repo = new TRepo();
+
+            if (repo is IFileRepository fileRepo)
+            {
+                _fileRepositoryService.SetFileRepositoryService(fileRepo);
+            }
             repo.Initialize(_configSettings);
 
             _flightRecordRepositories.Add(repo);

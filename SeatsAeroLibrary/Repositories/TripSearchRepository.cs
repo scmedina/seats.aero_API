@@ -38,11 +38,10 @@ namespace SeatsAeroLibrary.Repositories
            return currentID++;
         }
 
-        protected override int GetEntityId(TripSearchDataModel entity)
+        public override int GetID(TripSearchDataModel entity)
         {
             return entity.ID;
         }
-
         protected override void SetEntityId(TripSearchDataModel entity, int id)
         {
             entity.ID = id;

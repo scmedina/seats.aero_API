@@ -75,11 +75,17 @@ namespace SeatsAeroLibrary.Helpers
 
         public static void ExportJsonFile<T>(T jsonClass, string filePath)
         {
+            string json = SerializeJsonData(jsonClass);
+            File.WriteAllText(filePath, json);
+        }
+
+        public static string SerializeJsonData<T>(T jsonClass)
+        {
             string json = JsonSerializer.Serialize(jsonClass, new JsonSerializerOptions
             {
                 WriteIndented = true // For pretty-printing the JSON
             });
-            File.WriteAllText(filePath, json);
+            return json;
         }
 
         public static string ReadEmbeddedResource( string resourceName, Assembly assembly)
