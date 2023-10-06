@@ -30,16 +30,17 @@ namespace SeatsAeroLibrary.Repositories
             return new List<T>();
         }
 
-        protected override void SaveDataToFile()
+        protected override string GetDataAsString()
         {
             try
             {
-                FileIO.ExportJsonFile<List<T>>(base.GetValueList(), _filePath);
+                return FileIO.GetAsJsonString(base.GetValueList());
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error saving data to file: {ex.Message}");
             }
+            return "";
         }
 
     }

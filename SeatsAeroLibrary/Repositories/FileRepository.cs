@@ -30,6 +30,11 @@ namespace SeatsAeroLibrary.Repositories
             entities = BuildDictionary(LoadDataFromFile());
         }
 
+        public virtual void SaveDataToFile()
+        {
+            string text = GetDataAsString();
+            File.WriteAllText(_filePath, text);
+        }
         protected virtual Dictionary<U, T> BuildDictionary(List<T> elements)
         {
             Dictionary<U, T> results = new Dictionary<U, T>();
@@ -93,8 +98,7 @@ namespace SeatsAeroLibrary.Repositories
         }
 
         protected abstract List<T> LoadDataFromFile();
-
-        protected abstract void SaveDataToFile(); 
+        protected abstract string GetDataAsString();
         protected virtual List<T> GetValueList()
         {
             return entities.Values.ToList();
