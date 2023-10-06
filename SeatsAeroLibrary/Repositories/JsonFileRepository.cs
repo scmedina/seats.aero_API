@@ -34,7 +34,7 @@ namespace SeatsAeroLibrary.Repositories
         {
             try
             {
-                FileIO.ExportJsonFile(GetValueList(), _filePath);
+                FileIO.ExportJsonFile<List<T>>(base.GetValueList(), _filePath);
             }
             catch (Exception ex)
             {

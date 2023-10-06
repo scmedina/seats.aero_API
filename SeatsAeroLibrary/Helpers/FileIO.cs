@@ -64,22 +64,18 @@ namespace SeatsAeroLibrary.Helpers
             }
         }
 
-        public static void ExportJsonListFile<T>(List<T> jsonClass,  string filePath)
-        {
-            string json = JsonSerializer.Serialize(jsonClass, new JsonSerializerOptions
-            {
-                WriteIndented = true // For pretty-printing the JSON
-            });
-            File.WriteAllText(filePath,json);
-        }
-
         public static void ExportJsonFile<T>(T jsonClass, string filePath)
         {
+            File.WriteAllText(filePath, GetAsJsonString(jsonClass));
+        }
+
+        public static string GetAsJsonString<T>(T jsonClass)
+        {
             string json = JsonSerializer.Serialize(jsonClass, new JsonSerializerOptions
             {
                 WriteIndented = true // For pretty-printing the JSON
             });
-            File.WriteAllText(filePath, json);
+            return json;
         }
 
         public static string ReadEmbeddedResource( string resourceName, Assembly assembly)

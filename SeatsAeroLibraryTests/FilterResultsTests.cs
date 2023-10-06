@@ -101,7 +101,7 @@ namespace SeatsAeroTests
             string filePath = $@"{Environment.GetEnvironmentVariable("Temp")}\\seats_aero_flights_[dateStamp]_[timeStamp]";
             filePath = filePath.Replace("[dateStamp]", DateTime.Now.ToString("yyyyMMdd"));
             filePath = filePath.Replace("[timeStamp]", DateTime.Now.ToString("HHmmss"));
-            FileIO.ExportJsonListFile(flights, filePath + ".json");
+            FileIO.ExportJsonFile(flights, filePath + ".json");
 
             FileIO.SaveStringToFile(Flight.GetAsCSVString(flights), filePath + ".csv");
         }
@@ -148,7 +148,7 @@ namespace SeatsAeroTests
             string filePath = $@"{Environment.GetEnvironmentVariable("Temp")}\\seats_aero_flights_[dateStamp]_[timeStamp]";
             filePath = filePath.Replace("[dateStamp]", DateTime.Now.ToString("yyyyMMdd"));
             filePath = filePath.Replace("[timeStamp]", DateTime.Now.ToString("HHmmss"));
-            FileIO.ExportJsonListFile(flights, filePath + ".json");
+            FileIO.ExportJsonFile(flights, filePath + ".json");
 
             FileIO.SaveStringToFile(Flight.GetAsCSVString(flights), filePath + ".csv");
         }
