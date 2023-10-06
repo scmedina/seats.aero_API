@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Repositories
 {
-    public abstract class BasicRepository<T, U> : IRepository<T, U>
+    public abstract class FileRepository<T, U> : IRepository<T, U>
     {
         protected string _filePath;
         protected Dictionary<U, T> entities;
         protected IConfigSettings _configSettings = null;
 
-        public BasicRepository() { }
+        public FileRepository() { }
 
         public virtual void Initialize(IConfigSettings configSettings)
         {

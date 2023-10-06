@@ -1,9 +1,7 @@
-﻿using Autofac;
-using SeatsAeroLibrary.Helpers;
+﻿using SeatsAeroLibrary.Helpers;
 using SeatsAeroLibrary.Services;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -11,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Repositories
 {
-    public abstract class JsonFileRepository<T,U> : FileRepository<T,U>
+    public abstract class CsvFileRepository<T,U> : FileRepository<T, U> where T: ICsvExport
     {
         protected override List<T> LoadDataFromFile()
         {
@@ -19,8 +17,9 @@ namespace SeatsAeroLibrary.Repositories
             {
                 if (File.Exists(_filePath))
                 {
-                    string jsonData = File.ReadAllText(_filePath);
-                    return JsonSerializer.Deserialize<List<T>>(jsonData);
+                    string csvData = File.ReadAllText(_filePath);
+                    //return JsonSerializer.Deserialize<List<T>>(csvData);
+                    throw new NotImplementedException();
                 }
             }
             catch (Exception ex)
@@ -34,13 +33,12 @@ namespace SeatsAeroLibrary.Repositories
         {
             try
             {
-                FileIO.ExportJsonFile(GetValueList(), _filePath);
+                throw new NotImplementedException();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error saving data to file: {ex.Message}");
             }
         }
-
     }
 }
