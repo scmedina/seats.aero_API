@@ -12,7 +12,7 @@ namespace SeatsAeroLibrary.Repositories
     public abstract class FileRepository<T, U> : IRepository<T, U>
     {
         protected string _filePath;
-        protected Dictionary<U, T> entities;
+        protected Dictionary<U, T> entities = new Dictionary<U, T>();
         protected IConfigSettings _configSettings = null;
 
         public FileRepository() { }
@@ -27,12 +27,17 @@ namespace SeatsAeroLibrary.Repositories
         public void LoadFilePath()
         {
             this._filePath = GetDefaultFilePath();
-            entities = BuildDictionary(LoadDataFromFile());
+
+            if (File.Exists(_filePath))
+            {
+                string data = File.ReadAllText(_filePath);
+                entities = BuildDictionary(LoadDataFromString(data));
+            }
         }
 
         public virtual void SaveDataToFile()
         {
-            string text = GetDataAsString();
+            string text = GetDataAsString(GetValueList());
             File.WriteAllText(_filePath, text);
         }
         protected virtual Dictionary<U, T> BuildDictionary(List<T> elements)
@@ -97,8 +102,8 @@ namespace SeatsAeroLibrary.Repositories
             }
         }
 
-        protected abstract List<T> LoadDataFromFile();
-        protected abstract string GetDataAsString();
+        protected abstract List<T> LoadDataFromString(string data);
+        protected abstract string GetDataAsString(List<T> elements);
         protected virtual List<T> GetValueList()
         {
             return entities.Values.ToList();

@@ -16,7 +16,7 @@ namespace SeatsAeroLibrary.Repositories
 
         protected override string GetDefaultFilePath()
         {
-            return $@"{_configSettings.OutputDirectory}\\Flight_Record_Lows_By_SeatType.json";
+            return $@"{_configSettings.OutputDirectory}\\Flight_Record_Lows_By_SeatType.csv";
         }
     }
 }

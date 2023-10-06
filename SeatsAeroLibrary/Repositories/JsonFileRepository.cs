@@ -13,15 +13,11 @@ namespace SeatsAeroLibrary.Repositories
 {
     public abstract class JsonFileRepository<T,U> : FileRepository<T,U>
     {
-        protected override List<T> LoadDataFromFile()
+        protected override List<T> LoadDataFromString(string data)
         {
             try
             {
-                if (File.Exists(_filePath))
-                {
-                    string jsonData = File.ReadAllText(_filePath);
-                    return JsonSerializer.Deserialize<List<T>>(jsonData);
-                }
+                 return JsonSerializer.Deserialize<List<T>>(data);
             }
             catch (Exception ex)
             {
@@ -30,11 +26,11 @@ namespace SeatsAeroLibrary.Repositories
             return new List<T>();
         }
 
-        protected override string GetDataAsString()
+        protected override string GetDataAsString(List<T> elements)
         {
             try
             {
-                return FileIO.GetAsJsonString(base.GetValueList());
+                return FileIO.GetAsJsonString(elements);
             }
             catch (Exception ex)
             {

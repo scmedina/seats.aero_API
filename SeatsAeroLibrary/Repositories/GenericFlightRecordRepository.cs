@@ -16,7 +16,7 @@ using SeatsAeroLibrary.Services;
 
 namespace SeatsAeroLibrary.Repositories
 {
-    public abstract class GenericFlightRecordRepository<T> : JsonFileRepository<FlightRecordDataModel, Guid>, IFlightRecordRepository where T: IFlightRecordID, new()
+    public abstract class GenericFlightRecordRepository<T> : CsvFileRepository<FlightRecordDataModel, Guid>, IFlightRecordRepository where T: IFlightRecordID, new()
     {
         public readonly Dictionary<T, KeyValuePair<Guid, FlightRecordDataModel>> uniqueEntities = new Dictionary<T, KeyValuePair<Guid, FlightRecordDataModel>>();
 
