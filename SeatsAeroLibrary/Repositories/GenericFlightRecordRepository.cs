@@ -82,6 +82,10 @@ namespace SeatsAeroLibrary.Repositories
 
         public override void Add(FlightRecordDataModel entity)
         {
+            if (entity.MileageCost == 0 )
+            {
+                return;
+            }
             FlightRecordDataModel currentEntity = null;
             if (MatchExists(entity, ref currentEntity))
             {
