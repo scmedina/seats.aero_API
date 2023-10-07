@@ -23,7 +23,7 @@ namespace SeatsAeroLibrary.Repositories
 
         protected override string GetDefaultFilePath()
         {
-            return $@"{_configSettings.OutputDirectory}\\Flight_Record_Lows.csv";
+            return $@"{_configSettings.OutputDirectory}\\Flight_Record_Lows_ByDate.csv";
         }
     }
 }

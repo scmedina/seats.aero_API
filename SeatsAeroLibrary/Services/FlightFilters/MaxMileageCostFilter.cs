@@ -17,7 +17,7 @@ namespace SeatsAeroLibrary.Services.FlightFilters
             return this.GetType().Name + ": " + _maxPoints.ToString();
         }
 
-        public MaxMileageCostFilter( int? maxPoints = null, bool nonZero = false) : base()
+        public MaxMileageCostFilter( int? maxPoints = null, bool nonZero = true) : base()
         {
             _maxPoints = maxPoints;
             _nonZero = nonZero;

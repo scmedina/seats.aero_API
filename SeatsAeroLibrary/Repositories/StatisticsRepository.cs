@@ -16,14 +16,14 @@ namespace SeatsAeroLibrary.Repositories
         public Dictionary<string, int> APICallsCount { get; set; } = new Dictionary<string, int>();
         public int TotalAPICalls { get; set; }
         private string _currentKey = "";
-        protected string _filePath = "";
+        protected ILogger _logger { get; set; }
         protected IConfigSettings _configSettings { get; set; }
 
-        public StatisticsRepository(IConfigSettings configSettings)
+        public StatisticsRepository(IConfigSettings configSettings, ILogger logger)
         {
             _configSettings = configSettings;
+            _logger = logger;
             _configSettings.Load();
-            _filePath = $@"{_configSettings.OutputDirectory}\\Statistics_{DateTime.Now:yyyyMMdd}_{DateTime.Now:HHmmss}.json";
         }
 
         public void SetCurrentAPICall(string searchName)
@@ -39,14 +39,13 @@ namespace SeatsAeroLibrary.Repositories
             APICallsCount[_currentKey]++;
 
             TotalAPICalls++;
-
-            ExportStatistics();
         }
 
 
         protected void ExportStatistics()
         {
-            FileIO.ExportJsonFile(this, _filePath);
+            string json = FileIO.GetAsJsonString(this);
+            _logger.Info(json);
         }
 
     }

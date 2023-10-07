@@ -28,8 +28,14 @@ namespace SeatsAeroLibrary.Repositories
         {
             base.Initialize(configSettings);
             BuildUniqueDictionary();
+            if (_fileFixed)
+            {
+                SaveDataToFile();
+            }
         }
+        
 
+        private bool _fileFixed = false;
         private void BuildUniqueDictionary()
         {
             uniqueEntities.Clear();
@@ -37,9 +43,15 @@ namespace SeatsAeroLibrary.Repositories
             {
                 var entity = entities.ElementAt(i);
                 T id = GetT(entity.Value);
-                if (uniqueEntities.ContainsKey(id))
+                if (entity.Value.MileageCost == 0)
                 {
                     entities.Remove(entity.Key);
+                    _fileFixed = true;
+                }
+                else if (uniqueEntities.ContainsKey(id))
+                {
+                    entities.Remove(entity.Key);
+                    _fileFixed = true;
                 }
                 else
                 {
@@ -94,9 +106,16 @@ namespace SeatsAeroLibrary.Repositories
 
         private void UpdateIfLessThan(FlightRecordDataModel entity, FlightRecordDataModel currentEntity)
         {
-            if (entity.MileageCost < currentEntity.MileageCost)
+            if (entity.MileageCost > 0)
             {
-                base.Update(entity);
+                if (currentEntity.MileageCost == 0 )
+                {
+                    base.Update(entity);
+                }
+                else if (entity.MileageCost < currentEntity.MileageCost)
+                {
+                    base.Update(entity);
+                }
             }
         }
 
