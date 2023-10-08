@@ -1,4 +1,5 @@
-﻿using SeatsAeroLibrary.Models.DataModels;
+﻿using SeatsAeroLibrary.Models;
+using SeatsAeroLibrary.Models.DataModels;
 using SeatsAeroLibrary.Services;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,6 @@ namespace SeatsAeroLibrary.Repositories
     public interface IFlightRecordRepository 
     {
         void Add(FlightRecordDataModel entity);
-        public void Initialize(IConfigSettings configSettings);
+        public void Initialize(IConfigSettings configSettings, IDataAccess dataAccess);
     }
 }

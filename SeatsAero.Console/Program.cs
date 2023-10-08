@@ -35,6 +35,7 @@ List<TripSearch> trips = tripSearchService.GetTripSearches(searchData);
 flightRecordService.AddRepositoryType<FlightRecordByDayOfWeekRepository>();
 flightRecordService.AddRepositoryType<FlightRecordByDateRepository>();
 flightRecordService.AddRepositoryType<FlightRecordBySeatTypeRepository>();
+flightRecordService.AddRepositoryType<FlightRecordRepository>();
 
 tripSearchService.GetAllFlightsFromCachedSearches(trips);
 

@@ -26,7 +26,9 @@ namespace SeatsAeroLibrary.Profiles
                 Direct = source.Direct,
                 MileageCost = source.MileageCost,
                 Airline = source.Airlines,
-                Source = source.Source.ToString()
+                Source = source.Source.ToString(),
+                CreatedAt = source.CreatedAt,
+                UpdatedAt = source.UpdatedAt
             };
             return record;
         }
@@ -46,7 +48,9 @@ namespace SeatsAeroLibrary.Profiles
                 Direct = source.Direct, 
                 MileageCost = source.MileageCost,
                 Airlines = source.Airline,
-                Source = (MileageProgram)Enum.Parse(typeof(MileageProgram), source.Source)
+                Source = (MileageProgram)Enum.Parse(typeof(MileageProgram), source.Source),
+                CreatedAt = source.CreatedAt,
+                UpdatedAt = source.UpdatedAt
             };
             return record;
         }

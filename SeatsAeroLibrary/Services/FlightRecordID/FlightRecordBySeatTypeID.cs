@@ -86,5 +86,10 @@ namespace SeatsAeroLibrary.Services.FlightRecordID
         {
             GenericMapper.Map(flightRecordDataModel, this);
         }
+
+        public string JsonQuery(string fieldName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

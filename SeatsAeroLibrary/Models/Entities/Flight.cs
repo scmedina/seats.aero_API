@@ -25,6 +25,8 @@ namespace SeatsAeroLibrary.Models
         }
         private string ComputedLastSeen { get; set; }
         private object AvailabilityTrips { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
         public MileageProgram Source { get; set; }
         public string SourceString
         {
@@ -78,6 +80,8 @@ namespace SeatsAeroLibrary.Models
             Date = availability.ParsedDate;
             AvailabilityTrips = availability.AvailabilityTrips;
             SeatType = seatType;
+            CreatedAt = availability.CreatedAt;
+            UpdatedAt = availability.UpdatedAt;
 
             MileageProgram thisSource = MileageProgram.None;
             Enum.TryParse(availability.Source, true, out thisSource);

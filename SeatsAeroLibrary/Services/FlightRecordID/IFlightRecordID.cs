@@ -10,5 +10,6 @@ namespace SeatsAeroLibrary.Services.FlightRecordID
     public interface IFlightRecordID : IComparable
     {
         public void Map(FlightRecordDataModel flightRecordDataModel);
+        public string JsonQuery(string fieldName);
     }
 }

@@ -68,6 +68,10 @@ namespace SeatsAeroLibrary.Services
                 .As<IAPIFactory>()
                 .SingleInstance();
 
+            builder.RegisterType<PostgresDataAccessService>()
+                .As<IDataAccess>()
+                .SingleInstance();
+
             //#if (DEBUG)
             //            // If in debug mode, log to console instead of file
             //            builder.RegisterType<DebuggerLogger>()

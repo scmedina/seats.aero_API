@@ -20,6 +20,8 @@ namespace SeatsAeroLibrary.Models.DataModels
         public bool Direct { get; set; }
         public int MileageCost { get; set; }
         public DateTime Date { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
         public string Airline { get; set; }
         public string Source { get; set; }
 

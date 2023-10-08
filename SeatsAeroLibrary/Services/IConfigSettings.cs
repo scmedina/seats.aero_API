@@ -12,6 +12,7 @@ namespace SeatsAeroLibrary.Services
     {
         public string APIKey { get; set; }
         public string OutputDirectory { get; set; }
+        public string GetConnectionString();
         public void Load();
     }
 }

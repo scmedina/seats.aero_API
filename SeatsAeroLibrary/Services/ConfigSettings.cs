@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using SeatsAeroLibrary.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace SeatsAeroLibrary.Services
 
         public string APIKey { get; set; }
         public string OutputDirectory { get; set; }
+        private string _connectionString { get; set; }
 
         private bool _isLoaded  = false;
 
@@ -35,6 +37,8 @@ namespace SeatsAeroLibrary.Services
 
             APIKey = (string)builder.Configuration.GetValue(typeof(string), "ApiKey");
             OutputDirectory = (string)builder.Configuration.GetValue(typeof(string), "OutputDirectory");
+            _connectionString = (string)builder.Configuration.GetConnectionString("DefaultConnection");
+            
 
             if (String.IsNullOrEmpty(OutputDirectory))
             {
@@ -43,6 +47,12 @@ namespace SeatsAeroLibrary.Services
             
             Guard.AgainstNullOrEmptyResultString(APIKey, nameof(APIKey));
             _isLoaded = true;
+        }
+
+        public string GetConnectionString()
+        {
+            return _connectionString;
+
         }
     }
 }

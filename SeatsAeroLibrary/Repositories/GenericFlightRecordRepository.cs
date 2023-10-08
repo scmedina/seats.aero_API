@@ -24,7 +24,7 @@ namespace SeatsAeroLibrary.Repositories
         {
         }
 
-        public override void Initialize(IConfigSettings configSettings)
+        public void Initialize(IConfigSettings configSettings, IDataAccess dataAccess)
         {
             base.Initialize(configSettings);
             BuildUniqueDictionary();
@@ -36,6 +36,7 @@ namespace SeatsAeroLibrary.Repositories
         
 
         private bool _fileFixed = false;
+
         private void BuildUniqueDictionary()
         {
             uniqueEntities.Clear();
@@ -155,6 +156,5 @@ namespace SeatsAeroLibrary.Repositories
             id.Map(entity);
             return id;
         }
-
     }
 }

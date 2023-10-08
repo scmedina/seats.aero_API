@@ -17,7 +17,7 @@ namespace SeatsAeroLibrary.Services.FlightRecordID
         public string SeatType { get; set; }
         public string DayOfWeek { get; set; }
         public bool Direct { get; set; }
-        public string Airline { get; set; }
+        public DateTime Date { get; set; }
 
         public override int GetHashCode()
         {
@@ -27,8 +27,18 @@ namespace SeatsAeroLibrary.Services.FlightRecordID
             hash = hash * 23 + (SeatType?.GetHashCode() ?? 0);
             hash = hash * 23 + (DayOfWeek?.GetHashCode() ?? 0);
             hash = hash * 23 + Direct.GetHashCode();
-            hash = hash * 23 + (Airline?.GetHashCode() ?? 0);
+            hash = hash * 23 + (Date.GetHashCode());
             return hash;
+        }
+
+        public string JsonQuery(string fieldName)
+        {
+            return $"{fieldName}->>'OriginAirport' = '{OriginAirport}'" +
+                $"AND {fieldName}->>'DestinationAirport' = '{DestinationAirport}'" +
+                $"AND {fieldName}->>'SeatType' = '{SeatType}'" +
+                $"AND {fieldName}->>'DayOfWeek' = '{DayOfWeek}'" +
+                $"AND {fieldName}->>'Direct' = '{Direct}'" +
+                $"AND {fieldName}->>'Date' = '{Date}'";
         }
 
         public override bool Equals(object? obj)
@@ -44,7 +54,7 @@ namespace SeatsAeroLibrary.Services.FlightRecordID
                 SeatType == other.SeatType &&
                 DayOfWeek == other.DayOfWeek &&
                 Direct == other.Direct &&
-                Airline == other.Airline;
+                Date == other.Date;
         }
 
         public int CompareToID(FlightRecordByDateID? other)
@@ -69,9 +79,9 @@ namespace SeatsAeroLibrary.Services.FlightRecordID
             {
                 return SeatType.CompareTo(other.SeatType);
             }
-            else if (TypeHelper.NullComparable(Airline, other?.Airline ?? null)  != 0)
+            else if (Date.CompareTo(other.Date)  != 0)
             {
-                return TypeHelper.NullComparable(Airline, other?.Airline ?? null);
+                return Date.CompareTo(other.Date);
             }
             else
             {
