@@ -58,7 +58,14 @@ namespace SeatsAeroLibrary.Repositories
                 dr["values"] = FileIO.GetAsJsonString(entity);
                 dr["low_key"] = lowKeyString;
                 dr["mileage"] = entity.MileageCost;
-                _dataAccess.UpdateDataTable(dt, query);
+                try
+                {
+                    _dataAccess.UpdateDataTable(dt, query);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
 
         }

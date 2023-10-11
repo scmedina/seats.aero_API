@@ -7,6 +7,7 @@ using System.IO;
 using System.Text.Json;
 using System.Collections;
 using System.Reflection;
+using System.Data;
 
 namespace SeatsAeroLibrary.Helpers
 {
@@ -76,6 +77,38 @@ namespace SeatsAeroLibrary.Helpers
                 WriteIndented = true // For pretty-printing the JSON
             });
             return json;
+        }
+
+        public static void ExportToCsv(DataTable dataTable, string filePath)
+        {
+            if (dataTable == null || dataTable.Rows.Count == 0)
+            {
+                Console.WriteLine("DataTable is empty. Nothing to export.");
+                return;
+            }
+
+            try
+            {
+                // Create a StreamWriter to write the CSV file
+                using (StreamWriter sw = new StreamWriter(filePath))
+                {
+                    // Write the column headers
+                    sw.WriteLine(string.Join(",", dataTable.Columns.Cast<DataColumn>().Select(col => col.ColumnName)));
+
+                    // Write the data rows
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        var fields = row.ItemArray.Select(field => field.ToString());
+                        sw.WriteLine("\"" +string.Join("\",\"", fields)+"\"");
+                    }
+
+                    Console.WriteLine($"DataTable exported to: {filePath}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occurred while exporting to CSV: {ex.Message}");
+            }
         }
 
         public static string ReadEmbeddedResource( string resourceName, Assembly assembly)
