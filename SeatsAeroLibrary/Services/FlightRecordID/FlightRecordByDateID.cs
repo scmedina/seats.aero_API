@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SeatsAeroLibrary.Services.FlightRecordID
@@ -34,11 +37,11 @@ namespace SeatsAeroLibrary.Services.FlightRecordID
         public string JsonQuery(string fieldName)
         {
             return $"{fieldName}->>'OriginAirport' = '{OriginAirport}'" +
-                $"AND {fieldName}->>'DestinationAirport' = '{DestinationAirport}'" +
-                $"AND {fieldName}->>'SeatType' = '{SeatType}'" +
-                $"AND {fieldName}->>'DayOfWeek' = '{DayOfWeek}'" +
-                $"AND {fieldName}->>'Direct' = '{Direct}'" +
-                $"AND {fieldName}->>'Date' = '{Date}'";
+                $" AND {fieldName}->>'DestinationAirport' = '{DestinationAirport}'" +
+                $" AND {fieldName}->>'SeatType' = '{SeatType}'" +
+                $" AND {fieldName}->>'DayOfWeek' = '{DayOfWeek}'" +
+                $" AND {fieldName}->>'Direct' = '{JsonSerializer.Serialize(Direct)}'" +
+                $"AND {fieldName}->>'Date' = '{JsonSerializer.Serialize(Date).Replace("\"","")}'";            
         }
 
         public override bool Equals(object? obj)

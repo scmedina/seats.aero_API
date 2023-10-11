@@ -39,7 +39,7 @@ namespace SeatsAeroLibrary.Repositories
                 if (dt.Rows.Count > 0)
                 {
                     DataRow rowMin = dt.Rows[0];
-                    if ((int)rowMin["mileage"] < entity.MileageCost)
+                    if ((int)rowMin["mileage"] <= entity.MileageCost)
                     {
                         return;
                     }
