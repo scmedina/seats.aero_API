@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SeatsAero.Console": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\steph\\OneDrive\\My projects\\SeatsAero\\SeatsAeroSearches.json\""
+    }
+  }
+}

@@ -1,0 +1,72 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+    <None Remove="Data\seats_aero_aeromexico_20230909.json" />
+    <None Remove="Data\seats_aero_aeroplan_20230909.json" />
+    <None Remove="Data\seats_aero_alaska_20230909.json" />
+    <None Remove="Data\seats_aero_delta_20230909.json" />
+    <None Remove="Data\seats_aero_emirates_20230909.json" />
+    <None Remove="Data\seats_aero_etihad_20230909.json" />
+    <None Remove="Data\seats_aero_eurobonus_20230909.json" />
+    <None Remove="Data\seats_aero_flyingblue_20230909.json" />
+    <None Remove="Data\seats_aero_qantas_20230909.json" />
+    <None Remove="Data\seats_aero_united_20230909.json" />
+    <None Remove="Data\seats_aero_velocity_20230909.json" />
+    <None Remove="Data\seats_aero_virginatlantic_20230909.json" />
+    <None Remove="Data\test.json" />
+    <None Remove="Data\test2.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Data\seats_aero_aeromexico_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_aeroplan_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_alaska_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_american_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_delta_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_emirates_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_etihad_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_eurobonus_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_flyingblue_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_lifemiles_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_qantas_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_united_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_velocity_20230909.json" />
+    <EmbeddedResource Include="Data\seats_aero_virginatlantic_20230909.json" />
+    <EmbeddedResource Include="Data\test2.json" />
+    <EmbeddedResource Include="Data\test.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="7.1.0" />
+    <PackageReference Include="Castle.Core" Version="5.1.1" />
+    <PackageReference Include="CsvHelper" Version="30.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
+    <PackageReference Include="coverlet.collector" Version="3.2.0" />
+    <PackageReference Include="Npgsql" Version="7.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SeatsAeroLibrary\SeatsAeroLibrary.csproj" />
+  </ItemGroup>
+
+</Project>
