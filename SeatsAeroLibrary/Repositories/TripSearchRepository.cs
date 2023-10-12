@@ -55,7 +55,7 @@ namespace SeatsAeroLibrary.Repositories
 
         protected override string GetDefaultFilePath()
         {
-            return $@"{_configSettings.OutputDirectory}\\SeatsAeroSearches.json";
+            return $@"{_configSettings.OutputDirectory}\SeatsAeroSearches.json";
         }
     }
 }

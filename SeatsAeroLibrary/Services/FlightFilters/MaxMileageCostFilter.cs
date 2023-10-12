@@ -29,9 +29,12 @@ namespace SeatsAeroLibrary.Services.FlightFilters
             {
                 return true;
             }
-            else if (_nonZero == true && flight.MileageCost == 0)
+            else if (flight.MileageCost == 0)
             {
-                return false;
+                if (_nonZero == true)
+                {
+                    return false;
+                }
             }
             return flight.MileageCost <= (int)_maxPoints;
         }
