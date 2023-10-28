@@ -11,12 +11,12 @@ namespace SeatsAeroTests.Services
     public class Messenger : IMessenger
     {
 
-        public SeatsAeroLibrary.Services.DialogResult ShowMessageBox(string message, string title)
+        public SeatsAeroLibrary.Services.MessengerDialogResult ShowMessageBox(string message, string title)
         {
-            return ShowDevExpressMessageBox(message, title, new SeatsAeroLibrary.Services.DialogResult[] { SeatsAeroLibrary.Services.DialogResult.OK });
+            return ShowDevExpressMessageBox(message, title, new SeatsAeroLibrary.Services.MessengerDialogResult[] { SeatsAeroLibrary.Services.MessengerDialogResult.OK });
         }
 
-        public SeatsAeroLibrary.Services.DialogResult ShowMessageBox(string message, string title, SeatsAeroLibrary.Services.DialogResult[] buttons)
+        public SeatsAeroLibrary.Services.MessengerDialogResult ShowMessageBox(string message, string title, SeatsAeroLibrary.Services.MessengerDialogResult[] buttons)
         {
             return ShowDevExpressMessageBox(message, title, buttons);
         }
@@ -27,9 +27,9 @@ namespace SeatsAeroTests.Services
         //}
 
 
-        private SeatsAeroLibrary.Services.DialogResult ShowDevExpressMessageBox(string message, string title, SeatsAeroLibrary.Services.DialogResult[] buttons)
+        private SeatsAeroLibrary.Services.MessengerDialogResult ShowDevExpressMessageBox(string message, string title, SeatsAeroLibrary.Services.MessengerDialogResult[] buttons)
         {
-            return SeatsAeroLibrary.Services.DialogResult.OK;
+            return SeatsAeroLibrary.Services.MessengerDialogResult.OK;
         }
 
         //private void ShowGSSUINotification(string message, string title, SvgImage icon)
