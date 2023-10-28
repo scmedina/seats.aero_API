@@ -11,12 +11,12 @@ namespace SeatsAeroTool.Services
     public class Messenger : IMessenger
     {
 
-        public SeatsAeroLibrary.Services.MessengerDialogResult ShowMessageBox(string message, string title)
+        public SeatsAeroLibrary.Services.DialogResult ShowMessageBox(string message, string title)
         {
-            return ShowDevExpressMessageBox(message, title, new SeatsAeroLibrary.Services.MessengerDialogResult[] { SeatsAeroLibrary.Services.MessengerDialogResult.OK });
+            return ShowDevExpressMessageBox(message, title, new SeatsAeroLibrary.Services.DialogResult[] { SeatsAeroLibrary.Services.DialogResult.OK });
         }
 
-        public SeatsAeroLibrary.Services.MessengerDialogResult ShowMessageBox(string message, string title, SeatsAeroLibrary.Services.MessengerDialogResult[] buttons)
+        public SeatsAeroLibrary.Services.DialogResult ShowMessageBox(string message, string title, SeatsAeroLibrary.Services.DialogResult[] buttons)
         {
             return ShowDevExpressMessageBox(message, title, buttons);
         }
@@ -27,9 +27,9 @@ namespace SeatsAeroTool.Services
         //}
 
 
-        private SeatsAeroLibrary.Services.MessengerDialogResult ShowDevExpressMessageBox(string message, string title, SeatsAeroLibrary.Services.MessengerDialogResult[] buttons)
+        private SeatsAeroLibrary.Services.DialogResult ShowDevExpressMessageBox(string message, string title, SeatsAeroLibrary.Services.DialogResult[] buttons)
         {
-            return (SeatsAeroLibrary.Services.MessengerDialogResult)MessageBox.Show(message, title, GetMessageBoxButtonsFromDialogButton(buttons));
+            return (SeatsAeroLibrary.Services.DialogResult)MessageBox.Show(message, title, GetMessageBoxButtonsFromDialogButton(buttons));
         }
 
         //private void ShowGSSUINotification(string message, string title, SvgImage icon)
@@ -46,15 +46,15 @@ namespace SeatsAeroTool.Services
         //    Alerts.ShowAlert(titleInfo, messageInfo);
         //}
 
-        private MessageBoxButtons GetMessageBoxButtonsFromDialogButton(SeatsAeroLibrary.Services.MessengerDialogResult[] buttons)
+        private MessageBoxButtons GetMessageBoxButtonsFromDialogButton(SeatsAeroLibrary.Services.DialogResult[] buttons)
         {
-            if (buttons.Contains(SeatsAeroLibrary.Services.MessengerDialogResult.OK) && buttons.Contains(SeatsAeroLibrary.Services.MessengerDialogResult.Cancel))
+            if (buttons.Contains(SeatsAeroLibrary.Services.DialogResult.OK) && buttons.Contains(SeatsAeroLibrary.Services.DialogResult.Cancel))
             {
                 return MessageBoxButtons.OKCancel;
             }
-            else if(buttons.Contains(SeatsAeroLibrary.Services.MessengerDialogResult.Yes) && buttons.Contains(SeatsAeroLibrary.Services.MessengerDialogResult.No))
+            else if(buttons.Contains(SeatsAeroLibrary.Services.DialogResult.Yes) && buttons.Contains(SeatsAeroLibrary.Services.DialogResult.No))
             {
-                if (buttons.Contains(SeatsAeroLibrary.Services.MessengerDialogResult.Cancel))
+                if (buttons.Contains(SeatsAeroLibrary.Services.DialogResult.Cancel))
                 {
                     return MessageBoxButtons.YesNoCancel;
                 }
@@ -63,11 +63,11 @@ namespace SeatsAeroTool.Services
                     return MessageBoxButtons.YesNo;
                 }
             }
-            else if (buttons.Contains(SeatsAeroLibrary.Services.MessengerDialogResult.Abort) && buttons.Contains(SeatsAeroLibrary.Services.MessengerDialogResult.Retry) && buttons.Contains(SeatsAeroLibrary.Services.MessengerDialogResult.Ignore))
+            else if (buttons.Contains(SeatsAeroLibrary.Services.DialogResult.Abort) && buttons.Contains(SeatsAeroLibrary.Services.DialogResult.Retry) && buttons.Contains(SeatsAeroLibrary.Services.DialogResult.Ignore))
             {
                 return MessageBoxButtons.AbortRetryIgnore;
             }
-            else if (buttons.Contains(SeatsAeroLibrary.Services.MessengerDialogResult.Cancel) && buttons.Contains(SeatsAeroLibrary.Services.MessengerDialogResult.Retry))
+            else if (buttons.Contains(SeatsAeroLibrary.Services.DialogResult.Cancel) && buttons.Contains(SeatsAeroLibrary.Services.DialogResult.Retry))
             {
                 return MessageBoxButtons.RetryCancel;
             }

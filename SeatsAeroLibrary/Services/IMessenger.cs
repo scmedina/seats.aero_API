@@ -9,15 +9,15 @@ namespace SeatsAeroLibrary.Services
 {
     public interface IMessenger
     {
-        MessengerDialogResult ShowMessageBox(string message, string title);
-        MessengerDialogResult ShowMessageBox(string message, string title, MessengerDialogResult[] buttons);
+        DialogResult ShowMessageBox(string message, string title);
+        DialogResult ShowMessageBox(string message, string title, DialogResult[] buttons);
         //void ShowNotification(string message, string title);       // void ShowNotification(string message, string title, SvgImage icon);
     }
     //
     // Summary:
     //     Specifies identifiers to indicate the return value of a dialog box.
     [ComVisible(true)]
-    public enum MessengerDialogResult
+    public enum DialogResult
     {
         //
         // Summary:

@@ -10,11 +10,11 @@ using Microsoft.Extensions.Logging.EventLog;
 
 namespace SeatsAeroLibrary.Services
 {
-    public class BasicLogger : ILogger
+    public class Logger : ILogger
     {
         private NLog.Logger _logger;
 
-        public BasicLogger(NLog.Logger logger, IConfigSettings configSettings)
+        public Logger(NLog.Logger logger, IConfigSettings configSettings)
         {
             _logger = logger;
             SetLogSettings(configSettings);
