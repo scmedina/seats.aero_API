@@ -78,7 +78,7 @@ namespace SeatsAeroLibrary.Services
             //                .As<ILogger>()
             //                .SingleInstance();
             //#else
-            builder.RegisterType<Logger>()
+            builder.RegisterType<NlogLogger>()
                 .As<ILogger>()
                 .WithParameter(new TypedParameter(typeof(NLog.Logger),
                                 LogManager.GetCurrentClassLogger()))
